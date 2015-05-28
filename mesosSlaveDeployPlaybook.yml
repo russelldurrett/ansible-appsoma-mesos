@@ -1,0 +1,58 @@
+---
+- hosts: [tag_Class_mesos_slave]
+  remote_user: ubuntu
+  sudo: True
+  vars_files:
+    - playbook_vars/common.yml
+    - playbook_vars/required_vars.yml
+    - playbook_vars/users.yml
+  pre_tasks:
+    # Allow sudo with no terminal
+    - name: Remove require tty
+      lineinfile: regexp="tty" dest=/etc/sudoers/os_defaults state=absent
+      tags: ['system']
+    - name: Set NFS server group
+      set_fact: nfs_group="tag_Class_{{ service_class_name }}"
+    - name: Find NFS Server IP
+      set_fact: nfsServerIp={{ hostvars[groups[nfs_group][0]]['ec2_private_ip_address'] }}
+      when: groups[nfs_group] is defined
+    - name:  Set zookeeper private IP list with ports
+      set_fact:
+        zookeeper_hosts_with_port: |
+          {% set comma = joiner(':' + zookeeper_client_port + ',') %}
+          {% for item in groups['tag_Class_mesos_master'] -%}
+            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+          {%- endfor %}
+
+
+  roles:
+    # Install docker
+    - { role: ansible-docker, tags: ['docker'] }
+    # Configure NFS
+    - { role: ansible-nfs-client, nfsmount: "/mnt/data", nfspath: "/data", nfsserver: "{{ nfsServerIp }}", when: nfsServerIp is defined }
+    # Create an users
+    - { role: ansible-mesos-user, dataDir: "{{ data_mount_point }}"}
+    # Install Python
+    - { role: ansible-python, tags: ["python"]}
+    # Install NodeJs
+    - { role: ansible-nvm-nodejs, tags: ["nodejs"]}
+    # Make sure we have usable JDKs on masters
+    - { role: ansible-java, java_versions: [6, 7], tags: ["java"] }
+
+    # Install mesos in slave mode
+    - role: ansible-mesos
+      mesos_containerizers: "docker,mesos"
+      zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
+      mesos_install_mode: "slave"
+      mesos_cluster_name: "{{cluster_name}}"
+      tags:  ['mesos']
+
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - playbook_vars/common.yml
+    - playbook_vars/required_vars.yml
+    - playbook_vars/aws_secret_vars.yml
+  roles:
+    # Burn an image from the completed slaves
+    - { role: ec2Burn, source_instance_id: "{{hostvars[groups['tag_Class_mesos_slave'][0]]['ec2_id']}}", node_class: "{{ slave_class_name }}" }

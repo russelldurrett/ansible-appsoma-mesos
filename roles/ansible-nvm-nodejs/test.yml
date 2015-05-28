@@ -1,0 +1,8 @@
+- hosts: all
+  tasks:
+    - include: 'tasks/container.yml'
+  vars_files:
+    - 'defaults/container.yml'
+
+  vars:
+    nodejs_version: "v0.10.35"

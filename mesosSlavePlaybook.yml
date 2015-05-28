@@ -2,4 +2,4 @@
 ---
 # Complete, from zero, creation of mesos masters
 - include: mesosSlaveCreatePlaybook.yml
-#- include: mesosSlaveDeployPlaybook.yml
+- include: mesosSlaveDeployPlaybook.yml

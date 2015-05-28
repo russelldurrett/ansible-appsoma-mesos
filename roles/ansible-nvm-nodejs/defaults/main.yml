@@ -1,0 +1,29 @@
+---
+
+#
+# variables needed to be defined in user's playbook
+#
+
+# use "nvm ls-remote" to see all available versions 
+nodejs_version: "v0.12.4"
+
+
+#
+# user-configurable defaults
+#
+
+nvm_parent_path:  /opt/nodejs
+
+
+#
+# derived variables; never overrided unless absolutely necessary!
+#
+
+nvm_install_path: "{{ nvm_parent_path }}/nvm"
+nvm_exe_path:     "{{ nvm_install_path }}/nvm.sh"
+
+nodejs_global_packages:
+  - browserify
+  - mocha
+  - nodejs-websocket
+  - supervisor

@@ -1,0 +1,21 @@
+---
+- name: Add apt-key
+  apt_key: id=E56151BF keyserver=keyserver.ubuntu.com state=present
+
+- name: Add mesosphere repo
+  apt_repository: repo='deb http://repos.mesosphere.io/{{ansible_distribution|lower}} {{ansible_distribution_release|lower}} main' state=present
+
+- name: Install Debian OS packages
+  apt: pkg={{item}} state=present update_cache=yes
+  with_items:
+    - wget
+    - curl
+    - unzip
+    - python-setuptools
+    - python-dev
+    - mesos={{mesos_version}}-1.0.{{ansible_distribution|lower}}{{ansible_distribution_version.split('.')|join('')}}
+
+# == Remove zookeeper daemon which shouldn't be running on slaves
+- name: Remove zookeeperd from slaves
+  apt: pkg=zookeeperd state=absent
+  when: mesos_install_mode == "slave"

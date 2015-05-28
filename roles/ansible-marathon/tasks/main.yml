@@ -1,0 +1,13 @@
+---
+- include: Debian.yml
+  when: ansible_os_family == "Debian"
+
+- include: RedHat.yml
+  when: ansible_os_family == "RedHat"
+
+- include: conf.yml
+
+- include: haproxy.yml
+  when: haproxy_script_location != ""
+
+

@@ -1,0 +1,9 @@
+- name: Install HAProxy (RedHat)
+  yum: pkg=haproxy state=present
+  when: ansible_os_family == "RedHat"
+- name: Install HAProxy (Ubuntu)
+  apt: pkg=haproxy state=present
+  when: ansible_os_family == "Debian"
+- name: Sets haproxy to enabled (Ubuntu)
+  lineinfile: dest=/etc/default/haproxy regexp="^ENABLED" line="ENABLED=1"
+  when: ansible_os_family == "Debian"

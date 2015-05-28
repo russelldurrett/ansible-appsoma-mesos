@@ -1,0 +1,37 @@
+- name: install nfs client
+  apt: pkg=nfs-common state=present
+  when: ansible_os_family == "Debian"
+  tags:
+    - nfs
+
+- name: install nfs client
+  yum: pkg=nfs-utils state=present
+  when: ansible_os_family == "RedHat"
+  tags:
+    - nfs
+
+- name: Ensure rpcbind is running (CentOS)
+  service: name=rpcbind state=started enabled=yes
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure portmap is running (Ubuntu prior to Trusty Thar)
+  action: service name=portmap state=started enabled=yes
+  when: ansible_distribution == "Ubuntu" and ansible_lsb.major_release is defined and ansible_lsb.major_release|int < 14
+
+- name: Ensure rpcbind is running (Ubuntu Trusty Tahr or newer)
+  service: name=rpcbind state=started enabled=yes
+  when: ansible_distribution == "Ubuntu" and ansible_lsb.major_release is defined and ansible_lsb.major_release|int >= 14
+
+- name: Ensure rpcbind is running (Debian)
+  service: name=rpcbind state=started enabled=yes
+  when: ansible_distribution == "Debian"
+
+- name: Ensure {{nfsmount}} directory exists
+  action: file path={{nfsmount}} state=directory
+  tags:
+    - nfs
+
+- name: configure /etc/fstab on clients
+  action: mount name={{nfsmount}} src={{nfsserver}}:{{nfspath}} fstype=nfs opts=rw,hard,intr state=mounted
+  tags:
+    - nfs
