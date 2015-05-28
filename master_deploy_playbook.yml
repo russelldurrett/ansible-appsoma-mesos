@@ -9,11 +9,9 @@
   pre_tasks:
     - name: Set Hostname to "{{ inventory_hostname }}"
       hostname: name="{{ inventory_hostname }}"
-    - name: Set node group
-      set_fact: node_group="{{ inventory_group_master }}"
     - name: Find NFS Server IP
       set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['ec2_private_ip_address'] }}
-      when: groups[nfs_group] is defined
+      when: groups[inventory_group_service] is defined
     - name:  Set zookeeper private IP list with port
       set_fact:
         zookeeper_hosts_with_port: |
