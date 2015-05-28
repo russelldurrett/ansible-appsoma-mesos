@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+    - playbook_vars/common.yml
+    - playbook_vars/required_vars.yml
+    - playbook_vars/aws_secret_vars.yml
+  roles:
+    # Ensure a VPC exists
+    - role: ec2Vpc
+      when: aws_security_group_id is not defined
+
+    # Boot the slaves
+    - role: ec2Boot
+      count: "{{ slave_count }}"
+      node_class: "{{ slave_class_name }}"
+      node_group_name: "{{ inventory_group_slave }}"
