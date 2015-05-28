@@ -1,4 +1,3 @@
-- set_fact: node_group_name="tag_Class_{{ node_class }}"
 - debug: msg="Node group is {{ node_group_name }}"
 
 - set_fact: max_id_name=""

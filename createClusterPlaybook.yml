@@ -1,0 +1,59 @@
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - playbook_vars/required_vars.yml
+    - playbook_vars/aws_secret_vars.yml
+    - playbook_vars/common.yml
+  roles:
+    # Create a VPC
+    - role: ec2Vpc
+      when: aws_security_group_id is not defined
+
+    # Boot the NFS server node
+    - role: ec2Boot
+      count: 1
+      node_class: "{{service_class_name}}"
+      node_group_name: "{{ inventory_group_service }}"
+  post_tasks:
+    - name: Add data volume
+      ec2_vol:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ ec2_region }}"
+        zone: "{{ ec2_zone }}"
+        device_name: "/dev/xvdf"
+        volume_type: "{{ data_vol_type }}"
+        volume_size: "{{ data_vol_size_gb }}"
+        instance: "{{ hostvars[groups[inventory_group_service][0]]['ec2_id'] }}"
+        state: present
+
+- hosts: [ "{{ inventory_group_service }}" ]
+  vars_files:
+    - playbook_vars/common.yml
+    - playbook_vars/required_vars.yml
+    - playbook_vars/users.yml
+  remote_user: ubuntu
+  sudo: yes
+  pre_tasks:
+    - name: Format data volume
+      filesystem: fstype=ext4 dev="/dev/xvdf"
+    - name: Mount data volume
+      mount: name="/data" src="/dev/xvdf" fstype=ext4 state=mounted
+  roles:
+    # Install Docker
+    - role: ansible-docker
+    # Create an Appsoma user as a member of the docker group (permission to run /usr/bin/docker)
+    - role: ansible-mesos-user
+      dataDir: "/data"
+      enableDocker: true
+
+    # Configure node as an NFS server
+    - role: ansible-nfs-server
+      nfs_exports:
+        - "path": "/data"
+          "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
+
+
+#- include: mesosMasterPlaybook.yml
+#- include: mesosSlavePlaybook.yml

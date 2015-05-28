@@ -7,5 +7,12 @@
     - playbook_vars/required_vars.yml
     - playbook_vars/aws_secret_vars.yml
   roles:
-    - { role: ec2Vpc, when: aws_security_group_id is not defined }
-    - { role: ec2Boot, count: "{{ master_count }}", node_class: "{{ master_class_name }}" }
+    # Ensure that the VPC exists
+    - role: ec2Vpc
+      when: aws_security_group_id is not defined
+
+    # Boot the master nodes and add them to the live inventory
+    - role: ec2Boot
+      count: "{{ master_count }}"
+      node_class: "{{ master_class_name }}"
+      node_group_name: "{{ inventory_group_master }}"

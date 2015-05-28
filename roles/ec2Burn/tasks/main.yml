@@ -31,5 +31,5 @@
   args:
     tags:
       Name: "{{cluster_name}}_slave_image"
-      Cluster: "{{cluster_name}}"
-      Class: "{{ node_class }}"
+      cluster: "{{cluster_name}}"
+      class: "{{ node_class }}"

@@ -1,2 +1,3 @@
 ansible-appsoma-mesos.iws
 playbook_vars/aws_secret_vars.yml
+playbook_vars/required_vars.yml

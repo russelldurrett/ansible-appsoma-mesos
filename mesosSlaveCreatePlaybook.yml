@@ -9,7 +9,9 @@
     # Ensure a VPC exists
     - role: ec2Vpc
       when: aws_security_group_id is not defined
+
     # Boot the slaves
     - role: ec2Boot
       count: "{{ slave_count }}"
-      node_class: "{{slave_class_name}}"
+      node_class: "{{ slave_class_name }}"
+      node_group_name: "{{ inventory_group_slave }}"

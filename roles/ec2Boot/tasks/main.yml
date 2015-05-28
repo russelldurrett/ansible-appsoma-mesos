@@ -22,9 +22,10 @@
     wait: yes
     exact_count: "{{ count }}"
     count_tag:
-      Class: "{{ node_class }}"
+      class: "{{ node_class }}"
     instance_tags:
-      Class: "{{ node_class }}"
+      class: "{{ node_class }}"
+      cluster: "{{ cluster_name }}"
     assign_public_ip: yes
     region: "{{ ec2_region }}"
     zone: "{{ ec2_zone }}"
@@ -41,9 +42,10 @@
     command: create
     overwrite: yes
     type: CNAME
-    zone: appsoma.com
+    zone: "{{ route_53_zone }}"
+    zone: "{{ route_53_zone }}"
     ttl: 10
-    record: "{{node_class}}_{{ item.ami_launch_index | int + start_id | int }}.mesos.appsoma.com"
+    record: "{{node_class}}_{{ item.ami_launch_index | int + start_id | int }}.{{route_53_zone}}"
     value: "{{ item.public_dns_name }}"
   with_items: ec2Create.instances
 

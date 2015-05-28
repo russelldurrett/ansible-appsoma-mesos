@@ -1,0 +1,7 @@
+---
+# Complete, from zero, creation of mesos masters
+- include: mesosMasterCreatePlaybook.yml
+#- include: mesosMasterDeployPlaybook.yml
+
+
+

@@ -5,11 +5,11 @@
     internet_gateway: yes
     region: "{{ ec2_region }}"
     cidr_block: "{{private_lan_net}}"
-    resource_tags: { "Name": "mesos-{{ cluster_name }}" }
+    resource_tags: { "Name": "{{ cluster_name }}-vpc" }
     subnets:
       - cidr: "{{private_lan_subnet}}"
         az: "{{ ec2_zone }}"
-        resource_tags: { "Name": "mesos-{{ cluster_name }}", "subnet_id": "base" }
+        resource_tags: { "Name": "{{ cluster_name }}-subnet"}
     route_tables:
       - subnets:
           - "{{private_lan_subnet}}"
@@ -26,19 +26,17 @@
 - name: Set Subnet ID
   set_fact: aws_vpc_subnet_id="{{ vpc['subnets'][0]['id']}}"
 
-- debug: msg="{{aws_vpc_id}} {{aws_vpc_subnet_id}}"
-
 - name: Create Security Group
   ec2_group:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     region: "{{ ec2_region }}"
     vpc_id: "{{ aws_vpc_id }}"
-    name: "mesos-{{ cluster_name }}-sg"
+    name: "{{ cluster_name }}-sg"
     description: "Security group for cluster {{ cluster_name }}"
     rules:
       - proto: all
-        group_name: "mesos-{{ cluster_name }}-sg"
+        group_name: "{{ cluster_name }}-sg"
       - proto: tcp
         from_port: 22
         to_port: 22
