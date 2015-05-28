@@ -1,5 +1,5 @@
 ---
-- hosts: [tag_Class_mesos_master]
+- hosts: [ "{{ inventory_group_master }}" ]
   remote_user: ubuntu
   sudo: True
   vars_files:
@@ -33,13 +33,12 @@
 
   roles:
     # Install Python
-    #- { role: ansible-python, tags: ["python"]}
+    - role: ansible-python
     # Install NodeJs
     - role: ansible-nvm-nodejs
       nodejs_version: "v0.12.4"
       nodejs_global_packages:
         - browserify
-        - connect-flash
         - mocha
         - nodejs-websocket
         - phantomjs
@@ -49,22 +48,41 @@
         - supervisor
       tags: ["nodejs"]
     # Install Docker
-    - { role: ansible-docker, tags: [ "docker" ]}
+    - role: ansible-docker
     # Configure NFS
-    - { role: ansible-nfs-client, nfsmount: "/mnt/data", nfspath: "/data", nfsserver: "{{ nfsServerIp }}", when: nfsServerIp is defined }
+    - role: ansible-nfs-client
+      nfsmount: "/mnt/data"
+      nfspath: "/data"
+      nfsserver: "{{ nfsServerIp }}"
+      when: nfsServerIp is defined
+
     # Create an users
-    - { role: ansible-mesos-user, dataDir: "{{ data_mount_point }}"}
+    - role: ansible-mesos-user
+      dataDir: "{{ data_mount_point }}"
+
     # Make sure we have usable JDKs on masters
-    - { role: ansible-java, java_versions: [6, 7], tags: ["java"] }
+    - role: ansible-java
+      java_versions: [6, 7]
+
     # Install High Availability Proxy
-    - { role: haProxy, tags: [ "haProxy" ] }
+    - role: ansible-haProxy
+
     # Install zookeeper
-    - { role: ansible-zookeeper, zookeeper_hosts: "{{ groups.tag_Class_mesos_master }}", tags: ["zookeeper"] }
+    - role: ansible-zookeeper
+      zookeeper_hosts: "{{ groups.tag_Class_mesos_master }}"
+
     # Install mesos in master mode
-    - { role: ansible-mesos, zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}", mesos_install_mode: 'master', mesos_cluster_name: "{{cluster_name}}", tags: ['mesos', 'platforms'] }
+    - role: ansible-mesos
+      zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
+      mesos_install_mode: 'master'
+      mesos_cluster_name: "{{cluster_name}}"
+
     # Install marathon
-    - { role: ansible-marathon, zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}",  tags: ['mesos-tools'] }
+    - role: ansible-marathon
+      zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
     # Install Appsoma Rhino
-    #- { role: ansible-rhino, zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}", tags: ['mesos-tools']}
+    #- role: ansible-rhino
+    #  zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
     # Install Appsoma Welder
-    #- { role: ansible-welder, zookeeper_hostnames: "{{ zookeeper_hosts_no_port  }}", tags: ['mesos-tools']}
+    #- { role: ansible-welder
+    #  zookeeper_hostnames: "{{ zookeeper_hosts_no_port  }}"

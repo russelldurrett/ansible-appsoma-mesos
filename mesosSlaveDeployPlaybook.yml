@@ -1,5 +1,5 @@
 ---
-- hosts: [tag_Class_mesos_slave]
+- hosts: [ "{{ inventory_group_slave }}" ]
   remote_user: ubuntu
   sudo: True
   vars_files:
@@ -27,17 +27,28 @@
 
   roles:
     # Install docker
-    - { role: ansible-docker, tags: ['docker'] }
+    - role: ansible-docker
+
     # Configure NFS
-    - { role: ansible-nfs-client, nfsmount: "/mnt/data", nfspath: "/data", nfsserver: "{{ nfsServerIp }}", when: nfsServerIp is defined }
+    - role: ansible-nfs-client
+      nfsmount: "/mnt/data"
+      nfspath: "/data"
+      nfsserver: "{{ nfsServerIp }}"
+      when: nfsServerIp is defined
+
     # Create an users
-    - { role: ansible-mesos-user, dataDir: "{{ data_mount_point }}"}
+    - role: ansible-mesos-user
+      dataDir: "{{ data_mount_point }}"
+
     # Install Python
-    - { role: ansible-python, tags: ["python"]}
+    - role: ansible-python
+
     # Install NodeJs
-    - { role: ansible-nvm-nodejs, tags: ["nodejs"]}
+    - role: ansible-nvm-nodejs
+
     # Make sure we have usable JDKs on masters
-    - { role: ansible-java, java_versions: [6, 7], tags: ["java"] }
+    - role: ansible-java
+      java_versions: [6, 7]
 
     # Install mesos in slave mode
     - role: ansible-mesos
@@ -45,7 +56,6 @@
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
       mesos_install_mode: "slave"
       mesos_cluster_name: "{{cluster_name}}"
-      tags:  ['mesos']
 
 - hosts: localhost
   gather_facts: no
@@ -55,4 +65,6 @@
     - playbook_vars/aws_secret_vars.yml
   roles:
     # Burn an image from the completed slaves
-    - { role: ec2Burn, source_instance_id: "{{hostvars[groups['tag_Class_mesos_slave'][0]]['ec2_id']}}", node_class: "{{ slave_class_name }}" }
+    - role: ec2Burn
+      source_instance_id: "{{hostvars[groups['tag_Class_mesos_slave'][0]]['ec2_id']}}"
+      node_class: "{{ slave_class_name }}"
