@@ -1,0 +1,11 @@
+---
+# Creates "master_count" mesos master nodes and adds to the hosts file, as well as the dynamic inventory in group mesos_master
+
+- hosts: localhost
+  vars_files:
+    - playbook_vars/common.yml
+    - playbook_vars/required_vars.yml
+    - playbook_vars/aws_secret_vars.yml
+  roles:
+    - { role: ec2Vpc, when: aws_security_group_id is not defined }
+    - { role: ec2Boot, count: "{{ master_count }}", node_class: "{{ master_class_name }}" }

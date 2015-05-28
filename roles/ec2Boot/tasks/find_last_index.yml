@@ -1,0 +1,10 @@
+- set_fact: node_group_name="tag_Class_{{ node_class }}"
+- debug: msg="Node group is {{ node_group_name }}"
+
+- set_fact: max_id_name=""
+- set_fact: start_id=0
+- set_fact: max_id_name="{{ groups[node_group_name] | sort('ec2_tag_id' | int) | last }}"
+  when: node_group_name in groups
+
+- set_fact: start_id="{{ hostvars[max_id_name]['ec2_tag_id'] | int + 1}}"
+  when: max_id_name is defined and max_id_name != ""

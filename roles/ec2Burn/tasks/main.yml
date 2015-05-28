@@ -1,0 +1,35 @@
+
+
+- name: "Create Slave AMI for cluster {{cluster_name}}"
+  ec2_ami:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ ec2_region }}"
+    instance_id: "{{source_instance_id}}"
+    wait: yes
+    state: present
+    name: "{{cluster_name}}_slave_image"
+  register: ec2AmiCreate
+  ignore_errors: True
+
+- debug: msg="{{ec2AmiCreate}}"
+
+- name: Check the burn result because the ec2_ami code isn't idempotent
+  fail: msg="Something bad happened {{ ec2AmiCreate.msg }}"
+  when: "ec2AmiCreate['msg'] is defined and ec2AmiCreate['image_id'] is not defined and 'InvalidAMIName.Duplicate' not in ec2AmiCreate['msg']"
+
+- name: Get ID from New AMI
+  set_fact: ami_id="{{ec2AmiCreate['image_id']}}"
+  when: ec2AmiCreate['image_id'] is defined
+
+- name: Get ID from existing AMI
+  set_fact: ami_id="{{ec2AmiCreate['msg'].split(' ')[-1]}}"
+  when: "ec2AmiCreate['image_id'] is not defined and ec2AmiCreate['msg'] is defined"
+
+- name: Tag image
+  ec2_tag:  region="{{ ec2_region }}" resource="{{ ami_id }}" aws_access_key="{{ aws_access_key }}" aws_secret_key="{{ aws_secret_key }}"
+  args:
+    tags:
+      Name: "{{cluster_name}}_slave_image"
+      Cluster: "{{cluster_name}}"
+      Class: "{{ node_class }}"

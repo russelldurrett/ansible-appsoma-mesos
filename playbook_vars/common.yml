@@ -1,0 +1,6 @@
+master_class_name: "mesos_master"
+slave_class_name: "mesos_slave"
+service_class_name: "mesos_service"
+zookeeper_client_port: "2181"
+
+
