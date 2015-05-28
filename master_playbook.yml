@@ -1,0 +1,7 @@
+---
+# Complete, from zero, creation of mesos masters
+- include: master_create_playbook.yml
+- include: master_deploy_playbook.yml
+
+
+

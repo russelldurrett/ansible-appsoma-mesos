@@ -22,9 +22,9 @@
     wait: yes
     exact_count: "{{ count }}"
     count_tag:
-      class: "{{ node_class }}"
+      Class: "{{ node_class }}"
     instance_tags:
-      class: "{{ node_class }}"
+      Class: "{{ node_class }}"
       cluster: "{{ cluster_name }}"
     assign_public_ip: yes
     region: "{{ ec2_region }}"
@@ -55,6 +55,7 @@
     tags:
       Name: "{{node_class}}_{{ item.ami_launch_index | int + start_id | int }}"
       id: "{{ item.ami_launch_index | int + start_id | int }}"
+      Class: "{{ node_class }}"
   with_items: ec2Create.instances
   tags:
     - tag

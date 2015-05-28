@@ -2,5 +2,5 @@
 
 PORT="{{ mesos_port }}"
 ZK="{{ mesos_zookeeper_masters }}"
-export MESOS_QUORUM={{ groups[node_group] | length // 2  + 1 }}
-export MESOS_WORK_DIR="{{ mesos_work_dir }}"
+MESOS_QUORUM={{ groups[node_group] | length // 2  + 1 }}
+MESOS_WORK_DIR="{{ mesos_work_dir }}"
