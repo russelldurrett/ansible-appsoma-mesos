@@ -1,0 +1,12 @@
+use_containers: False
+host_ip: "127.0.0.1"
+
+db_folder: "/mnt/data/welder/db"
+db_port: 27107
+
+projects_folder: "/mnt/data/welder/projects"
+uploads_folder: "/mnt/data/welder/projects"
+
+scheduler: "rhino"
+
+

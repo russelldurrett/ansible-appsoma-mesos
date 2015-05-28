@@ -1,0 +1,5 @@
+
+---
+# Complete, from zero, creation of mesos masters
+- include: slave_create_playbook.yml
+- include: slave_deploy_playbook.yml

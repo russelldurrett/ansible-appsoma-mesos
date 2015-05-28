@@ -1,0 +1,7 @@
+---
+# i.e. upgrade zookeeper, templates stay the same...
+- name: Restart Zookeeper
+  service: name=zookeeper state=restarted enabled=yes
+
+
+

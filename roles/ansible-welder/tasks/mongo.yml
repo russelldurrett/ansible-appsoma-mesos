@@ -1,0 +1,14 @@
+- name: Install MongoDB native
+  apt: pkg=mongodb state=present
+  notify: Restart MongoDB
+
+- name: Create DB directory
+  file: path="{{db_folder}}" state=directory
+  notify: Restart MongoDB
+
+- name: Configure MongoDB
+  template: src=mongod.conf.j2 dest=/etc/mongod.conf owner=root group=root mode=0644
+  notify: Restart MongoDB
+
+
+

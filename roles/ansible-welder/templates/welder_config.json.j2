@@ -1,0 +1,21 @@
+{
+    "masterURL": "http://{{host_ip}}:8089",
+    "port": "8089",
+    "projectsFolder": "{{ projects_folder }}",
+    "uploadFolder": "{{ uploads_folder }}",
+    "mongodb": {
+        "host": "{{host_ip}}",
+        "port": {{ db_port }},
+        "database": "welder"
+    },
+    "scheduler": "{{scheduler}}",
+    "rhino": {
+        # if using rhino
+        "url": "http://{{host_ip}}:8899/"
+    },
+    "sge": {
+        # if using sge
+        "binPath": "/opt/sge/bin/lx-amd64",
+        "sgeRoot": "/opt/sge"
+    }
+}

@@ -1,0 +1,88 @@
+---
+- hosts: [ "{{ inventory_group_master }}" ]
+  remote_user: ubuntu
+  sudo: True
+  vars_files:
+    - playbook_vars/common.yml
+    - playbook_vars/required_vars.yml
+    - playbook_vars/users.yml
+  pre_tasks:
+    - name: Set Hostname to "{{ inventory_hostname }}"
+      hostname: name="{{ inventory_hostname }}"
+    - name: Set node group
+      set_fact: node_group="tag_Class_mesos_master"
+    - name: Set NFS server group
+      set_fact: nfs_group="tag_Class_{{ service_class_name }}"
+    - name: Find NFS Server IP
+      set_fact: nfsServerIp={{ hostvars[groups[nfs_group][0]]['ec2_private_ip_address'] }}
+      when: groups[nfs_group] is defined
+    - name:  Set zookeeper private IP list with port
+      set_fact:
+        zookeeper_hosts_with_port: |
+          {% set comma = joiner(':' + zookeeper_client_port + ',') %}
+          {% for item in groups['tag_Class_mesos_master'] -%}
+            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+          {%- endfor %}
+    - name:  Set zookeeper private IP list
+      set_fact:
+        zookeeper_hosts_no_port: |
+          {% set comma = joiner(',') %}
+          {% for item in groups['tag_Class_mesos_master'] -%}
+            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}
+          {%- endfor %}
+
+  roles:
+    # Install Python
+    - role: ansible-python
+    # Install NodeJs
+    - role: ansible-nvm-nodejs
+      nodejs_version: "v0.12.4"
+      nodejs_global_packages:
+        - browserify
+        - mocha
+        - nodejs-websocket
+        - phantomjs
+        - process
+        - require
+        - scribe-js
+        - supervisor
+      tags: ["nodejs"]
+    # Install Docker
+    - role: ansible-docker
+    # Configure NFS
+    - role: ansible-nfs-client
+      nfsmount: "/mnt/data"
+      nfspath: "/data"
+      nfsserver: "{{ nfsServerIp }}"
+      when: nfsServerIp is defined
+
+    # Create an users
+    - role: ansible-mesos-user
+      dataDir: "{{ data_mount_point }}"
+
+    # Make sure we have usable JDKs on masters
+    - role: ansible-java
+      java_versions: [6, 7]
+
+    # Install High Availability Proxy
+    - role: ansible-haProxy
+
+    # Install zookeeper
+    - role: ansible-zookeeper
+      zookeeper_hosts: "{{ groups.tag_Class_mesos_master }}"
+
+    # Install mesos in master mode
+    - role: ansible-mesos
+      zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
+      mesos_install_mode: 'master'
+      mesos_cluster_name: "{{cluster_name}}"
+
+    # Install marathon
+    - role: ansible-marathon
+      zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
+    # Install Appsoma Rhino
+    #- role: ansible-rhino
+    #  zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
+    # Install Appsoma Welder
+    #- { role: ansible-welder
+    #  zookeeper_hostnames: "{{ zookeeper_hosts_no_port  }}"

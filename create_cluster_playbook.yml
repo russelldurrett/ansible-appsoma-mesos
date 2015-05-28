@@ -55,5 +55,5 @@
           "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
 
 
-#- include: mesosMasterPlaybook.yml
-#- include: mesosSlavePlaybook.yml
+#- include: master_playbook.yml
+#- include: slave_playbook.yml

@@ -1,0 +1,56 @@
+---
+- name: Create Marathon conf directory
+  file: path=/etc/marathon/conf state=directory
+
+- name: Set required --master option
+  template: src=master.j2 dest=/etc/marathon/conf/master
+  notify:
+    - Restart Marathon
+
+- name: Remove optional --artifact_store option
+  file: path=/etc/marathon/conf/artifact_store state=absent
+  when: artifact_store == ""
+  notify:
+    - Restart Marathon
+
+- name: Set optional --artifact_store option
+  template: src=artifact_store.j2 dest=/etc/marathon/conf/artifact_store
+  when: artifact_store != ""
+  notify:
+    - Restart Marathon
+
+- name: Remove optional --checkpoint option
+  file: path="/etc/marathon/conf/?checkpoint" state=absent
+  when: checkpoint == ""
+  notify:
+    - Restart Marathon
+
+- stat: path=/etc/marathon/conf/?checkpoint
+  register: p
+- name: Set optional --checkpoint option
+  file: path=/etc/marathon/conf/?checkpoint state=touch
+  when: checkpoint != "" and p.stat.exists is defined and not p.stat.exists
+  notify:
+    - Restart Marathon
+
+- name: Remove optional --zk option
+  file: path=/etc/marathon/conf/zk state=absent
+  when: marathon_zookeeper_state == ""
+  notify:
+    - Restart Marathon
+
+- name: Set optional --zk option
+  template: src=zk.j2 dest=/etc/marathon/conf/zk
+  when: marathon_zookeeper_state != ""
+  notify:
+    - Restart Marathon
+
+- name: Set --hostname option
+  lineinfile: line={{ marathon_hostname }} dest=/etc/marathon/conf/hostname create=yes
+  notify:
+    - Restart Marathon
+
+- name: Set --http-port option
+  lineinfile: line={{ marathon_port }} dest=/etc/marathon/conf/http_port create=yes
+  notify:
+    - Restart Marathon

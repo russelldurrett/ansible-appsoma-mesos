@@ -1,0 +1,18 @@
+# Ansible managed
+
+dbpath = {{ db_folder }}
+
+#where to log
+logpath = /var/log/mongod.log
+logappend = true
+
+port = {{ db_port }}
+
+# Listen to local interface only. Comment out to listen on all interfaces.
+bind_ip = {{ host_ip }}
+
+journal = true
+smallfiles = true
+noprealloc = true
+
+

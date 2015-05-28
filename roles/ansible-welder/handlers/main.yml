@@ -1,0 +1,2 @@
+- name: Restart MongoDB
+  service: name=mongodb state=restarted enabled=yes

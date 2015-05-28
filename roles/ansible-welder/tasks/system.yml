@@ -1,0 +1,21 @@
+- include: mongo.yml
+
+- name: Clone Welder source
+  git:
+    dest: /opt/welder
+    repo: https://github.com/appsoma/welder.git
+    version: HEAD
+    update: no
+  register: git_pull
+
+- name: Create Welder Configuration
+  template: src=welder_config.json.j2 dest=/opt/welder/welder_config.json
+
+- name: Create Welder Init script
+  template: src=init_welder.conf.j2 dest=/etc/init/welder.conf
+
+
+
+
+
+
