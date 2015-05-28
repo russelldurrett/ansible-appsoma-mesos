@@ -68,7 +68,7 @@
     # Install zookeeper
     - role: ansible-zookeeper
       zookeeper_hosts: "{{ groups[inventory_group_master] }}"
-      zookeeper_id: "{{ hostvars[inventory_hostname]['ec2_tag_zoo_id'] }}
+      zookeeper_id: "{{ hostvars[inventory_hostname]['ec2_tag_zoo_id'] }}"
 
     # Install mesos in master mode
     - role: ansible-mesos
