@@ -11,16 +11,14 @@
     - name: Remove require tty
       lineinfile: regexp="tty" dest=/etc/sudoers/os_defaults state=absent
       tags: ['system']
-    - name: Set NFS server group
-      set_fact: nfs_group="tag_Class_{{ service_class_name }}"
     - name: Find NFS Server IP
-      set_fact: nfsServerIp={{ hostvars[groups[nfs_group][0]]['ec2_private_ip_address'] }}
+      set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['ec2_private_ip_address'] }}
       when: groups[nfs_group] is defined
     - name:  Set zookeeper private IP list with ports
       set_fact:
         zookeeper_hosts_with_port: |
           {% set comma = joiner(':' + zookeeper_client_port + ',') %}
-          {% for item in groups['tag_Class_mesos_master'] -%}
+          {% for item in groups[inventory_group_master] -%}
             {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
 
