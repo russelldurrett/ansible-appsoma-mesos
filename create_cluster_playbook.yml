@@ -39,19 +39,20 @@
     - name: Format data volume
       filesystem: fstype=ext4 dev="/dev/xvdf"
     - name: Mount data volume
-      mount: name="/data" src="/dev/xvdf" fstype=ext4 state=mounted
+      mount: name="{{ nfs_data_mount }}" src="/dev/xvdf" fstype=ext4 state=mounted
   roles:
     # Install Docker
     - role: ansible-docker
+
     # Create an Appsoma user as a member of the docker group (permission to run /usr/bin/docker)
     - role: ansible-mesos-user
-      dataDir: "/data"
+      dataDir: "{{ nfs_data_mount }}"
       enableDocker: true
 
     # Configure node as an NFS server
     - role: ansible-nfs-server
       nfs_exports:
-        - "path": "/data"
+        - "path": "{{ nfs_data_mount }}"
           "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
 
 

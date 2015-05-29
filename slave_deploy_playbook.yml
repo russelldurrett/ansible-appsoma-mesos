@@ -29,8 +29,8 @@
 
     # Configure NFS
     - role: ansible-nfs-client
-      nfsmount: "/mnt/data"
-      nfspath: "/data"
+      nfsmount: "{{ data_mount_point }}"
+      nfspath: "{{ nfs_data_mount }}"
       nfsserver: "{{ nfsServerIp }}"
       when: nfsServerIp is defined
 

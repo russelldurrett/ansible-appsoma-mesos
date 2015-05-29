@@ -6,6 +6,22 @@
 
 Deploys software for a scalable Mesos cluster with Marathon, HAProxy and Appsoma's Welder job launcher and Rhino batch job Mesos framework.
 
+### What you get
+
+Successfully running this playbook will create:
+
+* An [Apache Mesos](http://mesos.apache.org/) cluster with 1 or more master nodes and 1 or more slave nodes
+* [Apache Zookeeper](https://zookeeper.apache.org/) to provide service registration and fault tolerance
+* The [Appsoma Rhino](https://github.com/appsoma/rhino) batch processing framework registered in Mesos
+* The [Appsoma Welder](https://github.com/appsoma/welder) compute Application Management service 
+* The [Mesosphere Marathon](https://github.com/mesosphere/marathon) service management framework registered with Mesos, and configured with [HAProxy](http://www.haproxy.org/) 
+* Master and slave nodes are configured with:
+    * Python2.7, Java 6 and 7, and NodeJS to run jobs and services
+    * [Docker](https://www.docker.com/) for containerized applications
+    
+* All nodes have access to an NFS-mounted data directory, shared across all masters and slaves, to share job data.
+* All nodes have a series of initial users created (see `playbook_vars/users.yml`) to use when running Welder jobs.
+* When using a cloud provider (Amazon EC2-only for now), you get dynamic access to your cloud, with node creation and management 
 
 ## Prerequisites
 
@@ -38,6 +54,8 @@ and edit to suit.  The only absolute customization you must do is the `cluster_n
 ## How To install on EC2
 
 ### What you'll need
+
+This script will create 1 NFS server with an EBS data volume and a new VPC, as well as the master and slave nodes.  Make sure your subscription has enough resources available
 To run with Amazon EC2, you'll have to collect an access credential (Access Key/Secret Key, or Access Key ID and Secret Access Key, either name might appear)
 You'll also need to register a keypair on EC2, either with the AWS CLI or on the web interface, on the EC2 Dashboard under "Network & Security". 
 
@@ -77,8 +95,9 @@ You can safely re-run this command multiple times, in the event of an Amazon com
 
 *Still in development*
 
-## Known Issues
+## To Do
 
+* Cluster shutdown and cleanup 
 * Existing cluster support (mostly configuring values to be non-ec2 specific, and setting rules for host file variables)
 * Supporting other clouds (GCE, OpenStack, Azure)
 * Dynamic node management (add and remove capacity when needed)

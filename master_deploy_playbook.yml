@@ -47,8 +47,8 @@
     - role: ansible-docker
     # Configure NFS
     - role: ansible-nfs-client
-      nfsmount: "/mnt/data"
-      nfspath: "/data"
+      nfsmount: "{{ data_mount_point }}"
+      nfspath: "{{ nfs_data_mount }}"
       nfsserver: "{{ nfsServerIp }}"
       when: nfsServerIp is defined
 
@@ -77,11 +77,17 @@
     # Install marathon
     - role: ansible-marathon
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
+      when: inventory_hostname == groups[inventory_group_master][0]
 
     # Install Appsoma Rhino
     - role: ansible-rhino
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
+      db_folder: "{{ data_mount_point }}/rhino_db"
+      when: inventory_hostname == groups[inventory_group_master][0]
 
     # Install Appsoma Welder
-    #- { role: ansible-welder
-    #  zookeeper_hostnames: "{{ zookeeper_hosts_no_port  }}"
+    - role: ansible-welder
+      framework_url: "{{}}"
+      project_folder: "{{ data_mount_point }}/welder/projects"
+      upload_folder: "{{ data_mount_point }}/welder/projects"
+      when: inventory_hostname == groups[inventory_group_master][0]
