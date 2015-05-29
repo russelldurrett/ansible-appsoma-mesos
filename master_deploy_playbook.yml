@@ -77,9 +77,11 @@
     # Install marathon
     - role: ansible-marathon
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
+
     # Install Appsoma Rhino
-    #- role: ansible-rhino
-    #  zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
+    - role: ansible-rhino
+      zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
+
     # Install Appsoma Welder
     #- { role: ansible-welder
     #  zookeeper_hostnames: "{{ zookeeper_hosts_no_port  }}"

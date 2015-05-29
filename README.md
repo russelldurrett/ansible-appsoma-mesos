@@ -45,7 +45,7 @@ You'll also need to select an AWS region and availability zone to install the cl
 
 If you use Route53 to manage a public domain name, you can assign DNS entries to your newly booted nodes. You'll need the name of the zone you want route53 to add new nodes to.
  
-* Copy `playbook_vars/aws_secret_vars.yml.template` to `playbook_vars/aws_secret_vars.yml.template` and edit the values to match your AWS account
+* Copy `playbook_vars/aws_secret_vars.yml.template` to `playbook_vars/aws_secret_vars.yml` and edit the values to match your AWS account
 * If you haven't already, copy `playbook_vars/required_vars.template` to `playbook_vars/required_vars.yml`
     * Be sure to change the `ec2_key_name`, `ec2_region`, and `ec2_zone` keys to match your information
     * If you want to use Route53 DNS, make sure `use_route53` is set to `True` and `route53_zone` is set to your DNS zone.
