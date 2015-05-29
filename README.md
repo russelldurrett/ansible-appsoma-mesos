@@ -25,7 +25,7 @@ Or on RH/Centos by using the [EPEL libary](http://fedoraproject.org/wiki/EPEL):
 	
 Don't forget about Boto, the Amazon AWS client module for python.  The standard distro package should be sufficient.
 
-## Installation
+# Installation
 
  
 	git clone git@github.com:appsoma/ansible-appsoma-mesos.git
