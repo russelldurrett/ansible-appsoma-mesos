@@ -1,21 +1,54 @@
 {
-    "masterURL": "http://{{host_ip}}:8089",
-    "port": "8089",
-    "projectsFolder": "{{ projects_folder }}",
-    "uploadFolder": "{{ uploads_folder }}",
-    "mongodb": {
-        "host": "{{host_ip}}",
-        "port": {{ db_port }},
-        "database": "welder"
+    "default": {
+        "apiURL": "http://{{ host_ip }}:8890",
+        "siteURL": "http://{{ host_ip }}:8890",
+        "consolePort": "8089",
+        "projectsFolder": "{{ project_folder }}",
+        "uploadFolder": "{{ upload_folder }}",
+        "pamGroupName": "docker",
+        "mongodb": {
+            "host": "localhost",
+           "port": 27107,
+           "database": "welder"
+        },
+        "scheduler": "{{ scheduler }}",
+{% if scheduler == "rhino" %}
+        "rhino": {
+           "url": "{{ scheduler_ip }}:8899/"
+        }
+{% elif scheduler == "sge" %}
+        "sge": {
+            "binPath": "/opt/sge/bin/lx-amd64",
+            "sgeRoot": "/opt/sge"
+        }
+{% endif %}
     },
-    "scheduler": "{{scheduler}}",
-    "rhino": {
-        # if using rhino
-        "url": "http://{{host_ip}}:8899/"
-    },
-    "sge": {
-        # if using sge
-        "binPath": "/opt/sge/bin/lx-amd64",
-        "sgeRoot": "/opt/sge"
+    "TLS": {
+        "apiURL": "http://{{ host_ip }}:8890",
+        "siteURL": "http://{{ host_ip }}:8890",
+        "consolePort": "8089",
+        "projectsFolder": "{{ project_folder }}",
+        "uploadFolder": "{{ upload_folder }}",
+        "pamGroupName": "docker",
+        "mongodb": {
+            "host": "localhost",
+            "port": 27107,
+            "database": "welder"
+        },
+        "scheduler": "{{ scheduler }}",
+{% if scheduler == "rhino" %}
+        "rhino": {
+            "url": "{{ scheduler_ip }}:8899/"
+        },
+{% elif scheduler == "sge" %}
+        "sge": {
+            "binPath": "/opt/sge/bin/lx-amd64",
+            "sgeRoot": "/opt/sge"
+        },
+{% endif %}
+        "https": {
+            "keyFile": "{{ pem_path }}",
+            "certFile": "{{ cert_path }}"
+        }
     }
 }

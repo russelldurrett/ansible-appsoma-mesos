@@ -6,7 +6,7 @@ ec2_key_name: "mykey"  # use with "ansible-playbook --private-key "my-key.pem" i
 ec2_region: "us-east-1" # Select your region
 ec2_zone: "us-east-1a"  # Select an availability zone for
 ec2_ami_id: "ami-7eb2a716" # Base HVM Ubuntu 14.04 image
-use_route_53: True
+use_route53: true
 route53_zone: "mydomain.com"
 
 
@@ -25,3 +25,5 @@ data_vol_type: "standard"
 data_mount_point: "/mnt/data"
 data_vol_size_gb: 100
 data_vol_type: "standard"  # EBS volumes include "standard" "gp2" and "io1"
+
+create_slave_image: true

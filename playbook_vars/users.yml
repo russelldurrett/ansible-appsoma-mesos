@@ -1,5 +1,4 @@
 user_list:
-  - { username: appsoma, uid: 2001, passwd: zoink012 }
-  - { username: zack, uid: 2002, passwd: zoink123 }
-  - { username: demo, uid: 2003, passwd: zoink456 }
-  - { username: mark, uid: 2004, passwd: zoink789 }
+  - { username: appsoma, uid: 2001, password: zoink012 }
+  - { username: demo, uid: 2003, password: zoink123 }
+

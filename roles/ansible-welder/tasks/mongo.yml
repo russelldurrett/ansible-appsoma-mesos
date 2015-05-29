@@ -1,13 +1,23 @@
-- name: Install MongoDB native
-  apt: pkg=mongodb state=present
+- name: Add Mongo specific key
+  apt_key: keyserver="{{mongo_repo_keyserver}}" id="{{mongo_repo_key}}" state=present
+
+- name: Add Mongo repo
+  apt_repository: repo="deb {{mongo_repo}} {{ansible_distribution_release}}/mongodb-org/3.0 multiverse" update_cache=yes state=present
+
+- name: Install MongoDB
+  apt: pkg=mongodb-org state=present update_cache=yes
   notify: Restart MongoDB
 
 - name: Create DB directory
-  file: path="{{db_folder}}" state=directory
+  file: path="{{db_folder}}" state=directory owner=mongodb group=mongodb
   notify: Restart MongoDB
 
 - name: Configure MongoDB
-  template: src=mongod.conf.j2 dest=/etc/mongod.conf owner=root group=root mode=0644
+  template: src=mongodb.conf.j2 dest=/etc/mongodb.conf owner=root group=root mode=0644
+  notify: Restart MongoDB
+
+- name: Remove /etc/init.d registration for MongoDB
+  file: path=/etc/init.d/mongodb state=absent
   notify: Restart MongoDB
 
 

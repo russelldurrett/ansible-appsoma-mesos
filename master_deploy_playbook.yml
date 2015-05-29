@@ -87,7 +87,10 @@
 
     # Install Appsoma Welder
     - role: ansible-welder
-      framework_url: "{{}}"
+      host_ip: "{{ hostvars[inventory_hostname]['ec2_ip_address'] }}"
+      scheduler_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+      db_folder: "{{ data_mount_point }}/welder_db"
       project_folder: "{{ data_mount_point }}/welder/projects"
       upload_folder: "{{ data_mount_point }}/welder/projects"
+      scheduler: "rhino"
       when: inventory_hostname == groups[inventory_group_master][0]

@@ -1,9 +1,10 @@
 
 - name: Add Appsoma user
+  no_log: true
   user:
     name: "{{ item.username }}"
     uid: "{{ item.uid }}"
-    password: "{{item.passwd}}"
+    password: "{{item.password | password_hash('sha512') }}"
     groups: docker
     state: present
   with_items: user_list

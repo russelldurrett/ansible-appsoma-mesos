@@ -1,12 +1,18 @@
-use_containers: False
-host_ip: "127.0.0.1"
+welder_user: "appsoma"
+use_tls: false
+use_containers: false
+host_ip: "{{ inventory_hostname }}"
 
-db_folder: "/mnt/data/welder/db"
+db_folder: "/mnt/data/welder_db"
 db_port: 27107
 
-projects_folder: "/mnt/data/welder/projects"
-uploads_folder: "/mnt/data/welder/projects"
+project_folder: "/mnt/data/welder/projects"
+upload_folder: "/mnt/data/welder/projects"
 
 scheduler: "rhino"
+
+use_https: False
+pem_path: "~/mycert.pem"
+cert_path: "~/mycert.crt"
 
 

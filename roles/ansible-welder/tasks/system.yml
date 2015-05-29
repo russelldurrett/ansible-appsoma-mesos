@@ -1,18 +1,73 @@
 - include: mongo.yml
 
+- name: Install PAM dev libraries (Debian/Ubuntu)
+  apt: pkg=libpam0g-dev state=present update_cache=yes
+  when: ansible_os_family == "Debian"
+
+- name: Install PAM dev libraries (RedHat/Centos)
+  yum: pkg=pam-devel state-present
+  when: ansible_os_family == "RedHat"
+
+- name: Create Welder dir
+  file: path=/opt/welder state=directory owner="{{ welder_user }}" group="{{ welder_user }}"
+
+- name: Create project folder
+  file: path="{{ project_folder }}" state=directory
+
+- name: Create upload folder
+  file: path="{{ upload_folder }}" state=directory
+
 - name: Clone Welder source
   git:
     dest: /opt/welder
     repo: https://github.com/appsoma/welder.git
     version: HEAD
     update: no
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
   register: git_pull
+  notify: Restart Welder
 
 - name: Create Welder Configuration
-  template: src=welder_config.json.j2 dest=/opt/welder/welder_config.json
+  template: src=welder_config.json.j2 dest=/opt/welder/config.json
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
+  notify: Restart Welder
 
 - name: Create Welder Init script
   template: src=init_welder.conf.j2 dest=/etc/init/welder.conf
+  notify: Restart Welder
+
+- name: Run NPM for widgets
+  shell: "cd /opt/welder/widgets; npm install;"
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
+  register: npmwidgets
+  failed_when: npmwidgets.stderr.find('ERROR') != -1
+  changed_when: npmwidgets.stdout != ''
+  notify: Restart Welder
+
+- name: Browserify widgets
+  shell: "cd /opt/welder/widgets; ./build"
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
+  register: browserifywidgets
+
+- name: Run NPM for welder
+  shell: "cd /opt/welder; npm install"
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
+  register: npmwelder
+  failed_when: npmwelder.stderr.find('ERROR') != -1
+  changed_when: npmwelder.stdout != ''
+  notify: Restart Welder
+
+- name: Start Mongo
+  service: name=mongod state=started enabled=yes
+
+- name: Start Welder
+  service: name=welder state=started enabled=yes
+
 
 
 

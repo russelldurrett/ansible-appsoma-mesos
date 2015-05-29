@@ -66,3 +66,4 @@
     - role: ec2Burn
       source_instance_id: "{{hostvars[groups[inventory_group_slave][0]]['ec2_id']}}"
       node_class: "{{ slave_class_name }}"
+      when: create_slave_image

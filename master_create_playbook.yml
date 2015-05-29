@@ -9,10 +9,18 @@
   roles:
     # Ensure that the VPC exists
     - role: ec2Vpc
-      when: aws_security_group_id is not defined
+      when: aws_master_security_group_id is not defined
 
     # Boot the master nodes and add them to the live inventory
     - role: ec2Boot
       count: "{{ master_count }}"
       node_class: "{{ master_class_name }}"
       node_group_name: "{{ inventory_group_master }}"
+
+  post_tasks:
+    - name: wait for master nodes to be available
+      local_action: wait_for host="{{ item.public_dns_name }}" port=22 delay=60 timeout=320 state=started
+      with_items: master_instances
+      when: master_instances is defined
+
+- include: master_deploy_playbook.yml

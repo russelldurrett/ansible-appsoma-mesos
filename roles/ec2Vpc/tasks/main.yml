@@ -26,17 +26,42 @@
 - name: Set Subnet ID
   set_fact: aws_vpc_subnet_id="{{ vpc['subnets'][0]['id']}}"
 
-- name: Create Security Group
+- name: Create All others Security Group
   ec2_group:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
     region: "{{ ec2_region }}"
     vpc_id: "{{ aws_vpc_id }}"
-    name: "{{ cluster_name }}-sg"
+    name: "{{ cluster_name }}-all-sg"
     description: "Security group for cluster {{ cluster_name }}"
     rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 8000
+        to_port: 9000
+        cidr_ip: 0.0.0.0/0
       - proto: all
-        group_name: "{{ cluster_name }}-sg"
+        group_name: "{{ cluster_name }}-all-sg"
+      - proto: all
+        group_name: "{{ cluster_name }}-master-sg"
+        group_desc: "Security group for cluster {{ cluster_name }}"
+  register: securityGroupAll
+
+- name: Set all others security group ID variable
+  set_fact: aws_all_security_group_id="{{ securityGroupAll['group_id'] }}"
+
+- name: Create Master Security Group
+  ec2_group:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ ec2_region }}"
+    vpc_id: "{{ aws_vpc_id }}"
+    name: "{{ cluster_name }}-master-sg"
+    description: "Security group for cluster {{ cluster_name }}"
+    rules:
       - proto: tcp
         from_port: 22
         to_port: 22
@@ -50,29 +75,19 @@
         to_port: 5050
         cidr_ip: 0.0.0.0/0
       - proto: tcp
-        from_port: 8080
-        to_port: 8080
+        from_port: 8000
+        to_port: 9000
         cidr_ip: 0.0.0.0/0
-      - proto: tcp
-        from_port: 8088
-        to_port: 8088
-        cidr_ip: 0.0.0.0/0
-      - proto: tcp
-        from_port: 8089
-        to_port: 8089
-        cidr_ip: 0.0.0.0/0
-      - proto: tcp
-        from_port: 8888
-        to_port: 8888
-        cidr_ip: 0.0.0.0/0
-      - proto: tcp
-        from_port: 10090
-        to_port: 10090
-        cidr_ip: 0.0.0.0/0
-  register: securityGroup
+      - proto: all
+        group_name: "{{ cluster_name }}-master-sg"
+      - proto: all
+        group_name: "{{ cluster_name }}-all-sg"
 
-- set_fact: aws_security_group_id="{{ securityGroup['group_id'] }}"
-- debug: msg=" GRP {{ aws_security_group_id }}"
+  register: securityGroupMaster
+
+- name: Set master security group ID variable
+  set_fact: aws_master_security_group_id="{{ securityGroupMaster['group_id'] }}"
+
 
 
 
