@@ -42,12 +42,13 @@
     command: create
     overwrite: yes
     type: CNAME
-    zone: "{{ route_53_zone }}"
-    zone: "{{ route_53_zone }}"
+    zone: "{{ route53_zone }}"
+    zone: "{{ route53_zone }}"
     ttl: 10
-    record: "{{node_class}}_{{ item.ami_launch_index | int + start_id | int }}.{{route_53_zone}}"
+    record: "{{node_class}}_{{ item.ami_launch_index | int + start_id | int }}.{{route53_zone}}"
     value: "{{ item.public_dns_name }}"
   with_items: ec2Create.instances
+  when: use_route53 == True
 
 - name: tag instances
   ec2_tag: region="{{ ec2_region }}" resource="{{ item.id }}" aws_access_key="{{ aws_access_key }}" aws_secret_key="{{ aws_secret_key }}"
