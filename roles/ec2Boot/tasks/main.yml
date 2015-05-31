@@ -84,7 +84,7 @@
     hostname: "{{ item.public_ip }}"
     groupname: "{{node_group_name}}"
     ec2_id: "{{ item.id }}"
-    ec2_public_ip_address: "{{ item.public_ip }}"
+    ec2_ip_address: "{{ item.public_ip }}"
     ec2_private_ip_address: "{{ item.private_ip }}"
     ec2_tag_id: "{{ item.ami_launch_index | int + start_id | int }}"
     ec2_tag_zoo_id: "{{ item.ami_launch_index | int + start_id | int}}"
@@ -98,7 +98,7 @@
     hostname: "{{ item.public_ip }}"
     groupname: "{{node_group_name}}"
     ec2_id: "{{ item.id }}"
-    ec2_public_ip_address: "{{ item.public_ip }}"
+    ec2_ip_address: "{{ item.public_ip }}"
     ec2_private_ip_address: "{{ item.private_ip }}"
     ec2_tag_id: "{{ item.ami_launch_index | int + start_id | int }}"
   with_items: ec2Create.instances

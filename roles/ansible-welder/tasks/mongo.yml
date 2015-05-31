@@ -16,6 +16,10 @@
   template: src=mongodb.conf.j2 dest=/etc/mongodb.conf owner=root group=root mode=0644
   notify: Restart MongoDB
 
+- name: Configure MongoDB
+  template: src=mongodb.conf.j2 dest=/etc/mongod.conf owner=root group=root mode=0644
+  notify: Restart MongoDB
+
 - name: Remove /etc/init.d registration for MongoDB
   file: path=/etc/init.d/mongodb state=absent
   notify: Restart MongoDB
