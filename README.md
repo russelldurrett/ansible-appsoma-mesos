@@ -65,14 +65,14 @@ If you use Route53 to manage a public domain name, you can assign DNS entries to
  
 * Copy `playbook_vars/aws_secret_vars.yml.template` to `playbook_vars/aws_secret_vars.yml` and edit the values to match your AWS account
     * Remember not to include the AWS keys in a git repo!
-* If you haven't already, copy `playbook_vars/required_vars.template` to `playbook_vars/required_vars.yml`
+    * If you haven't already, copy `playbook_vars/required_vars.template` to `playbook_vars/required_vars.yml`
     * Be sure to change the `ec2_key_name`, `ec2_region`, and `ec2_zone` keys to match your information
     * If you want to use Route53 DNS, make sure `use_route53: true` and `route53_zone` is set to your DNS zone.
     * Set the instance types, data volume size and type, and private lan subnets to your liking.  Remember these will cost you while running.
 
 Next, you'll have to set up the EC2 environment.  If you have an existing Boto config (`/etc/boto.cfg`, `~/.boto`, or `~/.aws/credentials`), you can skip this
 
-    source set_amazon_env.bash
+    source setup_amazon_env.bash
     
 Now, test that you can access the EC2 dynamic inventory.  This should produce a list of some contents of your EC2 account.  
 Any errors messages here will prevent you from accessing EC2 and using this playbook:
