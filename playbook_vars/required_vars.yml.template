@@ -20,6 +20,7 @@ private_lan_subnet: "10.10.0.0/24" # Note that EC2 requires the subnet to have a
 
 
 # NFS Data options
+nfs_data_mount: "/data"
 data_vol_size_gb: 250
 data_vol_type: "standard"
 data_mount_point: "/mnt/data"
