@@ -89,11 +89,31 @@ Now to run the playbook from scratch:
 
 You can safely re-run this command multiple times, in the event of an Amazon communication outage, or an error in variables.
 
+### Updating users
+If you edit `playbook_vars/users.yml`, you can update the entire cluster by running:
+    
+    ansible-playbook --private-key ~/vmmy.pem -i inventory/ec2Inventory.py sync_users.yml
+    
+This will add new users, and update existing users (and their passwords).  This fixed password management is the best solution short of a user directory system. ([To do items](#todo))
+
+### Connecting to the cluster
+The welder server will be listening on the master at the port specified in roles/ansible-welder/defaults/main.yml ( Defaults to `8890`)
+
+The users you have defined in `playbook_vars/users.yml` are available to log in to Welder, using the password defined.  These users do not have SSH access to the cluster.
+
+The `welder_group:` section of `playbook_vars/users.yml` defines a group that all Welder users will be a part of.
+
+### Developing with Welder
+The Welder source is checked out into `/opt/welder` on the master. There is an upstart script at `/etc/init/welder.conf` which can be used with `service start welder`. 
+Logs for the service are saved in `/var/log/upstart/welder.log`.
+
+The Welder users can be configured for ssh login by setting an authorized key in `~/.ssh/authorized_keys`.  Each user's home directory has a scratch space on the data dir in `~/data`
+
 ## How To install with an existing cluster
 
 *Still in development*
 
-## To Do
+## To Do<a name="todo'></a>
 
 * Cluster shutdown and cleanup 
 * Existing cluster support (mostly configuring values to be non-ec2 specific, and setting rules for host file variables)

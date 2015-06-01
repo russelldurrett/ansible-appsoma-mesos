@@ -75,8 +75,10 @@
     - role: ansible-docker
 
     # Create an Appsoma user as a member of the docker group (permission to run /usr/bin/docker)
-    - role: ansible-mesos-user
+    - role: ansible-welder-user
       dataDir: "{{ nfs_data_mount }}"
+      group: "{{ welder_group }}"
+      user_list: "{{ welder_user_list }}"
       enableDocker: true
 
     # Configure node as an NFS server

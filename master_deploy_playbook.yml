@@ -53,7 +53,9 @@
       when: nfsServerIp is defined
 
     # Create an users
-    - role: ansible-mesos-user
+    - role: ansible-welder-user
+      group: "{{ welder_group }}"
+      user_list: "{{ welder_user_list }}"
       dataDir: "{{ data_mount_point }}"
 
     # Make sure we have usable JDKs on masters
@@ -87,10 +89,11 @@
 
     # Install Appsoma Welder
     - role: ansible-welder
-      host_ip: "{{ hostvars[inventory_hostname]['ec2_ip_address'] }}"
+      int_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+      ext_ip: "{{ hostvars[inventory_hostname]['ec2_ip_address'] }}"
       scheduler_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
       db_folder: "{{ data_mount_point }}/welder_db"
       project_folder: "{{ data_mount_point }}/welder/projects"
-      upload_folder: "{{ data_mount_point }}/welder/projects"
+      upload_folder: "{{ data_mount_point }}/welder/uploads"
       scheduler: "rhino"
       when: inventory_hostname == groups[inventory_group_master][0]

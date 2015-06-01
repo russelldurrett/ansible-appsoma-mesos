@@ -1,11 +1,11 @@
 {
     "default": {
-        "apiURL": "http://{{ host_ip }}:8890",
-        "siteURL": "http://{{ host_ip }}:8890",
-        "consolePort": "8089",
+        "apiURL": "http://{{ ext_ip }}:{{welder_port }}",
+        "siteURL": "http://{{ int_ip }}:{{ welder_port }}",
+        "consolePort": "{{ welder_port | int + 1 }}",
         "projectsFolder": "{{ project_folder }}",
         "uploadFolder": "{{ upload_folder }}",
-        "pamGroupName": "docker",
+        "pamGroupName": "{{ welder_group['name'] }}",
         "mongodb": {
             "host": "localhost",
            "port": 27107,
@@ -14,7 +14,7 @@
         "scheduler": "{{ scheduler }}",
 {% if scheduler == "rhino" %}
         "rhino": {
-           "url": "{{ scheduler_ip }}:8899/"
+           "url": "http://{{ scheduler_ip }}:8899/"
         }
 {% elif scheduler == "sge" %}
         "sge": {
@@ -24,9 +24,9 @@
 {% endif %}
     },
     "TLS": {
-        "apiURL": "http://{{ host_ip }}:8890",
-        "siteURL": "http://{{ host_ip }}:8890",
-        "consolePort": "8089",
+        "apiURL": "http://{{ ext_ip }}:{{welder_port }}",
+        "siteURL": "http://{{ int_ip }}:{{ welder_port }}",
+        "consolePort": "{{ welder_port | int + 1 }}",
         "projectsFolder": "{{ project_folder }}",
         "uploadFolder": "{{ upload_folder }}",
         "pamGroupName": "docker",
@@ -38,7 +38,7 @@
         "scheduler": "{{ scheduler }}",
 {% if scheduler == "rhino" %}
         "rhino": {
-            "url": "{{ scheduler_ip }}:8899/"
+            "url": "http://{{ scheduler_ip }}:8899/"
         },
 {% elif scheduler == "sge" %}
         "sge": {

@@ -35,7 +35,9 @@
       when: nfsServerIp is defined
 
     # Create an users
-    - role: ansible-mesos-user
+    - role: ansible-welder-user
+      group: "{{ welder_group }}"
+      user_list: "{{ welder_user_list }}"
       dataDir: "{{ data_mount_point }}"
 
     # Install Python

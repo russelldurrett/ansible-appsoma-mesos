@@ -1,0 +1,13 @@
+---
+- hosts: [ "{{ inventory_group_service }}", "{{ inventory_group_master }}","{{ inventory_group_slave }}" ]
+  remote_user: ubuntu
+  sudo: True
+  vars_files:
+    - playbook_vars/common.yml
+    - playbook_vars/required_vars.yml
+    - playbook_vars/users.yml
+  roles:
+    - role: ansible-welder-user
+      group: "{{ welder_group }}"
+      user_list: "{{ welder_user_list }}"
+      dataDir: "{{ data_mount_point }}"

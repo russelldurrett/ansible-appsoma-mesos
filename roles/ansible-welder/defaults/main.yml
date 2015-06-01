@@ -1,18 +1,18 @@
 welder_user: "appsoma"
+welder_port: 8890
 use_tls: false
 use_containers: false
-host_ip: "{{ inventory_hostname }}"
 
 db_folder: "/mnt/data/welder_db"
 db_port: 27107
 
 project_folder: "/mnt/data/welder/projects"
-upload_folder: "/mnt/data/welder/projects"
+upload_folder: "/mnt/data/welder/uploads"
 
 scheduler: "rhino"
 
 use_https: False
-pem_path: "~/mycert.pem"
-cert_path: "~/mycert.crt"
+pem_path: "/opt/welder/mycert.pem"
+cert_path: "/opt/welder/mycert.crt"
 
 

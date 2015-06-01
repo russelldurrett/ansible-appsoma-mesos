@@ -1,11 +1,17 @@
 
+- name: Add Welder user group
+  group:
+    name: "{{ group['name'] }}"
+    gid: "{{ group['gid'] }}"
+    state: present
+
 - name: Add Appsoma user
-  no_log: true
   user:
     name: "{{ item.username }}"
     uid: "{{ item.uid }}"
     password: "{{item.password | password_hash('sha512') }}"
-    groups: docker
+    groups: "{{ group['name'] }},docker"
+    shell: "/bin/bash"
     state: present
   with_items: user_list
 
@@ -13,6 +19,7 @@
   file:
     name: "{{ dataDir }}/{{ item.username }}"
     owner: "{{ item.username }}"
+    group: "{{ group['name'] }}"
     state: directory
   with_items: user_list
 

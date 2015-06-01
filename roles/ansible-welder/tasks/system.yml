@@ -12,10 +12,10 @@
   file: path=/opt/welder state=directory owner="{{ welder_user }}" group="{{ welder_user }}"
 
 - name: Create project folder
-  file: path="{{ project_folder }}" state=directory
+  file: path="{{ project_folder }}" state=directory owner="{{ welder_user }}" group="{{ welder_group['name'] }}" mode=2775
 
 - name: Create upload folder
-  file: path="{{ upload_folder }}" state=directory
+  file: path="{{ upload_folder }}" state=directory  owner="{{ welder_user }}" group="{{ welder_group['name'] }}" mode=2775
 
 - name: Clone Welder source
   git:
