@@ -90,15 +90,10 @@ You can safely re-run this command multiple times, in the event of an Amazon com
 
 *Still in development*
 
-
-
-## How To install Welder
-
-*Still in development*
-
 ## To Do
 
 * Cluster shutdown and cleanup 
 * Existing cluster support (mostly configuring values to be non-ec2 specific, and setting rules for host file variables)
 * Supporting other clouds (GCE, OpenStack, Azure)
 * Dynamic node management (add and remove capacity when needed)
+* Dynamic user management
