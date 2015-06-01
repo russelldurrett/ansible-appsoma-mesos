@@ -80,7 +80,10 @@ Any errors messages here will prevent you from accessing EC2 and using this play
     inventory/ec2Inventory.py --list
 
 ### Running
-Now to run the playbook from scratch (note, if your private key is in ~/.ssh, you don't need the `--private-key` option):
+If your private key is in ~/.ssh, you don't need the `--private-key` option.  You may want to edit your user ssh config in `~/.ssh/config` or your system ssh config `/etc/ssh/ssh_config` to set `StrictHostKeyChecking no`. 
+This will remove the warnings (which require you to type `yes`) when you connect to a brand new node on Amazon.
+ 
+Now to run the playbook from scratch: 
 
     ansible-playbook --private-key ~/mykey.pem -i inventory/ec2Inventory.py create_cluster_playbook.yml -e "master_count=<# of masters> slave_count=<# of slaves>"
 
