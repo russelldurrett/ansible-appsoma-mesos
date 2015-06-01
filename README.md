@@ -94,7 +94,7 @@ If you edit `playbook_vars/users.yml`, you can update the entire cluster by runn
     
     ansible-playbook --private-key ~/vmmy.pem -i inventory/ec2Inventory.py sync_users.yml
     
-This will add new users, and update existing users (and their passwords).  This fixed password management is the best solution short of a user directory system. ([To do items](#todo))
+This will add new users, and update existing users (and their passwords).  This fixed password management is the best solution short of a user directory system. ([To do items](#to-do))
 
 ### Connecting to the cluster
 The welder server will be listening on the master at the port specified in roles/ansible-welder/defaults/main.yml ( Defaults to `8890`)
@@ -113,7 +113,7 @@ The Welder users can be configured for ssh login by setting an authorized key in
 
 *Still in development*
 
-## To Do<a name="todo'></a>
+## To Do
 
 * Cluster shutdown and cleanup 
 * Existing cluster support (mostly configuring values to be non-ec2 specific, and setting rules for host file variables)
