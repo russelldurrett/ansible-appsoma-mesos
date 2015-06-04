@@ -52,6 +52,8 @@
   sudo: yes
   sudo_user: "{{ welder_user }}"
   register: browserifywidgets
+  failed_when: browserifywidgets.stderr.find('ERROR') != -1
+  changed_when: browserifywidgets.stderr.find('ERROR') != -1
 
 - name: Run NPM for welder
   shell: "cd /opt/welder; npm install"
@@ -61,9 +63,6 @@
   failed_when: npmwelder.stderr.find('ERROR') != -1
   changed_when: npmwelder.stdout != ''
   notify: Restart Welder
-
-- name: Start Mongo
-  service: name=mongod state=started enabled=yes
 
 - name: Start Welder
   service: name=welder state=started enabled=yes

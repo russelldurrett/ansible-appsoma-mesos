@@ -4,7 +4,7 @@ use_tls: false
 use_containers: false
 
 db_folder: "/mnt/data/welder_db"
-db_port: 27107
+db_port: 27017
 
 project_folder: "/mnt/data/welder/projects"
 upload_folder: "/mnt/data/welder/uploads"

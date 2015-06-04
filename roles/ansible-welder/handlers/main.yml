@@ -1,5 +1,2 @@
-- name: Restart MongoDB
-  service: name=mongod state=restarted enabled=yes
-
 - name: Restart Welder
   service: name=welder state=restarted enabled=yes

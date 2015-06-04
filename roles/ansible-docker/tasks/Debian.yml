@@ -39,6 +39,9 @@
   command: ufw reload
   when: docker_listen_tcp == True
 
-- name: Allow incomming tcp traffic on {{docker_listen_port}}
+- name: Allow incoming tcp traffic on {{docker_listen_port}}
   command: ufw allow {{docker_listen_port}}/tcp
   when: docker_listen_tcp == True
+
+- name: Start and enable Docker
+  service: name=docker state=started enabled=yes

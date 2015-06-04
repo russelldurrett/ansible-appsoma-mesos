@@ -7,7 +7,7 @@ logappend=true
 
 # Listen to local interface only. Comment out to listen on all interfaces.
 bind_ip=localhost
-port={{ db_port }}
+port={{ db_port | int }}
 
 smallfiles=true
 nojournal=true

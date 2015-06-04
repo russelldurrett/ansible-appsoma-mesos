@@ -2,4 +2,4 @@
   when: not use_containers
 
 - include: haproxy.yml
-  when: use_route53
+  when: use_route53 and welder_dns_name is defined

@@ -20,12 +20,19 @@
 
 - name: create Rhino config
   template: src=rhino_container_config.j2 dest=/opt/rhino/rhino_container_config
-  register: config_create
 
+- name: Check if Rhino is running
+  shell: "docker ps -qf name=rhino*"
+  register: rhino_containers_running
+  changed_when: rhino_containers_running.stdout == ""
+
+- debug: msg="RHINO {{rhino_containers_running}}"
 - name: stop Rhino in Docker
   shell: "cd /opt/rhino; sudo ./rhino_in_container.bash --stop"
-  when: config_create.changed or get_url.changed
+  when: get_url.changed
 
 - name: start Rhino in Docker
   shell: "cd /opt/rhino; sudo ./rhino_in_container.bash --start --no-questions"
+  register: start_rhino
+  changed_when: start_rhino.stdout.find('Already Running') == -1
 

@@ -8,7 +8,7 @@
         "pamGroupName": "{{ welder_group['name'] }}",
         "mongodb": {
             "host": "localhost",
-            "port": 27107,
+            "port": {{ db_port | int }},
             "database": "welder"
         },
         "scheduler": "{{ scheduler }}",
@@ -32,7 +32,7 @@
         "pamGroupName": "docker",
         "mongodb": {
             "host": "localhost",
-            "port": 27107,
+            "port": {{ db_port | int }},
             "database": "welder"
         },
         "scheduler": "{{ scheduler }}",
