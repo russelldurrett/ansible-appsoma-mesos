@@ -89,13 +89,24 @@ Now to run the playbook from scratch:
 
 You can safely re-run this command multiple times, in the event of an Amazon communication outage, or an error in variables.
 
-### Updating users
 If you edit `playbook_vars/users.yml`, you can update the entire cluster by running:
     
     ansible-playbook --private-key ~/vmmy.pem -i inventory/ec2Inventory.py sync_users.yml
     
 This will add new users, and update existing users (and their passwords).  This fixed password management is the best solution short of a user directory system. (See [To do items](#to-do))
 
+#### Troubleshooting
+* Missing variable values
+    * Check the playbook_vars files, and ensure that you have customized the values for `aws_secret_vars.yml`, `required_vars.yml`, and `users.yml`
+    * Rerun.  You can use the ansible retry if it offers as well.
+* Timeouts or `receive failed` messages
+    * Custom repositories may not be responding (Docker, Mesosphere, Github. possibly core repos or cloud-served repos).
+    * You may need to check the nodes internet connectivity or wait to rerun.  You can use the ansible retry if it offers as well.
+* Timeouts or errors from AWS or Boto
+    * Check that your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables are set, or your boto.cfg is set up.
+    * Check connectivity of the host you are running on to AWS (AWS may also suffer temporary outages too).
+    * Rerun. You can use the ansible retry if it offers as well.
+    
 ### Connecting to the cluster
 The welder server will be listening on the master at the port specified in roles/ansible-welder/defaults/main.yml ( Defaults to `8890`)
 

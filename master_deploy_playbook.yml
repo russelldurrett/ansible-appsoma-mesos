@@ -15,7 +15,7 @@
         ttl: 10
         record: "{{ welder_dns_name }}.{{route53_zone}}"
         value: "{{ hostvars[groups[inventory_group_master][0]]['ec2_public_dns_name'] }}"
-      when: use_route53
+      when: use_route53 and welder_dns_name is defined
 
 - hosts: [ "{{ inventory_group_master }}" ]
   remote_user: ubuntu
