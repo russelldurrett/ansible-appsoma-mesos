@@ -4,7 +4,7 @@
     dest: /opt/welder/ha-proxy-marathon-bridge.py
 
 - name: Create bridge config directory
-  file: path=/etc/haproxy-marathon-bridge state=directory
+  file: path=/etc/ha-proxy-marathon-bridge state=directory
 
 - name: Create service configuration file
   template: src=service.json.j2 dest=/etc/ha-proxy-marathon-bridge/services.json
