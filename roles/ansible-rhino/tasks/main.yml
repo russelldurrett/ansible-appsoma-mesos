@@ -11,7 +11,7 @@
 
 - name: Fetch Rhino container setup script
   get_url:
-    url: https://raw.githubusercontent.com/appsoma/rhino/ansible-support/rhino_in_container.bash
+    url: https://raw.githubusercontent.com/appsoma/rhino/master/rhino_in_container.bash
     dest: /opt/rhino/rhino_in_container.bash
   register: get_url
 
@@ -26,10 +26,9 @@
   register: rhino_containers_running
   changed_when: rhino_containers_running.stdout == ""
 
-- debug: msg="RHINO {{rhino_containers_running}}"
 - name: stop Rhino in Docker
   shell: "cd /opt/rhino; sudo ./rhino_in_container.bash --stop"
-  when: get_url.changed
+  when: get_url.changed or rhino_containers_running.changed
 
 - name: start Rhino in Docker
   shell: "cd /opt/rhino; sudo ./rhino_in_container.bash --start --no-questions"

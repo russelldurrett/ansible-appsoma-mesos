@@ -5,3 +5,6 @@ welder_user_list:
   - { username: appsoma, uid: 2001, password: zoink012 }
   - { username: demo, uid: 2003, password: zoink123 }
 
+storm_user: appsoma
+kafka_user: appsoma
+

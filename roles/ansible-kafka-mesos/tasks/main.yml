@@ -1,0 +1,8 @@
+- name: Fetch kafka-mesos
+
+- name: Fetch kafka
+
+- name: Configure kafka
+
+- name: Start scheduler
+

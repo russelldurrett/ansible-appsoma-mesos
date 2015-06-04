@@ -1,0 +1,10 @@
+- name: Fetch storm-mesos
+
+- name: Fetch storm
+
+- name: Configure storm
+
+- name: Start Nimbus server
+
+- name: Start UI
+
