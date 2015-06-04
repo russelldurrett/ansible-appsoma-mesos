@@ -1,0 +1,14 @@
+- name: Get HAProxy bridge
+  get_url:
+    url: https://raw.githubusercontent.com/appsoma/devops/master/haproxy-marathon-bridge.py
+    dest: /opt/welder/ha-proxy-marathon-bridge.py
+
+- name: Create bridge config directory
+  file: path=/etc/haproxy-marathon-bridge state=directory
+
+- name: Create service configuration file
+  template: src=service.json.j2 dest=/etc/ha-proxy-marathon-bridge/services.json
+
+- name: Create marathons configuration
+  template: src=marathons.j2 dest=/etc/ha-proxy-marathon-bridge/marathons
+

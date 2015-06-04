@@ -51,7 +51,6 @@
     overwrite: yes
     type: CNAME
     zone: "{{ route53_zone }}"
-    zone: "{{ route53_zone }}"
     ttl: 10
     record: "{{node_class}}_{{ item.ami_launch_index | int + start_id | int }}.{{route53_zone}}"
     value: "{{ item.public_dns_name }}"

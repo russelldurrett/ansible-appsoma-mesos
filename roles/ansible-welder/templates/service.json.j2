@@ -1,0 +1,8 @@
+[
+    {
+        "url": "{{ welder_dns_name }}.{{route53_zone}}",
+        "service_port": "80",
+        "app_name": "welder",
+        "servers": [ "{{ hostvars[groups[inventory_group_master][0]]['ec2_ip_address'] }}:{{ welder_port }}" ]
+    }
+]

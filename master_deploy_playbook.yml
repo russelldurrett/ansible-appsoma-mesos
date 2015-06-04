@@ -1,4 +1,22 @@
 ---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - playbook_vars/required_vars.yml
+    - playbook_vars/aws_secret_vars.yml
+    - playbook_vars/common.yml
+  tasks:
+    - name: Create Welder master DNS entry
+      route53:
+        command: create
+        overwrite: yes
+        type: CNAME
+        zone: "{{ route53_zone }}"
+        ttl: 10
+        record: "{{ welder_dns_name }}.{{route53_zone}}"
+        value: "{{ hostvars[groups[inventory_group_master][0]]['ec2_public_dns_name'] }}"
+      when: use_route53
+
 - hosts: [ "{{ inventory_group_master }}" ]
   remote_user: ubuntu
   sudo: True
@@ -7,11 +25,14 @@
     - playbook_vars/required_vars.yml
     - playbook_vars/users.yml
   pre_tasks:
-    - name: Set Hostname to "{{ inventory_hostname }}"
-      hostname: name="{{ inventory_hostname }}"
+
+    - name: Set Hostname to "{{hostvars[inventory_hostname]['ec2_ip_address']}}"
+      hostname: name="{{hostvars[inventory_hostname]['ec2_ip_address']}}"
+
     - name: Find NFS Server IP
       set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['ec2_private_ip_address'] }}
       when: groups[inventory_group_service] is defined
+
     - name:  Set zookeeper private IP list with port
       set_fact:
         zookeeper_hosts_with_port: |
@@ -19,6 +40,7 @@
           {% for item in groups[inventory_group_master] -%}
             {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
+
     - name:  Set zookeeper private IP list
       set_fact:
         zookeeper_hosts_no_port: |
