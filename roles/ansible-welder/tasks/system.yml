@@ -53,7 +53,7 @@
   sudo_user: "{{ welder_user }}"
   register: browserifywidgets
   failed_when: browserifywidgets.stderr.find('ERROR') != -1
-  changed_when: browserifywidgets.stderr.find('ERROR') != -1
+  changed_when:
 
 - name: Run NPM for welder
   shell: "cd /opt/welder; npm install"

@@ -1,0 +1,29 @@
+# Ubuntu upstart file for Appsoma Welder
+limit fsize unlimited unlimited
+limit cpu unlimited unlimited
+limit as unlimited unlimited
+limit nofile 64000 64000
+limit rss unlimited unlimited
+limit nproc 32000 32000
+
+kill timeout 300 # wait 300s between SIGTERM and SIGKILL.
+
+
+start on runlevel [2345]
+stop on runlevel [06]
+
+script
+  ENABLE_STORM="yes"
+  DIR=/opt/storm/storm-mesos-{{ storm_version }}
+  DAEMON_OPTS="nimbus"
+  DAEMON=$DIR/bin/storm-mesos
+  UI_OPTS="ui"
+  DAEMON_UI=$DIR/bin/storm
+  DAEMON_USER={{ storm_user }}
+
+  if [ "x$ENABLE_STORM" = "xyes" ]
+  then
+    exec start-stop-daemon --start --chdir $DIR --chuid $DAEMON_USER --exec $DAEMON $DAEMON_OPTS
+    exec start-stop-daemon --start --chdir $DIR --chuid $DAEMON_USER --exec $DAEMON_UI $UI_OPTS
+  fi
+end script

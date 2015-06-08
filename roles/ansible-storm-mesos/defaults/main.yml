@@ -1,0 +1,18 @@
+storm_version: 0.9.4
+storm_ui_port: 8180
+
+storm_tarfile_location_uri: "file:///{{ data_mount_point }}/storm/storm-mesos-{{ storm_version }}.tgz"
+# Configured to allow a single supervisor and worker per amazon t2.medium node
+# 2 cpus and less than 2.5GB of ram (out of 2.9 available)
+# Can be tweaked
+cpus_per_worker: 1.5
+memory_per_worker_mb: 1024
+executor_cpu_allocation: 0.5
+executor_memory_alloc_mb: 512
+
+nimbus_timeout: 30
+supervisor_timeout: 30
+
+supervisor_ports:
+  - 6700
+  - 6701

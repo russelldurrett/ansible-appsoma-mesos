@@ -1,0 +1,45 @@
+mesos.master.url: "zk://{{ zookeeper_hosts }}/mesos"
+storm.zookeeper.servers:
+{% for server in zookeeper_hosts_no_port_list %}
+  - "{{ server }}"
+{% endfor %}
+
+mesos.master.failover.timeout.secs: 30
+mesos.supervisor.suicide.inactive.timeout.secs: 3600
+
+mesos.executor.uri: "{{ storm_tarfile_location_uri }}"
+mesos.framework.role: "*"
+mesos.framework.checkpoint: false
+mesos.master.failover.timeout.secs: 60
+mesos.framework.name: "Storm {{ storm_version }}"
+
+topology.mesos.worker.cpu: {{ cpus_per_worker }}
+topology.mesos.worker.mem.mb: {{ memory_per_worker_mb }}
+topology.mesos.executor.cpu: {{ executor_cpu_allocation }}
+topoplogy.mesos.executor.mem.mb: {{ executor_memory_alloc_mb }}
+
+# Use Netty to avoid ZMQ dependencies
+storm.messaging.transport: "backtype.storm.messaging.netty.Context"
+storm.messaging.netty.client_worker_threads: 1
+storm.messaging.netty.server_worker_threads: 1
+storm.local.dir: "storm-local"
+
+# Nimbus (server) settings
+nimbus.supervisor.timeout.secs: {{ nimbus_timeout }}
+nimbus.task.launch.secs: {{ nimbus_timeout }}
+nimbus.task.timeout.secs: {{ nimbus_timeout }}
+
+# Nimbus host must be a DNS-resolvable hostname, and match the system set hostname.
+# It will be unable to attach to the host at port 6627 otherwise
+nimbus.host: "{{ framework_host }}"
+
+# Supervisor (node agent) settings
+supervisor.worker.start.timeout.secs: {{ supervisor_timeout }}
+supervisor.worker.timeout.secs: {{ supervisor_timeout }}
+supervisor.slots.ports:
+{% for port in supervisor_ports %}
+  - {{ port }}
+{% endfor %}
+
+# Storm UI settings
+ui.port: {{ storm_ui_port }}

@@ -1,8 +1,38 @@
+- name: Add Gradle repo
+  apt_repository: repo=ppa:cwchien/gradle state=present update_cache=yes
+
+- name: Install Gradle
+  apt: pkg=gradle state=present update_cache=yes
+
+- name: Make kafka-mesos dir
+  file: path=/opt/kafka state=directory owner="{{ kafka_user }}" group="{{kafka_user}}"
+
 - name: Fetch kafka-mesos
+  git:
+    repo: https://github.com/mesos/kafka.git
+    dest: /opt/kafka
+    version: HEAD
+    update: no
+  sudo: yes
+  sudo_user: "{{ kafka_user }}"
+  register: git_pull
 
-- name: Fetch kafka
+- name: Build kafka-mesos
+  shell: "./gradlew jar"
+  args:
+     chdir: /opt/kafka
 
-- name: Configure kafka
+- name: Download Kafka tarball
+  get_url:
+    url: https://archive.apache.org/dist/kafka/0.8.2.1/kafka_2.10-0.8.2.1.tgz
+    dest: /opt/kafka/kafka_2.10-0.8.2.1.tgz
 
-- name: Start scheduler
+- name: Set Configuration
+  template: src=kafka-mesos.properties.j2 dest=/opt/kafka/kafka-mesos.properties
+
+- name: Set init script
+  template: src=init_kafka-mesos.conf.j2 dest=/etc/init/kafka-mesos.conf
+
+- name: Start kafka-mesos
+  service: name=kafka-mesos state=started
 

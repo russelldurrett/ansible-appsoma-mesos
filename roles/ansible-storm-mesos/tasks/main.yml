@@ -1,10 +1,58 @@
+- name: Make sure Maven is installed
+  no_log: yes
+  apt: pkg=maven state=present update_cache=yes
+  when: ansible_os_family == "Debian"
+
+- name: Make storm-mesos dir
+  file: path=/opt/storm state=directory owner="{{ storm_user }}" group="{{storm_user}}"
+
+- name: Make storm tarfile dir
+  file: path="{{ data_mount_point }}/storm" state=directory owner="{{ storm_user }}" group="{{storm_user}}"
+
 - name: Fetch storm-mesos
+  git:
+    repo: https://github.com/mesos/storm.git
+    dest: /opt/storm
+    version: HEAD
+    update: no
+  sudo: yes
+  sudo_user: "{{ storm_user }}"
+  register: git_pull
 
-- name: Fetch storm
+- name: Create storm config
+  template: src=storm.yaml.j2 dest=/opt/storm/storm.yaml owner="{{ storm_user }}" group="{{storm_user}}"
 
-- name: Configure storm
+- name: Set storm version
+  lineinfile: dest=/opt/storm/pom.xml regexp='^    <version>*' line="    <version>{{ storm_version }}</version>"
 
-- name: Start Nimbus server
+- name: Build storm mesos release
+  no_log: yes
+  shell: "cd /opt/storm; bin/build-release.sh"
+  sudo: yes
+  sudo_user: "{{ storm_user }}"
+  register: storm_build
+  failed_when: false
+  failed_when: storm_build.stdout.find('BUILD SUCCESS') == -1
+
+- name: Expand storm release locally
+  no_log: yes
+  unarchive: src="/opt/storm/storm-mesos-{{ storm_version }}.tgz" dest="/opt/storm/" copy=no
+  sudo: yes
+  sudo_user: "{{ storm_user }}"
+
+- name: Copy storm mesos release to mounted dir
+  command: "cp /opt/storm/storm-mesos-{{ storm_version }}.tgz {{ data_mount_point}}/storm/storm-mesos-{{ storm_version }}.tgz"
+  sudo: yes
+  sudo_user: "{{ storm_user }}"
+
+- name: Create storm server upstart script
+  template: src=init_storm-mesos.conf.j2 dest=/etc/init/storm-mesos.conf
+
+- name: Create storm UI upstart script
+  template: src=init_storm-mesos-ui.conf.j2 dest=/etc/init/storm-mesos-ui.conf
+
+- name: Start Nimbus server and framework
+  service: name=storm-mesos state=started enabled=yes
 
 - name: Start UI
-
+  service: name=storm-mesos-ui state=started enabled=yes

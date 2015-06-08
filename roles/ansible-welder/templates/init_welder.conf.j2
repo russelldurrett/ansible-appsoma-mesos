@@ -36,6 +36,6 @@ script
 
   if [ "x$ENABLE_WELDER" = "xyes" ]
   then
-    cd $DIR; exec start-stop-daemon --start --exec $DAEMON $DAEMON_OPTS
+    exec start-stop-daemon --chdir $DIR --start --exec $DAEMON $DAEMON_OPTS
   fi
 end script
