@@ -103,33 +103,8 @@
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
       when: inventory_hostname == groups[inventory_group_master][0]
 
-    # Install Storm Mesos framework
-    - role: ansible-storm-mesos
-      zookeeper_hosts: "{{ zookeeper_hosts_with_port }}"
-      zookeeper_hosts_no_port_list: "{{ zookeeper_hosts_no_port.split(',') }}"
-      framework_host: "{{ hostvars[inventory_hostname]['ec2_private_dns_name'] }}"
-      when: inventory_hostname == groups[inventory_group_master][0]
-
-    # Install Kafka Mesos framework
-    - role: ansible-kafka-mesos
-      zookeeper_hosts: "{{ zookeeper_hosts_with_port }}"
-      framework_host: "{{ hostvars[inventory_hostname]['ec2_private_dns_name'] }}"
-      when: inventory_hostname == groups[inventory_group_master][0]
-
-    # Install Appsoma Rhino framework
-    - role: ansible-rhino
-      zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
-      db_folder: "{{ data_mount_point }}/rhino_db"
-      when: inventory_hostname == groups[inventory_group_master][0]
-
-    # Install Appsoma Welder
-    - role: ansible-welder
-      int_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
-      ext_ip: "{{ hostvars[inventory_hostname]['ec2_ip_address'] }}"
-      scheduler_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
-      db_folder: "{{ data_mount_point }}/welder_db"
-      project_folder: "{{ data_mount_point }}/welder/projects"
-      upload_folder: "{{ data_mount_point }}/welder/uploads"
-      scheduler: "rhino"
-      when: inventory_hostname == groups[inventory_group_master][0]
+- include: playbooks/kafka_playbook.yml
+- include: playbooks/storm_playbook.yml
+- include: playbooks/rhino_playbook.yml
+- include: playbooks/welder_playbook.yml
 

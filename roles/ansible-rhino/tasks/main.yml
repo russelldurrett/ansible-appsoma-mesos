@@ -13,7 +13,7 @@
   get_url:
     url: https://raw.githubusercontent.com/appsoma/rhino/master/rhino_in_container.bash
     dest: /opt/rhino/rhino_in_container.bash
-  register: get_url
+  register: fetched_rhino
 
 - name: Set rhino script executable
   file: path=/opt/rhino/rhino_in_container.bash mode=0744 state=file
@@ -26,16 +26,16 @@
   register: rhino_containers_running
   changed_when: rhino_containers_running.stdout == ""
 
-#- name: stop Rhino in Docker
+- name: stop Rhino in Docker
   shell: "sudo ./rhino_in_container.bash --stop"
   args:
     chdir: "/opt/rhino"
-  when: get_url.changed or rhino_containers_running.changed
+  when: fetched_rhino.changed or rhino_containers_running.changed
 
-#- name: start Rhino in Docker
-#  shell: "sudo ./rhino_in_container.bash --start --no-questions"
-#  args:
-#    chdir: "/opt/rhino"
-#  register: start_rhino
-#  changed_when: start_rhino.stdout.find('Already Running') == -1
+- name: start Rhino in Docker
+  shell: "sudo ./rhino_in_container.bash --start --no-questions"
+  args:
+    chdir: "/opt/rhino"
+  register: start_rhino
+  changed_when: start_rhino.stdout.find('Already Running') == -1
 

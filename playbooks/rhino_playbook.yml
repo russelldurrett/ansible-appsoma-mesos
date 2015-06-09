@@ -1,0 +1,23 @@
+---
+- hosts: [ "{{ inventory_group_master }}" ]
+  remote_user: ubuntu
+  sudo: True
+  vars_files:
+    - ../playbook_vars/common.yml
+    - ../playbook_vars/required_vars.yml
+    - ../playbook_vars/users.yml
+
+  pre_tasks:
+    - name:  Set zookeeper private IP list with port
+      set_fact:
+        zookeeper_hosts_with_port: |
+          {% set comma = joiner(':' + zookeeper_client_port + ',') %}
+          {% for item in groups[inventory_group_master] -%}
+            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+          {%- endfor %}
+
+  roles:
+    - role: ../roles/ansible-rhino
+      zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
+      db_folder: "{{ data_mount_point }}/rhino_db"
+      when: inventory_hostname == groups[inventory_group_master][0]

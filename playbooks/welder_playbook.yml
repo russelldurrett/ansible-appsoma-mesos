@@ -1,0 +1,19 @@
+---
+- hosts: [ "{{ inventory_group_master }}" ]
+  remote_user: ubuntu
+  sudo: True
+  vars_files:
+    - ../playbook_vars/common.yml
+    - ../playbook_vars/required_vars.yml
+    - ../playbook_vars/users.yml
+
+  roles:
+    - role: ../roles/ansible-welder
+      int_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+      ext_ip: "{{ hostvars[inventory_hostname]['ec2_ip_address'] }}"
+      scheduler_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+      db_folder: "{{ data_mount_point }}/welder_db"
+      project_folder: "{{ data_mount_point }}/welder/projects"
+      upload_folder: "{{ data_mount_point }}/welder/uploads"
+      scheduler: "rhino"
+      when: inventory_hostname == groups[inventory_group_master][0]
