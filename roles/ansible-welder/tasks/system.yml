@@ -21,7 +21,7 @@
   git:
     dest: /opt/welder
     repo: https://github.com/appsoma/welder.git
-    version: HEAD
+    version: "{{ welder_branch if welder_branch is defined else 'HEAD' }}"
     update: no
   sudo: yes
   sudo_user: "{{ welder_user }}"
