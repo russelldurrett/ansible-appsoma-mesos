@@ -1,0 +1,10 @@
+[
+{% for service in haproxy_services %}
+    {
+        "url": "{{ service['dns_name'] }}",
+        "service_port": "80",
+        "app_name": "{{ service['name'] }}",
+        "servers": [ "{{ hostvars[groups[inventory_group_master][0]]['ec2_ip_address'] }}:{{ service['port'] }}" ]
+    }{{ ',' if not loop.last else '' }}
+{% endfor %}
+]

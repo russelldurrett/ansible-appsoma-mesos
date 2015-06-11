@@ -9,7 +9,9 @@ ec2_ami_id: "ami-7eb2a716" # Base HVM Ubuntu 14.04 image
 
 use_route53: true
 route53_zone: "mydomain.com"
-welder_dns_name: "welder"
+
+haproxy-services:
+  - { name: 'welder', dns_name: "{{ cluster_name}}.{{route53_zone}}", port: 8890 }
 
 master_instance_type: "t2.micro"  # Master doesn't usually require a lot of resources.  Micro is for test only however
 service_instance_type: "t2.micro" # Serving NFS is not resource intensive, so a "micro" or "small" is good for most deploys
