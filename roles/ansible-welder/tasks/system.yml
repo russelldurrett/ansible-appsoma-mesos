@@ -34,6 +34,9 @@
   sudo_user: "{{ welder_user }}"
   notify: Restart Welder
 
+- name: Create Welder start script
+  template: src=welder.sh.j2 dest=/opt/welder/welder.sh mode=744
+
 - name: Create Welder Init script
   template: src=init_welder.conf.j2 dest=/etc/init/welder.conf
   notify: Restart Welder

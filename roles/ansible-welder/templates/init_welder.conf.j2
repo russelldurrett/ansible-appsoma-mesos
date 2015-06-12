@@ -28,11 +28,11 @@ script
   ENABLE_WELDER="yes"
   DIR=/opt/welder
 {% if use_tls %}
-  DAEMON_OPTS="$DIR/welder.js TLS"
+  DAEMON_OPTS="TLS"
 {% else %}
-  DAEMON_OPTS="$DIR/welder.js default"
+  DAEMON_OPTS="default"
 {% endif %}
-  DAEMON=/usr/local/bin/node
+  DAEMON=/opt/welder/welder.sh
 
   if [ "x$ENABLE_WELDER" = "xyes" ]
   then
