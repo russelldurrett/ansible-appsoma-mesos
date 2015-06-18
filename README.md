@@ -57,7 +57,7 @@ and edit to suit.  The only absolute customization you must do is the `cluster_n
 
 This script will create 1 NFS server with an EBS data volume and a new VPC, as well as the master and slave nodes.  Make sure your subscription has enough resources available
 To run with Amazon EC2, you'll have to collect an access credential (Access Key/Secret Key, or Access Key ID and Secret Access Key, either name might appear)
-You'll also need to register a keypair on EC2, either with the AWS CLI or on the web interface, on the EC2 Dashboard under "Network & Security". 
+You'll also need to register a [keypair on EC2](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html). 
 
 You'll also need to select an AWS region and availability zone to install the cluster in.
 
