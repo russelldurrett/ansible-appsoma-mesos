@@ -7,7 +7,7 @@
 
 - include: conf.yml
 
-- include: haproxy.yml
-  when: haproxy_script_location != ""
+#- include: haproxy.yml
+#  when: haproxy_script_location != ""
 
 

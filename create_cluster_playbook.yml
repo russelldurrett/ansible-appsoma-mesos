@@ -27,6 +27,7 @@
       count: "{{ slave_count }}"
       node_class: "{{ slave_class_name }}"
       node_group_name: "{{ inventory_group_slave }}"
+      when: slave_count is defined and slave_count > 0
 
   post_tasks:
     - name: wait for service nodes to be available

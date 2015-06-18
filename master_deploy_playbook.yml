@@ -95,7 +95,7 @@
     # Install mesos in master mode
     - role: ansible-mesos
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
-      mesos_install_mode: 'master'
+      mesos_install_mode: "{{ 'master' if run_slave_on_master is not defined else 'master-slave' }}"
       mesos_cluster_name: "{{cluster_name}}"
 
     # Install marathon
