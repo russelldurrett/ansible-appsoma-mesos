@@ -1,0 +1,20 @@
+---
+- name: Restart apache
+  action: service name=apache2 state=restarted
+  when: ansible_os_family == "Debian"
+
+- name: Restart apache
+  action: service name=httpd state=restarted
+  when: ansible_os_family == "RedHat"
+
+- name: Restart gmond
+  service: name=ganglia-monitor state=restarted
+  when: ansible_os_family == "Debian"
+
+- name: Restart gmond
+  action: service name=gmond state=restarted
+  when: ansible_os_family == "RedHat"
+
+- name: Restart gmetad
+  service: name=gmetad state=restarted
+  when: role == 'master'

@@ -6,7 +6,9 @@
     - ../playbook_vars/common.yml
     - ../playbook_vars/required_vars.yml
     - ../playbook_vars/users.yml
-
+  pre_tasks:
+    - name: Check for version to use
+      debug: msg="Using version {{ welder_version if welder_version is defined else 'HEAD' }}"
   roles:
     - role: ../roles/ansible-welder
       int_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"

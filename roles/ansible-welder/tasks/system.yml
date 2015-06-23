@@ -11,6 +11,9 @@
 - name: Create Welder dir
   file: path=/opt/welder state=directory owner="{{ welder_user }}" group="{{ welder_user }}"
 
+- name: Create Welder log dir
+  file: path="{{ welder_log_dir }}" state=directory
+
 - name: Create project folder
   file: path="{{ project_folder }}" state=directory owner="{{ welder_user }}" group="{{ welder_group['name'] }}" mode=2775
 
@@ -21,12 +24,24 @@
   git:
     dest: /opt/welder
     repo: https://github.com/appsoma/welder.git
-    version: "{{ welder_branch if welder_branch is defined else 'HEAD' }}"
+    version: "{{ welder_version if welder_version is defined else 'HEAD' }}"
     update: no
   sudo: yes
   sudo_user: "{{ welder_user }}"
   register: git_pull
   notify: Restart Welder
+
+- name: Add Certificate
+  copy: src="{{ welder_cert_path }}" dest="/opt/welder/certificate.crt" mode=600
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
+  when: welder_use_tls
+
+- name: Add Certificate key
+  copy: src="{{ welder_key_path }}" dest="/opt/welder/certificate.key" mode=600
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
+  when: welder_use_tls
 
 - name: Create Welder Configuration
   template: src=welder_config.json.j2 dest=/opt/welder/config.json
@@ -36,10 +51,16 @@
 
 - name: Create Welder start script
   template: src=welder.sh.j2 dest=/opt/welder/welder.sh mode=744
+  sudo: yes
+  sudo_user: "{{ welder_user }}"
 
 - name: Create Welder Init script
   template: src=init_welder.conf.j2 dest=/etc/init/welder.conf
   notify: Restart Welder
+
+- name: Create Welder Widgets Init script
+  template: src=init_welder-widgets.conf.j2 dest=/etc/init/welder-widgets.conf
+  notify: Restart Welder Widgets
 
 - name: Run NPM for widgets
   shell: "cd /opt/welder/widgets; npm install;"
@@ -69,6 +90,9 @@
 
 - name: Start Welder
   service: name=welder state=started enabled=yes
+
+- name: Start Welder Widgets
+  service: name=welder-widgets state=started enabled=yes
 
 
 

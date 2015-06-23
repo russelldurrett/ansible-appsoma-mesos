@@ -1,6 +1,7 @@
 welder_user: "appsoma"
 welder_port: 8890
-use_tls: false
+welder_log_dir: /var/log/appsoma
+welder_use_tls: false
 use_containers: false
 
 db_folder: "/mnt/data/welder_db"
@@ -12,7 +13,7 @@ upload_folder: "/mnt/data/welder/uploads"
 scheduler: "rhino"
 
 use_https: False
-pem_path: "/opt/welder/mycert.pem"
-cert_path: "/opt/welder/mycert.crt"
+key_path: "/opt/welder/certificate.key"
+cert_path: "/opt/welder/certificate.crt"
 
 

@@ -1,19 +1,19 @@
-#- name: fetch Rhino from github
-#  git:
-#    dest: /opt/rhino
-#    repo: https://github.com/appsoma/rhino.git
-#    version: HEAD
-#    update: no
-#  register: git_pull
-
-- name: Create Rhino directory
-  file: path=/opt/rhino state=directory
-
-- name: Fetch Rhino container setup script
-  get_url:
-    url: https://raw.githubusercontent.com/appsoma/rhino/master/rhino_in_container.bash
-    dest: /opt/rhino/rhino_in_container.bash
+- name: fetch Rhino from github
+  git:
+    dest: /opt/rhino
+    repo: https://github.com/appsoma/rhino.git
+    version: HEAD
+    update: no
   register: fetched_rhino
+
+#- name: Create Rhino directory
+#  file: path=/opt/rhino state=directory
+
+#- name: Fetch Rhino container setup script
+#  get_url:
+#    url: https://raw.githubusercontent.com/appsoma/rhino/master/rhino_in_container.bash
+#    dest: /opt/rhino/rhino_in_container.bash
+#  register: fetched_rhino
 
 - name: Set rhino script executable
   file: path=/opt/rhino/rhino_in_container.bash mode=0744 state=file
@@ -27,13 +27,13 @@
   changed_when: rhino_containers_running.stdout == ""
 
 - name: stop Rhino in Docker
-  shell: "sudo ./rhino_in_container.bash --stop"
+  shell: "sudo ./rhino_in_container.bash --stop {{ '--dev' if use_dev else '' }}"
   args:
     chdir: "/opt/rhino"
   when: fetched_rhino.changed or rhino_containers_running.changed
 
 - name: start Rhino in Docker
-  shell: "sudo ./rhino_in_container.bash --start --no-questions"
+  shell: "sudo ./rhino_in_container.bash --start --no-questions {{ '--dev' if use_dev else '' }}"
   args:
     chdir: "/opt/rhino"
   register: start_rhino

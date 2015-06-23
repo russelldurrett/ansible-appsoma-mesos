@@ -1,7 +1,7 @@
 {
     "default": {
-        "apiURL": "http://{{ ext_ip }}:{{welder_port }}",
-        "siteURL": "http://{{ int_ip }}:{{ welder_port }}",
+        "apiURL": "http://{{ int_ip }}:{{welder_port }}",
+        "siteURL": "http://{{ ext_ip }}:{{ welder_port }}",
         "consolePort": "{{ welder_port | int + 1 }}",
         "projectsFolder": "{{ project_folder }}",
         "uploadFolder": "{{ upload_folder }}",
@@ -24,8 +24,8 @@
 {% endif %}
     },
     "TLS": {
-        "apiURL": "http://{{ ext_ip }}:{{welder_port }}",
-        "siteURL": "http://{{ int_ip }}:{{ welder_port }}",
+        "apiURL": "https://{{ int_ip }}:{{welder_port }}",
+        "siteURL": "https://{{ ext_ip }}:{{ welder_port }}",
         "consolePort": "{{ welder_port | int + 1 }}",
         "projectsFolder": "{{ project_folder }}",
         "uploadFolder": "{{ upload_folder }}",
@@ -47,7 +47,7 @@
         },
 {% endif %}
         "https": {
-            "keyFile": "{{ pem_path }}",
+            "keyFile": "{{ key_path }}",
             "certFile": "{{ cert_path }}"
         }
     }

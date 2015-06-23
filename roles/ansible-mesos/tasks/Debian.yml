@@ -19,3 +19,10 @@
 - name: Remove zookeeperd from slaves
   apt: pkg=zookeeperd state=absent
   when: mesos_install_mode == "slave"
+
+- name: Fix rsyslog service
+  file: path=/etc/init.d/rsyslog state=absent
+
+- name: Fix logrotate to use smaller syslog files
+  template: src=rsyslog.rotate.j2 dest=/etc/logrotate.d/rsyslog
+  notify: Restart rsyslog

@@ -26,16 +26,11 @@ stop on runlevel [06]
 
 script
   ENABLE_WELDER="yes"
-  DIR=/opt/welder
-{% if welder_use_tls %}
-  DAEMON_OPTS="TLS"
-{% else %}
-  DAEMON_OPTS="default"
-{% endif %}
-  DAEMON=/opt/welder/welder.sh
+  DIR=/opt/welder/widgets
+  DAEMON=/opt/welder/widgets/auto_build
 
   if [ "x$ENABLE_WELDER" = "xyes" ]
   then
-    exec start-stop-daemon --chdir $DIR --start --exec $DAEMON $DAEMON_OPTS >> {{ welder_log_dir }}/welder.log 2>&1
+    exec start-stop-daemon --chdir $DIR --start --exec $DAEMON >> {{ welder_log_dir }}/welder-widgets.log 2>&1
   fi
 end script

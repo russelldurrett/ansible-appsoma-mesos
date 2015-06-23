@@ -1,2 +1,5 @@
 - name: Restart Welder
   service: name=welder state=restarted enabled=yes
+
+- name: Restart Welder Widgets
+  service: name=welder-widgets state=restarted enabled=yes
