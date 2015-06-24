@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 if [ "$1" == "" ] || [ "$2" == "" ]; then
-	echo "USAGE: welder_push.bash BRANCH CLUSTER"
+	echo "USAGE: rhino_push.bash BRANCH CLUSTER"
 	exit 1
 fi
 BRANCH=$1
