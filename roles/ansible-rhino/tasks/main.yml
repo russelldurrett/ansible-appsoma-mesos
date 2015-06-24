@@ -2,7 +2,7 @@
   git:
     dest: /opt/rhino
     repo: https://github.com/appsoma/rhino.git
-    version: HEAD
+    version: "{{ rhino_version if rhino_version is defined else 'HEAD' }}"
     update: no
   register: fetched_rhino
 
@@ -18,8 +18,11 @@
 - name: Set rhino script executable
   file: path=/opt/rhino/rhino_in_container.bash mode=0744 state=file
 
-- name: create Rhino config
+- name: Create Rhino config
   template: src=rhino_container_config.j2 dest=/opt/rhino/rhino_container_config
+
+- name: Create Rhino log dir
+  file: path="{{ rhino_log_dir }}" state=directory
 
 - name: Check if Rhino is running
   shell: "docker ps -qf name=rhino*"

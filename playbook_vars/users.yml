@@ -1,9 +1,15 @@
 welder_group:
-  name: welder
-  gid: 3000
+ name: welder
+ gid: 3000
 welder_user_list:
-  - { username: appsoma, uid: 2001, password: zoink012 }
-  - { username: demo, uid: 2003, password: zoink123 }
+ - { username: appsoma, uid: 2001, password: zoink123 }
+ - { username: demo, uid: 2002, password: zoink123 }
+ - { username: zack, uid: 2004, password: zoink123 }
+ - { username: ken, uid: 2005, password: zoink123 }
+ - { username: mark, uid: 2006, password: zoink123 }
+ - { username: agustin, uid: 2007, password: zoink123 }
+ - { username: test1, uid: 2009, password: zoink123 }
+ - { username: test2, uid: 2008, password: zoink123, test_group: true }
 
 storm_user: appsoma
 kafka_user: appsoma

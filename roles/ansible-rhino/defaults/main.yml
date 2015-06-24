@@ -1,1 +1,2 @@
-use_dev: false
+use_dev: true
+rhino_log_dir: "/var/log/appsoma"
