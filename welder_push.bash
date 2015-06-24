@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 if [ "$1" == "" ] || [ "$2" == "" ]; then
 	echo "USAGE: welder_push.bash BRANCH CLUSTER"
+	exit 1
 fi
 BRANCH=$1
 CLUSTER=$2
