@@ -4,10 +4,10 @@
   when: ansible_os_family == "Debian"
 
 - name: Make storm-mesos dir
-  file: path=/opt/storm state=directory owner="{{ storm_user }}" group="{{storm_user}}"
+  file: path=/opt/storm state=directory owner="{{ storm_user }}"
 
 - name: Make storm tarfile dir
-  file: path="{{ data_mount_point }}/storm" state=directory owner="{{ storm_user }}" group="{{storm_user}}"
+  file: path="{{ data_mount_point }}/storm" state=directory owner="{{ storm_user }}"
 
 - name: Fetch storm-mesos
   git:
@@ -20,7 +20,7 @@
   register: git_pull
 
 - name: Create storm config
-  template: src=storm.yaml.j2 dest=/opt/storm/storm.yaml owner="{{ storm_user }}" group="{{storm_user}}"
+  template: src=storm.yaml.j2 dest=/opt/storm/storm.yaml owner="{{ storm_user }}"
 
 - name: Set storm version
   lineinfile: dest=/opt/storm/pom.xml regexp='^    <version>*' line="    <version>{{ storm_version }}</version>"

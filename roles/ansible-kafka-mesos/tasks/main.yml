@@ -5,7 +5,7 @@
   apt: pkg=gradle state=present update_cache=yes
 
 - name: Make kafka-mesos dir
-  file: path=/opt/kafka state=directory owner="{{ kafka_user }}" group="{{kafka_user}}"
+  file: path=/opt/kafka state=directory owner="{{ kafka_user }}"
 
 - name: Fetch kafka-mesos
   git:
