@@ -37,7 +37,6 @@ nfs_data_mount: "/data"
 data_vol_size_gb: 250
 data_vol_type: "standard"
 data_mount_point: "/mnt/data"
-data_vol_size_gb: 100
 data_vol_type: "standard"  # EBS volumes include "standard" "gp2" and "io1"
 
 # Enable this script to burn a slave AMI.  Any AWS boot method may be used to add new slaves

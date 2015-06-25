@@ -88,8 +88,5 @@
         - "path": "{{ nfs_data_mount }}"
           "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
 
-- include: playbooks/welder_test_playbook.yml
-  when: test_welder is defined and test_welder
-
 - include: master_deploy_playbook.yml
 - include: slave_deploy_playbook.yml
