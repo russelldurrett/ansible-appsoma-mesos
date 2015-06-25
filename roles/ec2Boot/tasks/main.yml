@@ -12,6 +12,18 @@
   set_fact: instance_type="{{ slave_instance_type }}"
   when: node_class == slave_class_name
 
+- name: set root disk size
+  set_fact: root_disk_size_gb="{{ slave_local_disk_size_gb }}"
+  when: instance_type == slave_instance_type
+
+- name: set root disk size
+  set_fact: root_disk_size_gb="{{ master_local_disk_size_gb }}"
+  when: instance_type == master_instance_type
+
+- name: set root disk size
+  set_fact: root_disk_size_gb="8"
+  when: instance_type == service_instance_type
+
 - name: Set security group ID
   set_fact: security_group_id="{{ aws_master_security_group_id }}"
   when: node_class == master_class_name
@@ -39,6 +51,10 @@
     zone: "{{ ec2_zone }}"
     group_id: "{{ security_group_id }}"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    volumes:
+      - device_name: /dev/sda1
+        volume_size: "{{ root_disk_size_gb }}"
+
   register: ec2Create
   tags:
     - create

@@ -8,6 +8,8 @@ ec2_region: "us-east-1" # Select your region
 ec2_zone: "us-east-1a"  # Select an availability zone for
 #ec2_ami_id: "ami-ade2da9d" # 14.04.2 us-west-2 hvm-ssd
 ec2_ami_id: "ami-7eb2a716" # 14.04.2 us-east-1 hvm
+slave_local_disk_size_gb: 16
+master_local_disk_size_gb: 32
 
 # This section is only required if you want to use Route53 to manage DNS names for the cluster
 # AWS default ec2 public dns names are still created
