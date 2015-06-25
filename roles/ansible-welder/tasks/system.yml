@@ -9,16 +9,16 @@
   when: ansible_os_family == "RedHat"
 
 - name: Create Welder dir
-  file: path=/opt/welder state=directory owner="{{ welder_user }}" group="{{ welder_user }}"
+  file: path=/opt/welder state=directory owner="{{ welder_user }}"
 
 - name: Create Welder log dir
   file: path="{{ welder_log_dir }}" state=directory
 
 - name: Create project folder
-  file: path="{{ project_folder }}" state=directory owner="{{ welder_user }}" group="{{ welder_group['name'] }}" mode=2775
+  file: path="{{ project_folder }}" state=directory owner="{{ welder_user }}" mode=2775
 
 - name: Create upload folder
-  file: path="{{ upload_folder }}" state=directory  owner="{{ welder_user }}" group="{{ welder_group['name'] }}" mode=2775
+  file: path="{{ upload_folder }}" state=directory  owner="{{ welder_user }}" mode=2775
 
 - name: Clone Welder source
   git:
