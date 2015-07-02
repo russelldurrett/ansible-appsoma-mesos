@@ -2,3 +2,4 @@ ansible-appsoma-mesos.iws
 cluster_vars/ansible_dev/aws_secret_vars.yml
 cluster_vars/ansible_dev/required_vars.yml
 users/node_modules/*
+cluster_vars/ansible_dev
