@@ -1,0 +1,12 @@
+- name: Create project folder
+  file: path="{{ project_folder }}" state=directory owner="{{ welder_user }}" mode=2775
+
+- name: Clone Demo Project source
+  git:
+    dest: "{{ project_folder }}/demo_project"
+    repo: https://github.com/appsoma/demo_project.git
+    version: "{{ demo_project_version if demo_project_version is defined else 'HEAD' }}"
+    update: yes
+  sudo: yes
+  sudo_user: "demo"
+  register: git_pull
