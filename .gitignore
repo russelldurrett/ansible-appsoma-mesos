@@ -1,4 +1,4 @@
 ansible-appsoma-mesos.iws
-playbook_vars/aws_secret_vars.yml
-playbook_vars/required_vars.yml
+cluster_vars/ansible_dev/aws_secret_vars.yml
+cluster_vars/ansible_dev/required_vars.yml
 users/node_modules/*
