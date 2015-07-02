@@ -1,5 +1,5 @@
 - name: Create project folder
-  file: path="{{ project_folder }}" state=directory owner="{{ welder_user }}" mode=2775
+  file: path="{{ project_folder }}" state=directory owner="demo" mode=2775
 
 - name: Clone Demo Project source
   git:
