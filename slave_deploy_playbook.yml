@@ -5,7 +5,7 @@
   vars_files:
     - "cluster_vars/common.yml"
     - "cluster_vars/{{ cluster_name }}/required_vars.yml"
-    - "cluster_vars/{{ cluster_name }}/service_users.yml"
+    - "cluster_vars/{{ cluster_name }}/users.yml"
   pre_tasks:
     # Allow sudo with no terminal
     - name: Remove require tty

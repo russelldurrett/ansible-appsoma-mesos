@@ -3,7 +3,7 @@
     dest: /opt/rhino
     repo: https://github.com/appsoma/rhino.git
     version: "{{ rhino_version if rhino_version is defined else 'HEAD' }}"
-    update: no
+    update: yes
   register: fetched_rhino
 
 #- name: Create Rhino directory
