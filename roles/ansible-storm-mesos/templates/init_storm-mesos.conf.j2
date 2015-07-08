@@ -8,6 +8,12 @@ limit nproc 32000 32000
 
 kill timeout 300 # wait 300s between SIGTERM and SIGKILL.
 
+pre-start script
+    # Remove existing framework registration, since re-register doesn't work
+    if [ -d /opt/storm/storm-mesos-{{ storm_version }}/storm-local ]; then
+        rm -rf /opt/storm/storm-mesos-{{ storm_version }}/storm-local
+    fi
+end script
 
 start on runlevel [2345]
 stop on runlevel [06]

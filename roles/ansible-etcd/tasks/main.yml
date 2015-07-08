@@ -1,0 +1,4 @@
+- name: Fetch etcd source
+  git: source=https://github.com/coreos/etcd.git
+
+

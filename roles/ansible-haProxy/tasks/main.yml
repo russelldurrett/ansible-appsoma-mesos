@@ -15,7 +15,7 @@
 - name: Get HAProxy bridge
   get_url:
     url: https://raw.githubusercontent.com/appsoma/devops/master/haproxy-marathon-bridge.py
-    dest: /opt/haproxy//haproxy-marathon-bridge.py
+    dest: /opt/haproxy/haproxy-marathon-bridge.py
 
 - name: Create bridge config directory
   file: path=/etc/haproxy-marathon-bridge state=directory
