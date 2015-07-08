@@ -1,0 +1,21 @@
+client
+remote {{ groups[inventory_group_service][0] }} 1194
+proto udp
+dev tun
+persist-key
+persist-tun
+resolv-retry infinite
+nobind
+tun-mtu 1400
+cipher AES-256-CBC
+comp-lzo
+verb 3
+<ca>
+{{ ca_certificate }}
+</ca>
+<cert>
+{{ client_certificate }}
+</cert>
+<key>
+{{ client_key }}
+</key>

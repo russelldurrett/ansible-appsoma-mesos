@@ -1,0 +1,24 @@
+- name: Install openvpn
+
+- name: Create VPN server config
+
+- name: Copy RSA generation scripts
+
+- name: Set RSA vars
+
+- name: Create DH key
+
+- name: Build CA
+
+- name: Build CA certificate
+
+- name: Move certificate
+
+- name: Start server
+
+- name: Build client key
+
+- name: Build client ovpn config
+
+- name: Change SSH to listen on high port
+  lineinfile: path=/etc/ssh/sshd_config
