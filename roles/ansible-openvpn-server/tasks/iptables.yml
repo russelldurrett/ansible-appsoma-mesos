@@ -1,13 +1,9 @@
-- name: Get NAT rules
-  include_vars: rules.yml
-
 - name: Check NAT rules
-  shell: "iptables -n -L FORWARD | grep {{ private_lan_subnet }} | grep 'ctstate NEW' "
+  shell: "iptables -n -t nat -L POSTROUTING | grep {{ nat_subnet }}/24 | grep 'MASQUERADE' "
   register: nat_rules
   changed_when: nat_rules.stdout == ""
   failed_when: nat_rules.stderr != ""
 
 - name: Set NAT rules
-  shell: "iptables {{ item }}"
-  with_items: forwarding_rules
+  shell: "iptables -t nat -I POSTROUTING -o eth0 -s {{ nat_subnet }}/24 -j MASQUERADE"
   when: nat_rules.changed
