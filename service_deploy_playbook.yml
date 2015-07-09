@@ -31,6 +31,8 @@
 
     # Add VPN server
     - role: ansible-openvpn-server
+      when: use_openvpn is defined and use_openvpn
+
     # Install Docker
     - role: ansible-docker
 

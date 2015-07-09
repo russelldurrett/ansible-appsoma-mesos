@@ -40,8 +40,8 @@
         to_port: 22
         cidr_ip: 0.0.0.0/0
       - proto: tcp
-        from_port: "{{ alternate_ssh_port }}"
-        to_port: "{{ alternate_ssh_port }}"
+        from_port: "{{ alternate_ssh_port if alternate_ssh_port is defined else 10022 }}"
+        to_port: "{{ alternate_ssh_port if alternate_ssh_port is defined else 10022 }}"
         cidr_ip: 0.0.0.0/0
       - proto: udp
         from_port: 10101
@@ -75,8 +75,8 @@
         to_port: 22
         cidr_ip: 0.0.0.0/0
       - proto: tcp
-        from_port: "{{ alternate_ssh_port }}"
-        to_port: "{{ alternate_ssh_port }}"
+        from_port: "{{ alternate_ssh_port if alternate_ssh_port is defined else 10022 }}"
+        to_port: "{{ alternate_ssh_port if alternate_ssh_port is defined else 10022 }}"
         cidr_ip: 0.0.0.0/0
       - proto: tcp
         from_port: 80

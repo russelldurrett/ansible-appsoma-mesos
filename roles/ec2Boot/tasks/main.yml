@@ -54,6 +54,7 @@
     volumes:
       - device_name: /dev/sda1
         volume_size: "{{ root_disk_size_gb }}"
+        delete_on_termination: true
 
   register: ec2Create
   tags:

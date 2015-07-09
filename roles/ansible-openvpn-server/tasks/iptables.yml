@@ -1,0 +1,13 @@
+- name: Get NAT rules
+  include_vars: rules.yml
+
+- name: Check NAT rules
+  shell: "iptables -n -L FORWARD | grep {{ private_lan_subnet }} | grep 'ctstate NEW' "
+  register: nat_rules
+  changed_when: nat_rules.stdout == ""
+  failed_when: nat_rules.stderr != ""
+
+- name: Set NAT rules
+  shell: "iptables {{ item }}"
+  with_items: forwarding_rules
+  when: nat_rules.changed
