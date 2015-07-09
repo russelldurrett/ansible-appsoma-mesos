@@ -1,4 +1,8 @@
+- include: ssh.yml
+  when: alternate_ssh_port is defined
 
 - include: ufw.yml
-- include: openvpn.yml
+  when: "use_ufw is defined and use_ufw"
+
 - include: halo.yml
+  when: "use_halo is defined and use_halo"

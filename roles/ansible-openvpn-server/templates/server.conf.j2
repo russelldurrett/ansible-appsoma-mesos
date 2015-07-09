@@ -1,0 +1,23 @@
+user nobody
+group nogroup
+port 10101
+proto udp
+dev tun
+ca      /etc/openvpn/easy-rsa/keys/ca.crt    # generated keys
+cert    /etc/openvpn/easy-rsa/keys/server.crt
+key     /etc/openvpn/easy-rsa/keys/server.key  # keep secret
+dh      /etc/openvpn/easy-rsa/keys/dh2048.pem
+server 10.10.1.0 255.255.255.0  # internal tun0 connection IP
+ifconfig-pool-persist ipp.txt
+keepalive 10 120
+tun-mtu 1400
+cipher AES-256-CBC
+comp-lzo         # Compression - must be turned on at both end
+persist-key
+persist-tun
+verb 3  # verbose mode
+client-to-client
+status /tmp/openvpn-status.log
+push "dhcp-option DNS 10.10.0.2"
+push "dhcp-option DOMAIN us-west-2.compute.internal"
+push "route 10.10.0.0 255.255.255.0"

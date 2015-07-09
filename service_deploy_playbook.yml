@@ -1,0 +1,49 @@
+---
+# Check for SSH port function
+- hosts: [ "{{ inventory_group_service }}" ]
+  remote_user: ubuntu
+  gather_facts: no
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+  roles:
+    - role: ansible-find-ssh
+      when: alternate_ssh_port is defined
+
+# Start configuring the service node
+- hosts: [ "{{ inventory_group_service }}" ]
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "cluster_vars/{{ cluster_name }}/users.yml"
+  remote_user: ubuntu
+  sudo: yes
+  pre_tasks:
+    - name: Format data volume
+      filesystem: fstype=ext4 dev="/dev/xvdf"
+    - name: Mount data volume
+      mount: name="{{ nfs_data_mount }}" src="/dev/xvdf" fstype=ext4 state=mounted
+      when: inventory_hostname == groups[inventory_group_service][0]
+  roles:
+    # Add firewall
+    - role: ansible-lockdown
+      when: use_ufw is defined and use_ufw
+
+    # Add VPN server
+    - role: ansible-openvpn-server
+    # Install Docker
+    - role: ansible-docker
+
+    # Create an Appsoma user as a member of the docker group (permission to run /usr/bin/docker)
+    - role: ansible-welder-user
+      dataDir: "{{ nfs_data_mount }}"
+      group: "{{ welder_group }}"
+      user_list: "{{ welder_user_list }}"
+      enableDocker: true
+
+    # Configure node as an NFS server
+    - role: ansible-nfs-server
+      nfs_exports:
+        - "path": "{{ nfs_data_mount }}"
+          "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
+      when: inventory_hostname == groups[inventory_group_service][0]

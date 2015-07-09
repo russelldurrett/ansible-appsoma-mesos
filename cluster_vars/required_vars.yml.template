@@ -48,3 +48,9 @@ create_slave_image: true
 master_count: 1
 slave_count: 3
 run_slave_on_master: no
+
+# Security
+use_ufw: true
+use_halo: false
+use_openvpn: true
+alternate_ssh_port: 10203

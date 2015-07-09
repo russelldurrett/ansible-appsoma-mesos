@@ -1,4 +1,16 @@
 ---
+
+# Check for SSH port function
+- hosts: [ "{{ inventory_group_master }}" ]
+  remote_user: ubuntu
+  gather_facts: no
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+  roles:
+    - role: ansible-find-ssh
+      when: alternate_ssh_port is defined
+
 - hosts: localhost
   connection: local
   vars_files:
@@ -58,6 +70,14 @@
       when: run_slave_on_master is not defined or not run_slave_on_master
 
   roles:
+    # Add firewall
+    - role: ansible-lockdown
+      extra_ports:
+        - 80/tcp
+        - 443/tcp
+        - 5000:9000
+      when: use_ufw is defined and use_ufw
+
     # Install Python
     - role: ansible-python
     # Install NodeJs

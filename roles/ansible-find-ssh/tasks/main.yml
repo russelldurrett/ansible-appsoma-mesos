@@ -1,0 +1,23 @@
+
+- name: Test ssh on alternate port
+  local_action: wait_for port={{ alternate_ssh_port }} timeout=5 host={{ inventory_hostname }}
+  register: alt_ssh
+  when: alternate_ssh_port is defined
+  ignore_errors: true
+
+- name: Test default ssh port
+  local_action: wait_for port=22 timeout=5 host={{inventory_hostname}}
+  register: default_ssh
+  ignore_errors: true
+
+- name: Set ansible_ssh_port to alternate
+  set_fact: ansible_ssh_port={{ alternate_ssh_port }}
+  when: alt_ssh.elapsed < 5 and default_ssh.elapsed >= 5
+  register: set_alt
+
+- name: Set ansible_ssh_port to default
+  set_fact: ansible_ssh_port=22
+  when: set_alt.skipped is defined
+
+- name: debug
+  debug: msg=" Using port {{ ansible_ssh_port }} for SSH"

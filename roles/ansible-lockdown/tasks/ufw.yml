@@ -1,0 +1,24 @@
+- name: Set before rules
+  template: src=before.rules.j2 dest=/etc/ufw/before.rules
+
+- name: Configure UFW
+  command: "ufw allow {{item}}"
+  with_items:
+    - "{{ alternate_ssh_port if alternate_ssh_port is defined else '22' }}/tcp"
+    - "from {{ private_lan_subnet }}"
+
+- name: Add ports
+  command: "ufw allow {{ item }}"
+  with_items: extra_ports
+
+- name: Configure default allow forward policy
+  command: ufw default allow forward
+
+- name: Configure default deny incoming policy
+  command: ufw default deny incoming
+
+- name: Enable UFW
+  command: ufw --force enable
+
+- name: Reload UFW
+  command: ufw --force reload

@@ -15,7 +15,7 @@
   when: ansible_os_family == "RedHat"
 
 - name: Ensure portmap is running (Ubuntu prior to Trusty Thar)
-  action: service name=portmap state=started enabled=yes
+  service: name=portmap state=started enabled=yes
   when: ansible_distribution == "Ubuntu" and ansible_lsb.major_release is defined and ansible_lsb.major_release|int < 14
 
 - name: Ensure rpcbind is running (Ubuntu Trusty Tahr or newer)
@@ -27,11 +27,11 @@
   when: ansible_distribution == "Debian"
 
 - name: Ensure {{nfsmount}} directory exists
-  action: file path={{nfsmount}} state=directory
+  file: path={{nfsmount}} state=directory
   tags:
     - nfs
 
 - name: configure /etc/fstab on clients
-  action: mount name={{nfsmount}} src={{nfsserver}}:{{nfspath}} fstype=nfs opts=rw,hard,intr state=mounted
+  mount: name={{nfsmount}} src={{nfsserver}}:{{nfspath}} fstype=nfs opts=rw,hard,intr,sync state=mounted
   tags:
     - nfs

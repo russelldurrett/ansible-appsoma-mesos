@@ -1,0 +1,8 @@
+- name: Change SSH to listen on high port
+  lineinfile: dest=/etc/ssh/sshd_config line="Port {{ alternate_ssh_port }}"
+
+- name: Restart SSH
+  command: service ssh restart
+
+- name: Set Ansible SSH port
+  set_fact: ansible_ssh_port="{{ alternate_ssh_port }}"

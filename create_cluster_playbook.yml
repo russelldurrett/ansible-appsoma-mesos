@@ -58,35 +58,6 @@
       when: slave_instances is defined
 
 
-# Start configuring the service node
-- hosts: [ "{{ inventory_group_service }}" ]
-  vars_files:
-    - "cluster_vars/common.yml"
-    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
-    - "cluster_vars/{{ cluster_name }}/users.yml"
-  remote_user: ubuntu
-  sudo: yes
-  pre_tasks:
-    - name: Format data volume
-      filesystem: fstype=ext4 dev="/dev/xvdf"
-    - name: Mount data volume
-      mount: name="{{ nfs_data_mount }}" src="/dev/xvdf" fstype=ext4 state=mounted
-  roles:
-    # Install Docker
-    - role: ansible-docker
-
-    # Create an Appsoma user as a member of the docker group (permission to run /usr/bin/docker)
-    - role: ansible-welder-user
-      dataDir: "{{ nfs_data_mount }}"
-      group: "{{ welder_group }}"
-      user_list: "{{ welder_user_list }}"
-      enableDocker: true
-
-    # Configure node as an NFS server
-    - role: ansible-nfs-server
-      nfs_exports:
-        - "path": "{{ nfs_data_mount }}"
-          "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
-
+- include: service_deploy_playbook.yml
 - include: master_deploy_playbook.yml
 - include: slave_deploy_playbook.yml

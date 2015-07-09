@@ -7,15 +7,16 @@
 #   ufw-before-output
 #   ufw-before-forward
 #
-
+{% if use_ufw is defined and use_ufw and use_openvpn is defined and use_openvpn %}
 # START OPENVPN RULES
 # NAT table rules
 *nat
 :POSTROUTING ACCEPT [0:0]
 # Allow traffic from OpenVPN client to eth0
--A POSTROUTING -s 10.10.1.0/8 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.10.1.0/24 -o eth0 -j MASQUERADE
 COMMIT
 # END OPENVPN RULES
+{% endif %}
 
 # Don't delete these required lines, otherwise there will be errors
 *filter

@@ -1,4 +1,16 @@
 ---
+
+# Check for SSH port function
+- hosts: [ "{{ inventory_group_slave }}" ]
+  remote_user: ubuntu
+  gather_facts: no
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+  roles:
+    - role: ansible-find-ssh
+      when: alternate_ssh_port is defined
+
 - hosts: [ "{{ inventory_group_slave }}" ]
   remote_user: ubuntu
   sudo: True
@@ -24,6 +36,15 @@
 
 
   roles:
+
+    # Add firewall
+    - role: ansible-lockdown
+      extra_ports:
+        - 31000:32000/tcp
+        - 31000:32000/udp
+      when: use_ufw is defined and use_ufw
+
+
     # Install docker
     - role: ansible-docker
 
