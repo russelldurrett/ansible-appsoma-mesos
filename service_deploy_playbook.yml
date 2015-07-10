@@ -25,9 +25,16 @@
       mount: name="{{ nfs_data_mount }}" src="/dev/xvdf" fstype=ext4 state=mounted
       when: inventory_hostname == groups[inventory_group_service][0]
   roles:
+    # Install CloudPassage Halo agent if available
+    - role: ansible-cphalo
+      halo_agent_key: "{{ cp_agent_key }}"
+      halo_agent_tag: "{{ cp_agent_tag }}"
+      when: use_halo is defined and use_halo
+
     # Add firewall
-#    - role: ansible-lockdown
-#      when: "(use_ufw is defined and use_ufw) or (use_halo is defined and use_halo)"
+    - role: ansible-ufw
+      extra_ports: "{{ service_firewall_ports if service_firewall_ports is defined else [] }}"
+      when: use_ufw is defined and use_ufw
 
     # Add VPN server
     - role: ansible-openvpn-server

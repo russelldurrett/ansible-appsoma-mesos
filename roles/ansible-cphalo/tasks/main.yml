@@ -1,8 +1,8 @@
 - name: Get CloudPassage repo key
-  apt_key: url=http://packages.cloudpassage.com/cloudpassage.packages.key state=present
+  apt_key: url="{{ cphalo_key_url }}" state=present
 
 - name: Add CloudPassage repo
-  apt_repository: repo="deb http://packages.cloudpassage.com/debian debian main" state=present update_cache=yes
+  apt_repository: repo="deb {{ cphalo_repo_url }} debian main" state=present update_cache=yes
 
 - name: Install cphalo
   apt: pkg=cphalo state=present update_cache=yes

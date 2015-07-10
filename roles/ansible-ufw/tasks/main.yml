@@ -4,5 +4,3 @@
 - include: ufw.yml
   when: "use_ufw is defined and use_ufw"
 
-- include: halo.yml
-  when: "use_halo is defined and use_halo"

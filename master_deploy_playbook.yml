@@ -67,13 +67,16 @@
       when: run_slave_on_master is not defined or not run_slave_on_master
 
   roles:
-    # Add firewall
-    - role: ansible-lockdown
-      extra_ports:
-        - 80/tcp
-        - 443/tcp
-        - 5000:9000
-      when: "(use_ufw is defined and use_ufw) or (use_halo is defined and use_halo)"
+    # Install CloudPassage Halo agent if available
+    - role: ansible-cphalo
+      halo_agent_key: "{{ cp_agent_key }}"
+      halo_agent_tag: "{{ cp_agent_tag }}"
+      when: use_halo is defined and use_halo
+
+    # Add UFW firewall if selected (should not be used with halo)
+    - role: ansible-ufw
+      extra_ports: "{{ master_firewall_ports }}"
+      when: use_ufw is defined and use_ufw
 
     # Install Python
     - role: ansible-python

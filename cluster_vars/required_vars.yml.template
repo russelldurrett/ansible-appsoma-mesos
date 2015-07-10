@@ -28,8 +28,8 @@ service_instance_type: "t2.micro" # Serving NFS is not resource intensive, so a 
 slave_instance_type: "t2.medium"  # Slave sizing depends on the workload.  This is usually best set dynamically according to needs
 
 # Network settings
-private_lan_net: "10.10.0.0/16"    # Your favorite private LAN
-private_lan_subnet: "10.10.0.0/24" # Note that EC2 requires the subnet to have a smaller netmask than the LAN above
+private_lan_net: "10.10.0.0/24"    # Your favorite private LAN
+private_lan_subnet: "10.10.0.0/24" # Note that EC2 requires the subnet to have a smaller or equal netmask than the LAN above
 
 
 # NFS Data options
@@ -49,8 +49,19 @@ master_count: 1
 slave_count: 3
 run_slave_on_master: no
 
-# Security
+# SECURITY
 use_ufw: true
+
+master_firewall_ports:
+  - 80/tcp
+  - 443/tcp
+  - 8000:8999/tcp
+
+slave_firewall_ports: []
+service_firewall_ports: []
+
 use_halo: false
+
 use_openvpn: true
-#alternate_ssh_port: 10203
+
+alternate_ssh_port: 10203

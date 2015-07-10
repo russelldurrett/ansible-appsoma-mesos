@@ -1,0 +1,5 @@
+cphalo_repo_url: http://packages.cloudpassage.com/debian
+cphalo_key_url: http://packages.cloudpassage.com/cloudpassage.packages.key
+
+halo_agent_key: "none"
+halo_agent_tag: "none"

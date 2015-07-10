@@ -12,4 +12,5 @@
   sudo: yes
   sudo_user: "demo"
   register: git_pull
-  failed_when: "git_pull.failed and git_pull.msg.find('modifications exist') == -1"
+  failed_when: false
+  failed_when: "(git_pull.failed and git.pull.msg is defined and git_pull.msg.find('modifications exist') == -1)"

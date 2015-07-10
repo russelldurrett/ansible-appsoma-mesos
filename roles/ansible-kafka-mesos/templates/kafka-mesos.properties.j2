@@ -8,5 +8,7 @@ master=zk://{{ zookeeper_hosts }}/mesos
 zk={{ zookeeper_hosts }}
 api=http://{{ framework_host }}:7000
 
-log.retention.minutes=20
+delete.topic.enable=true
+log.segment.bytes=1000000
+log.retention.hours=20
 failoverTimeout=60
