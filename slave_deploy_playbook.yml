@@ -42,7 +42,7 @@
       extra_ports:
         - 31000:32000/tcp
         - 31000:32000/udp
-      when: use_ufw is defined and use_ufw
+      when: "(use_ufw is defined and use_ufw) or (use_halo is defined and use_halo)"
 
 
     # Install docker

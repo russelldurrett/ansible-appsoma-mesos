@@ -1,10 +1,2 @@
 ansible-appsoma-mesos.iws
-cluster_vars/ansible_dev/aws_secret_vars.yml
-cluster_vars/ansible_dev/required_vars.yml
-users/node_modules/*
-cluster_vars/ansible_dev
-cluster_vars/cg_demo
-cluster_vars/metagenomics
-cluster_vars/protocp
-cluster_vars/welder_demo
-cluster_vars/welder_dev
+cluster_vars/*/*

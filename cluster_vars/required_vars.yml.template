@@ -53,4 +53,4 @@ run_slave_on_master: no
 use_ufw: true
 use_halo: false
 use_openvpn: true
-alternate_ssh_port: 10203
+#alternate_ssh_port: 10203

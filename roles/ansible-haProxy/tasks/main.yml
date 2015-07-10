@@ -7,7 +7,7 @@
   when: ansible_os_family == "Debian"
 
 - name: Stop HAProxy
-  service: name=haproxy state=stopped
+  service: name=haproxy state=stopped enabled=no
 
 - name: Create HAProxy start directory
   file: path=/opt/haproxy state=directory

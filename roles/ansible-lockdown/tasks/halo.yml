@@ -1,0 +1,25 @@
+- name: Get CloudPassage repo key
+  apt_key: url=http://packages.cloudpassage.com/cloudpassage.packages.key state=present
+
+- name: Add CloudPassage repo
+  apt_repository: repo="deb http://packages.cloudpassage.com/debian debian main" state=present update_cache=yes
+
+- name: Install cphalo
+  apt: pkg=cphalo state=present update_cache=yes
+
+- name: Test if cphalo already has a id
+  file: path=/opt/cloudpassage/data/id state=file
+  register: cphalo_id
+  failed_when: false
+  changed_when: cphalo_id.state == 'absent'
+
+- name: Start cphalod for the first time
+  shell: "/etc/init.d/cphalod start --daemon-key={{ halo_agent_key }} --tag={{ halo_agent_tag }}"
+  when: cphalo_id.state == 'absent'
+
+- name: Start cphalod using existing id
+  shell: "/etc/init.d/cphalod start"
+  when: cphalo_id.state == 'file'
+  register: cphalo_second_start
+  failed_when: cphalo_second_start.stdout != '' and cphalo_second_start.stdout.find('cphalo is running') == -1
+  changed_when: cphalo_second_start.stdout.find('cphalo is running') == -1

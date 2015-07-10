@@ -38,9 +38,6 @@
     - "cluster_vars/{{ cluster_name }}/users.yml"
   pre_tasks:
 
-#    - name: Set Hostname to "{{ hostvars[inventory_hostname]['ec2_private_dns_name'] }}"
-#      hostname: name="{{ hostvars[inventory_hostname]['ec2_private_dns_name'] )}"
-
     - name: Find NFS Server IP
       set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['ec2_private_ip_address'] }}
       when: groups[inventory_group_service] is defined
@@ -76,7 +73,7 @@
         - 80/tcp
         - 443/tcp
         - 5000:9000
-      when: use_ufw is defined and use_ufw
+      when: "(use_ufw is defined and use_ufw) or (use_halo is defined and use_halo)"
 
     # Install Python
     - role: ansible-python
