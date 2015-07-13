@@ -7,8 +7,6 @@
   failed_when: false
   register: etcd_check
 
-- debug: msg="{{etcd_check}}"
-
 - name: Build etcd
   shell: "./build"
   args:
