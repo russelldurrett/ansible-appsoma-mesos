@@ -23,11 +23,17 @@
   file: path=/etc/haproxy-marathon-bridge state=directory
 
 - name: Create service configuration file
-  template: src=service.json.j2 dest=/etc/haproxy-marathon-bridge/services.json
+  template: src=services.json.j2 dest=/etc/haproxy-marathon-bridge/services.json
   when: haproxy_services is defined
+
+- name: Create service configuration in etcd
+  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/services.json \'{{ lookup('template', '../templates/services.json.j2') }}\'"
 
 - name: Create marathons configuration
   template: src=marathons.j2 dest=/etc/haproxy-marathon-bridge/marathons
+
+- name: Create marathons configuration in etcd
+  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/marathons \'{{ lookup('template', '../templates/marathons.j2') }}\'"
 
 - name: Create HAProxy cron job
   shell: "python /opt/haproxy/haproxy-marathon-bridge.py createCronJob"
