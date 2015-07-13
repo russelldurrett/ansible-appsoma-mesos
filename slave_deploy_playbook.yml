@@ -73,6 +73,10 @@
     - role: ansible-java
       java_versions: [6, 7]
 
+    - role: ansible-go
+
+    - role: ansible-etcd
+
     # Install mesos in slave mode
     - role: ansible-mesos
       mesos_containerizers: "docker,mesos"

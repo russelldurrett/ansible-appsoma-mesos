@@ -43,6 +43,10 @@
     # Install Docker
     - role: ansible-docker
 
+    - role: ansible-go
+
+    - role: ansible-etcd
+
     # Create an Appsoma user as a member of the docker group (permission to run /usr/bin/docker)
     - role: ansible-welder-user
       dataDir: "{{ nfs_data_mount }}"
