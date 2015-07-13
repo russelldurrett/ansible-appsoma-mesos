@@ -1,3 +1,5 @@
+
+
 - name: Install HAProxy (RedHat)
   yum: pkg=haproxy state=present
   when: ansible_os_family == "RedHat"
