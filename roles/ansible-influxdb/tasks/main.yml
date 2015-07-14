@@ -1,0 +1,29 @@
+- name: Check if InfluxDB is installed
+  command: dpkg-query -W influxdb
+  register: check_deb
+  failed_when: check_deb.rc > 1
+  changed_when: check_deb.rc == 1 and check_deb.stdout.find("{{ influxdb_version }}") == -1
+
+- name: Download InfluxDB deb file
+  get_url: url="http://influxdb.s3.amazonaws.com/influxdb_{{ influxdb_version }}_amd64.deb" dest="/tmp/influxdb_{{ influxdb_version }}_amd64.deb"
+  when: check_deb.changed
+
+- name: Install InfluxDB deb file
+  apt: deb="/tmp/influxdb_{{ influxdb_version }}_amd64.deb"
+  when: check_deb.changed
+
+- name: Install InfluxDB config file
+  template: src=influxdb.conf.j2 dest=/etc/opt/influxdb/influxdb.conf
+
+- name: Start InfluxDB
+  service: name=influxdb state=started enabled=yes
+
+- name: Check if InfluxDB database exists
+  command: /opt/influxdb/influx -execute "show databases;"
+  register: influxdb_exists
+  changed_when: influxdb_exists.stdout.find('{{ cluster_name }}') == -1
+
+- name: Create InfluxDB database
+  command: /opt/influxdb/influx -execute "create database {{ cluster_name }};"
+  when: influxdb_exists.changed
+

@@ -1,0 +1,29 @@
+- name: Add Grafana repo key
+  apt_key: url=https://packagecloud.io/gpg.key
+
+- name: Add Grafana repo
+  apt_repository: repo="deb https://packagecloud.io/grafana/stable/debian/ wheezy main" state=present
+
+#- name: Install Graphana and prerequisite packages
+#  apt: pkg="{{item}}" state=present update_cache=yes
+#  with_items:
+#    - adduser
+#    - libfontconfig
+#    - sqlite3
+#    - grafana
+
+- name: Check for data source
+  command: sqlite3 /var/lib/grafana/grafana.db "select name from data_source where name='{{ cluster_name }}';"
+  register: source_db
+  changed_when: source_db.stdout.find('{{ cluster_name }}') == -1
+
+- name: Make data source sql string
+  set_fact: insert_str="insert into data_source {{ data_source_columns }} values {{ data_source_values }};"
+  when: source_db.changed
+
+- name: Add InfluxDB data source
+  command: sqlite3 /var/lib/grafana/grafana.db "{{ insert_str }}"
+  when: source_db.changed
+
+- name: Make JSON file with dashboard info
+  template: src=dashboard.json.j2 dest=/tmp/dashboard.json
