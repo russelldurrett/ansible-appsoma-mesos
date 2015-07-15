@@ -1,39 +1,44 @@
+- include: package.yml
+  when: use_package and not use_source
 
-
-- name: Install HAProxy (RedHat)
-  yum: pkg=haproxy state=present
-  when: ansible_os_family == "RedHat"
-
-- name: Install HAProxy (Ubuntu)
-  apt: pkg=haproxy state=present
-  when: ansible_os_family == "Debian"
-
-- name: Stop HAProxy
-  service: name=haproxy state=stopped enabled=no
+- include: source.yml
+  when: use_source and not use_package
 
 - name: Create HAProxy start directory
   file: path=/opt/haproxy state=directory
 
-- name: Get HAProxy bridge
+- name: Get HAProxy bridge script and templates
   get_url:
-    url: https://raw.githubusercontent.com/appsoma/devops/master/haproxy-marathon-bridge.py
-    dest: /opt/haproxy/haproxy-marathon-bridge.py
+    url: "https://raw.githubusercontent.com/appsoma/devops/master/haproxy-marathon-bridge.py"
+    dest: "/opt/haproxy/haproxy-marathon-bridge.py"
 
-- name: Create bridge config directory
-  file: path=/etc/haproxy-marathon-bridge state=directory
+- name: Create backend template in etcd
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend_template.cfg.j2') }}"
 
-- name: Create service configuration file
-  template: src=services.json.j2 dest=/etc/haproxy-marathon-bridge/services.json
-  when: haproxy_services is defined
+- name: Create frontends template in etcd
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends_template.cfg.j2') }}"
+
+- name: Create port template in etcd
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port_template.cfg.j2') }}"
+
+- name: Create config template in etcd
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy.cfg" "{{ lookup('template', '../templates/haproxy_template.cfg.j2') }}"
+
+- name: Create services directory in etcd
+  shell: "/usr/local/bin/etcdctl mkdir /haproxy-marathon-bridge/services"
+  register: make_services_dir
+  changed_when: make_services_dir.stdout == "" and make_services_dir.stderr.find('Key already exists') == -1
+  failed_when: make_services_dir.stderr != "" and make_services_dir.stderr.find('Key already exists') == -1
 
 - name: Create service configuration in etcd
-  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/services.json \'{{ lookup('template', '../templates/services.json.j2') }}\'"
-
-- name: Create marathons configuration
-  template: src=marathons.j2 dest=/etc/haproxy-marathon-bridge/marathons
+  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/services/{{ item['app_name'] }} \'{{ lookup('template', '../templates/services.j2') }}\'"
+  with_items: haproxy_services
 
 - name: Create marathons configuration in etcd
-  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/marathons \'{{ lookup('template', '../templates/marathons.j2') }}\'"
+  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/marathons \'{{ marathon_server }}\'"
+
+- name: Create SSL certificate
+  copy: src="cluster_vars/{{ cluster_name }}/haproxy.pem" dest=/opt/haproxy/haproxy.pem mode=600
 
 - name: Create HAProxy cron job
   shell: "python /opt/haproxy/haproxy-marathon-bridge.py createCronJob"

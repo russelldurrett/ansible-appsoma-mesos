@@ -44,8 +44,8 @@
         to_port: "{{ alternate_ssh_port if alternate_ssh_port is defined else 10022 }}"
         cidr_ip: 0.0.0.0/0
       - proto: udp
-        from_port: 10101
-        to_port: 10101
+        from_port: 1194
+        to_port: 1194
         cidr_ip: 0.0.0.0/0
       - proto: tcp
         from_port: 8000

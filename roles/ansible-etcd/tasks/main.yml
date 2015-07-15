@@ -40,21 +40,21 @@
   service: name=etcd state=started enabled=yes
 
 - name: Make internals dir
-  shell: "etcdctl mkdir /internals"
+  shell: "/usr/local/bin/etcdctl mkdir /internals"
   register: make_internals
   changed_when: make_internals.stdout == "" and make_internals.stderr.find('Key already exists') == -1
   failed_when: make_internals.stderr != "" and make_internals.stderr.find('Key already exists') == -1
   when: inventory_hostname == groups[inventory_group_master][0]
 
 - name: Make externals dir
-  shell: "etcdctl mkdir /externals"
+  shell: "/usr/local/bin/etcdctl mkdir /externals"
   register: make_externals
   changed_when: make_externals.stdout == "" and make_externals.stderr.find('Key already exists') == -1
   failed_when: make_externals.stderr != "" and make_externals.stderr.find('Key already exists') == -1
   when: inventory_hostname == groups[inventory_group_master][0]
 
 - name: Make haproxy bridge dir
-  shell: "etcdctl mkdir /haproxy-marathon-bridge"
+  shell: "/usr/local/bin/etcdctl mkdir /haproxy-marathon-bridge"
   register: make_haproxy
   changed_when: make_haproxy.stdout == "" and make_haproxy.stderr.find('Key already exists') == -1
   failed_when: make_haproxy.stderr != "" and make_haproxy.stderr.find('Key already exists') == -1

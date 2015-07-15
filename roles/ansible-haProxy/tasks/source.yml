@@ -1,0 +1,31 @@
+- name: Remove any package (RedHat)
+  yum: pkg=haproxy state=absent
+  when: ansible_os_family == "RedHat"
+
+- name: Remove any package (Ubuntu)
+  apt: pkg=haproxy state=absent
+  when: ansible_os_family == "Debian"
+
+- name: Fetch source
+  git:
+    dest: /opt/haproxy/src
+    repo: https://github.com/haproxy/haproxy.git
+    version: "{{ haproxy_version if haproxy_version is defined else 'HEAD' }}"
+    update: yes
+  register: git_pull
+
+- name: Build source
+  command: make TARGET=linux2628 USE_OPENSSL=1 SSL_INC=$STATICLIBSSL/include SSL_LIB=$STATICLIBSSL/lib ADDLIB=-ldl
+  args:
+    chdir: /opt/haproxy/src
+  register: build
+  changed_when: build.stdout.find('Nothing to be done') == -1
+
+- name: Install built source
+  command: make install
+  args:
+    chdir: /opt/haproxy/src
+  when: build.changed
+
+- name: Link binary
+  file: src=/usr/local/sbin/haproxy dest=/usr/sbin/haproxy state=link
