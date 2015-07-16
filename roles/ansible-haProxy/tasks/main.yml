@@ -32,7 +32,7 @@
 
 - name: Create service configuration in etcd
   shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/services/{{ item['app_name'] }} \'{{ lookup('template', '../templates/services.j2') }}\'"
-  with_items: haproxy_services
+  with_items: haproxy_dns_services
 
 - name: Create marathons configuration in etcd
   shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/marathons \'{{ marathon_server }}\'"

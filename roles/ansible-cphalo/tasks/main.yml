@@ -22,4 +22,4 @@
   when: cphalo_id.state == 'file'
   register: cphalo_second_start
   failed_when: cphalo_second_start.stdout != '' and cphalo_second_start.stdout.find('cphalo is running') == -1
-  changed_when: cphalo_second_start.stdout.find('cphalo is running') == -1
+  changed_when: cphalo_second_start.stdout.find('cphalo is running') == -1 or cphalo_second_start.stdout.find('...done') == 1
