@@ -1,7 +1,0 @@
-frontend https-in
-   bind 0.0.0.0:{{ item['ext_port'] }} ssl crt {{ haproxy_certificate_path }}
-   mode http
-   reqadd X-Forwarded-Proto:\ https
-   option tcplog
-   $acls
-   $use_backends

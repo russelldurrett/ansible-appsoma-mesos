@@ -13,13 +13,28 @@
     dest: "/opt/haproxy/haproxy-marathon-bridge.py"
 
 - name: Create backend template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend_template.cfg.j2') }}"
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend_https.cfg.j2') }}"
+  when: haproxy_use_ssl
+
+- name: Create backend template in etcd
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend_http.cfg.j2') }}"
+  when: not haproxy_use_ssl
 
 - name: Create frontends template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends_template.cfg.j2') }}"
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends_https.cfg.j2') }}"
+  when: haproxy_use_ssl
+
+- name: Create frontends template in etcd
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends_http.cfg.j2') }}"
+  when: not haproxy_use_ssl
 
 - name: Create port template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port_template.cfg.j2') }}"
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port_https.cfg.j2') }}"
+  when: haproxy_use_ssl
+
+- name: Create port template in etcd
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port_http.cfg.j2') }}"
+  when: not haproxy_use_ssl
 
 - name: Create config template in etcd
   command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy.cfg" "{{ lookup('template', '../templates/haproxy_template.cfg.j2') }}"
@@ -30,6 +45,9 @@
   changed_when: make_services_dir.stdout == "" and make_services_dir.stderr.find('Key already exists') == -1
   failed_when: make_services_dir.stderr != "" and make_services_dir.stderr.find('Key already exists') == -1
 
+- name: Create subnet dns setting
+  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/subnet_dns '.{{ service_discovery_dns_suffix }}'"
+
 - name: Create service configuration in etcd
   shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/services/{{ item['app_name'] }} \'{{ lookup('template', '../templates/services.j2') }}\'"
   with_items: haproxy_dns_services
@@ -39,6 +57,7 @@
 
 - name: Create SSL certificate
   copy: src="cluster_vars/{{ cluster_name }}/haproxy.pem" dest=/opt/haproxy/haproxy.pem mode=600
+  when: haproxy_use_ssl
 
 - name: Create HAProxy cron job
   shell: "python /opt/haproxy/haproxy-marathon-bridge.py createCronJob"

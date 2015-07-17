@@ -18,16 +18,16 @@
     - "cluster_vars/{{ cluster_name }}/required_vars.yml"
     - "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
   tasks:
-    - name: Create Welder master DNS entry
+    - name: Create Service Discovery subnet wildcard DNS record
       route53:
         command: create
         overwrite: yes
         type: CNAME
         zone: "{{ route53_zone }}"
         ttl: 10
-        record: "{{ welder_dns_name }}.{{route53_zone}}"
+        record: "{{ service_discovery_subnet }}"
         value: "{{ hostvars[groups[inventory_group_master][0]]['ec2_public_dns_name'] }}"
-      when: use_route53 and welder_dns_name is defined
+      when: use_service_discovery_subnet and use_route53
 
 - hosts: [ "{{ inventory_group_master }}" ]
   remote_user: ubuntu
