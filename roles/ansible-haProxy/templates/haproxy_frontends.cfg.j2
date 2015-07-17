@@ -1,4 +1,5 @@
 # Configuration for all the apps that are accessible using acl and custom DNS names
+{% if haproxy_no_http is not defined or not haproxy_no_http %}
 frontend http-in
    bind 0.0.0.0:80
    mode http
@@ -6,7 +7,9 @@ frontend http-in
    option tcplog
    $acls
    $use_backends
+{% endif %}
 
+{% if haproxy_use_ssl is defined and haproxy_use_ssl %}
 frontend https-in
    bind 0.0.0.0:443 ssl crt {{ haproxy_certificate_path }}
    mode http
@@ -14,3 +17,4 @@ frontend https-in
    option tcplog
    $acls
    $use_backends
+{% endif %}

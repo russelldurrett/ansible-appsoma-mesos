@@ -1,8 +1,8 @@
 # Backend of the app $app_name
 backend srvs_$app_name
+{% if haproxy_use_ssl is defined and haproxy_use_ssl %}
    redirect scheme https if !{ ssl_fc }
+{% endif %}
    mode http
-#   option httpclose
-#   option forwardfor
    balance leastconn
    $servers

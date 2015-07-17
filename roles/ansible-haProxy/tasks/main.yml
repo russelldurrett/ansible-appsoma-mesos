@@ -13,28 +13,13 @@
     dest: "/opt/haproxy/haproxy-marathon-bridge.py"
 
 - name: Create backend template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend_https.cfg.j2') }}"
-  when: haproxy_use_ssl
-
-- name: Create backend template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend_http.cfg.j2') }}"
-  when: not haproxy_use_ssl
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend.cfg.j2') }}"
 
 - name: Create frontends template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends_https.cfg.j2') }}"
-  when: haproxy_use_ssl
-
-- name: Create frontends template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends_http.cfg.j2') }}"
-  when: not haproxy_use_ssl
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends.cfg.j2') }}"
 
 - name: Create port template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port_https.cfg.j2') }}"
-  when: haproxy_use_ssl
-
-- name: Create port template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port_http.cfg.j2') }}"
-  when: not haproxy_use_ssl
+  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port.cfg.j2') }}"
 
 - name: Create config template in etcd
   command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy.cfg" "{{ lookup('template', '../templates/haproxy_template.cfg.j2') }}"

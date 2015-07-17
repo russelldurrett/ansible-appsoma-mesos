@@ -15,9 +15,14 @@ master_local_disk_size_gb: 32
 # AWS default ec2 public dns names are still created
 use_route53: true
 route53_zone: "mydomain.com"
-welder_dns_name: "{{ cluster_name }}"
+use_service_discovery_subnet : true
+service_discovery_subnet: "*.{{cluster_name}}"
+service_discovery_dns_suffix: "{{cluster_name}}.{{route53_zone}}"
 
-# This will configure HAProxy to serve out the welder service on port 80 of "welder_demo.mydomain.com"
+haproxy_use_ssl: true
+haproxy_certificate_path: /opt/haproxy/haproxy.pem
+
+# This will configure HAProxy to serve out the welder service on port 80/443 of "welder_demo.mydomain.com"
 # Any other service running on the master you'd like to map DNS to HAProxy can be added with a {name, dns_name, port} dict.
 haproxy_dns_services:
   - { name: 'welder', dns_name: "{{ cluster_name}}.{{route53_zone}}", port: 8890 }
