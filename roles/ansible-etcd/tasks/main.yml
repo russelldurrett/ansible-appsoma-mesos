@@ -2,6 +2,15 @@
   git: repo=https://github.com/coreos/etcd.git dest=/opt/etcd
   register: fetched_etcd
 
+- name: Check for existing etcd
+  file: path=/etc/init/etcd.conf state=file
+  register: etcd_exists
+  failed_when: false
+
+- name: Stop etcd
+  service: name=etcd state=stopped
+  when: fetched_etcd.changed and etcd_exists.state == 'file'
+
 - name: Check build
   file: path=/opt/etcd/bin/etcd state=file
   failed_when: false
