@@ -1,123 +1,123 @@
 {
-  "id": 1,
-  "title": "Cluster stats",
-  "originalTitle": "Cluster stats",
-  "tags": [],
-  "style": "dark",
-  "timezone": "browser",
-  "editable": true,
-  "hideControls": false,
-  "sharedCrosshair": false,
-  "rows": [
+  'id': 1,
+  'title': 'Cluster stats',
+  'originalTitle': 'Cluster stats',
+  'tags': [],
+  'style': 'dark',
+  'timezone': 'browser',
+  'editable': true,
+  'hideControls': false,
+  'sharedCrosshair': false,
+  'rows': [
     {
-      "collapse": true,
-      "editable": true,
-      "height": "250px",
-      "panels": [
+      'collapse': true,
+      'editable': true,
+      'height': '250px',
+      'panels': [
         {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          'aliasColors': {},
+          'bars': false,
+          'datasource': null,
+          'editable': true,
+          'error': false,
+          'fill': 1,
+          'grid': {
+            'leftLogBase': 1,
+            'leftMax': null,
+            'leftMin': null,
+            'rightLogBase': 1,
+            'rightMax': null,
+            'rightMin': null,
+            'threshold1': null,
+            'threshold1Color': 'rgba(216, 200, 27, 0.27)',
+            'threshold2': null,
+            'threshold2Color': 'rgba(234, 112, 112, 0.22)'
           },
-          "id": 3,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
+          'id': 3,
+          'legend': {
+            'avg': false,
+            'current': false,
+            'max': false,
+            'min': false,
+            'show': true,
+            'total': false,
+            'values': false
           },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
+          'lines': true,
+          'linewidth': 2,
+          'links': [],
+          'nullPointMode': 'connected',
+          'percentage': false,
+          'pointradius': 5,
+          'points': false,
+          'renderer': 'flot',
+          'seriesOverrides': [],
+          'span': 12,
+          'stack': false,
+          'steppedLine': false,
+          'targets': [
             {% for h in groups[inventory_group_master] %}
             {
-              "alias": "master {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "hide": false,
-              "measurement": "cpu_value",
-              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "rawQuery": false,
-              "tags": [
+              'alias': 'master {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'hide': false,
+              'measurement': 'cpu_value',
+              'query': 'SELECT mean(value) FROM \'cpu_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'rawQuery': false,
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "user"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'user'
                 }
               ]
             },
             {% endfor %}
             {% for h in groups[inventory_group_slave] %}
             {
-              "alias": "slave {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "hide": false,
-              "measurement": "cpu_value",
-              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "rawQuery": true,
-              "tags": [
+              'alias': 'slave {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'hide': false,
+              'measurement': 'cpu_value',
+              'query': 'SELECT mean(value) FROM \'cpu_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'rawQuery': true,
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "user"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'user'
                 }
               ]
             },
             {% endfor %}
             {% for h in groups[inventory_group_service] %}
             {
-              "alias": "service {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "hide": false,
-              "measurement": "cpu_value",
-              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "rawQuery": false,
-              "tags": [
+              'alias': 'service {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'hide': false,
+              'measurement': 'cpu_value',
+              'query': 'SELECT mean(value) FROM \'cpu_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'rawQuery': false,
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "user"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'user'
                 }
               ]
             {% if not loop.last %}
@@ -127,130 +127,130 @@
             {% endif %}
             {% endfor %}
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "CPU usage",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
+          'timeFrom': null,
+          'timeShift': null,
+          'title': 'CPU usage',
+          'tooltip': {
+            'shared': true,
+            'value_type': 'cumulative'
           },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
+          'type': 'graph',
+          'x-axis': true,
+          'y-axis': true,
+          'y_formats': [
+            'short',
+            'short'
           ]
         }
       ],
-      "showTitle": true,
-      "title": "CPU Usage"
+      'showTitle': true,
+      'title': 'CPU Usage'
     },
     {
-      "collapse": true,
-      "editable": true,
-      "height": "250px",
-      "panels": [
+      'collapse': true,
+      'editable': true,
+      'height': '250px',
+      'panels': [
         {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 32,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          'aliasColors': {},
+          'bars': false,
+          'datasource': null,
+          'editable': true,
+          'error': false,
+          'fill': 1,
+          'grid': {
+            'leftLogBase': 32,
+            'leftMax': null,
+            'leftMin': null,
+            'rightLogBase': 1,
+            'rightMax': null,
+            'rightMin': null,
+            'threshold1': null,
+            'threshold1Color': 'rgba(216, 200, 27, 0.27)',
+            'threshold2': null,
+            'threshold2Color': 'rgba(234, 112, 112, 0.22)'
           },
-          "id": 16,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
+          'id': 16,
+          'legend': {
+            'alignAsTable': false,
+            'avg': false,
+            'current': true,
+            'max': false,
+            'min': false,
+            'rightSide': false,
+            'show': true,
+            'total': false,
+            'values': true
           },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 1,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
+          'lines': true,
+          'linewidth': 2,
+          'links': [],
+          'nullPointMode': 'connected',
+          'percentage': false,
+          'pointradius': 1,
+          'points': false,
+          'renderer': 'flot',
+          'seriesOverrides': [],
+          'span': 12,
+          'stack': false,
+          'steppedLine': false,
+          'targets': [
             {% for h in groups[inventory_group_master] %}
             {
-              "alias": "master {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "df_value",
-              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'alias': 'master {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'df_value',
+              'query': 'SELECT mean(value) FROM \'df_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "free"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'free'
                 }
               ]
             },
             {% endfor %}
             {% for h in groups[inventory_group_slave] %}
             {
-              "alias": "slave {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "df_value",
-              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'alias': 'slave {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'df_value',
+              'query': 'SELECT mean(value) FROM \'df_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "free"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'free'
                 }
               ]
             },
             {% endfor %}
             {% for h in groups[inventory_group_service] %}
             {
-              "alias": "service {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "df_value",
-              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'alias': 'service {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'df_value',
+              'query': 'SELECT mean(value) FROM \'df_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "free"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'free'
                 }
               ]
             {% if not loop.last %}
@@ -260,113 +260,113 @@
             {% endif %}
             {% endfor %}
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Root disks available",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
+          'timeFrom': null,
+          'timeShift': null,
+          'title': 'Root disks available',
+          'tooltip': {
+            'shared': true,
+            'value_type': 'cumulative'
           },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "bytes",
-            "short"
+          'type': 'graph',
+          'x-axis': true,
+          'y-axis': true,
+          'y_formats': [
+            'bytes',
+            'short'
           ]
         }
       ],
-      "showTitle": true,
-      "title": "Disk Status"
+      'showTitle': true,
+      'title': 'Disk Status'
     },
     {
-      "collapse": true,
-      "editable": true,
-      "height": "250px",
-      "panels": [
+      'collapse': true,
+      'editable': true,
+      'height': '250px',
+      'panels': [
         {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          'aliasColors': {},
+          'bars': false,
+          'datasource': null,
+          'editable': true,
+          'error': false,
+          'fill': 1,
+          'grid': {
+            'leftLogBase': 1,
+            'leftMax': null,
+            'leftMin': null,
+            'rightLogBase': 1,
+            'rightMax': null,
+            'rightMin': null,
+            'threshold1': null,
+            'threshold1Color': 'rgba(216, 200, 27, 0.27)',
+            'threshold2': null,
+            'threshold2Color': 'rgba(234, 112, 112, 0.22)'
           },
-          "id": 17,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
+          'id': 17,
+          'legend': {
+            'avg': false,
+            'current': false,
+            'max': false,
+            'min': false,
+            'show': true,
+            'total': false,
+            'values': false
           },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
+          'lines': true,
+          'linewidth': 2,
+          'links': [],
+          'nullPointMode': 'connected',
+          'percentage': false,
+          'pointradius': 5,
+          'points': false,
+          'renderer': 'flot',
+          'seriesOverrides': [],
+          'span': 12,
+          'stack': false,
+          'steppedLine': false,
+          'targets': [
             {% for h in groups[inventory_group_master] %}
             {
-              "alias": "master {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "swap_value",
-              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'alias': 'master {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'swap_value',
+              'query': 'SELECT mean(value) FROM \'swap_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 }
               ]
             },
             {% endfor %}
             {% for h in groups[inventory_group_slave] %}
             {
-              "alias": "slave {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "swap_value",
-              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'alias': 'slave {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'swap_value',
+              'query': 'SELECT mean(value) FROM \'swap_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 }
               ]
             },
             {% endfor %}
             {% for h in groups[inventory_group_service] %}
             {
-              "alias": "service {{ hostvars[h]['ec2_tag_id'] }}",
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "swap_value",
-              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'alias': 'service {{ hostvars[h]['ec2_tag_id'] }}",
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'swap_value',
+              'query': 'SELECT mean(value) FROM \'swap_value\' WHERE host = "{{ hostvars[h]['ec2_private_ip_address'] }}" AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  'key': 'host',
+                  'value': "{{ hostvars[h]['ec2_private_ip_address'] }}"
                 }
               ]
             {% if not loop.last %}
@@ -376,229 +376,229 @@
             {% endif %}
             {% endfor %}
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Disk Swap usage",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
+          'timeFrom': null,
+          'timeShift': null,
+          'title': 'Disk Swap usage',
+          'tooltip': {
+            'shared': true,
+            'value_type': 'cumulative'
           },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
+          'type': 'graph',
+          'x-axis': true,
+          'y-axis': true,
+          'y_formats': [
+            'short',
+            'short'
           ]
         }
       ],
-      "showTitle": true,
-      "title": "Disk Swap"
+      'showTitle': true,
+      'title': 'Disk Swap'
     },
     {
-      "collapse": true,
-      "editable": true,
-      "height": "250px",
-      "panels": [
+      'collapse': true,
+      'editable': true,
+      'height': '250px',
+      'panels': [
         {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          'aliasColors': {},
+          'bars': false,
+          'datasource': null,
+          'editable': true,
+          'error': false,
+          'fill': 1,
+          'grid': {
+            'leftLogBase': 1,
+            'leftMax': null,
+            'leftMin': null,
+            'rightLogBase': 1,
+            'rightMax': null,
+            'rightMin': null,
+            'threshold1': null,
+            'threshold1Color': 'rgba(216, 200, 27, 0.27)',
+            'threshold2': null,
+            'threshold2Color': 'rgba(234, 112, 112, 0.22)'
           },
-          "id": 18,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
+          'id': 18,
+          'legend': {
+            'avg': false,
+            'current': false,
+            'max': false,
+            'min': false,
+            'show': true,
+            'total': false,
+            'values': false
           },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
+          'lines': true,
+          'linewidth': 2,
+          'links': [],
+          'nullPointMode': 'connected',
+          'percentage': false,
+          'pointradius': 5,
+          'points': false,
+          'renderer': 'flot',
+          'seriesOverrides': [],
+          'span': 12,
+          'stack': false,
+          'steppedLine': false,
+          'targets': [
             {
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "mesos-slave_value",
-              "query": "SELECT mean(value) FROM \"mesos-slave_value\" WHERE type = 'gauge' AND type_instance = 'slave_tasks_staging' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'mesos-slave_value',
+              'query': 'SELECT mean(value) FROM \'mesos-slave_value\' WHERE type = 'gauge' AND type_instance = 'slave_tasks_staging' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "type",
-                  "value": "gauge"
+                  'key': 'type',
+                  'value': 'gauge'
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "slave_tasks_staging"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'slave_tasks_staging'
                 }
               ]
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Pending tasks",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
+          'timeFrom': null,
+          'timeShift': null,
+          'title': 'Pending tasks',
+          'tooltip': {
+            'shared': true,
+            'value_type': 'cumulative'
           },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
+          'type': 'graph',
+          'x-axis': true,
+          'y-axis': true,
+          'y_formats': [
+            'short',
+            'short'
           ]
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          'aliasColors': {},
+          'bars': false,
+          'datasource': null,
+          'editable': true,
+          'error': false,
+          'fill': 1,
+          'grid': {
+            'leftLogBase': 1,
+            'leftMax': null,
+            'leftMin': null,
+            'rightLogBase': 1,
+            'rightMax': null,
+            'rightMin': null,
+            'threshold1': null,
+            'threshold1Color': 'rgba(216, 200, 27, 0.27)',
+            'threshold2': null,
+            'threshold2Color': 'rgba(234, 112, 112, 0.22)'
           },
-          "id": 19,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
+          'id': 19,
+          'legend': {
+            'avg': false,
+            'current': false,
+            'max': false,
+            'min': false,
+            'show': true,
+            'total': false,
+            'values': false
           },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
+          'lines': true,
+          'linewidth': 2,
+          'links': [],
+          'nullPointMode': 'connected',
+          'percentage': false,
+          'pointradius': 5,
+          'points': false,
+          'renderer': 'flot',
+          'seriesOverrides': [],
+          'span': 12,
+          'stack': false,
+          'steppedLine': false,
+          'targets': [
             {
-              "function": "mean",
-              "groupByTags": [],
-              "measurement": "mesos-slave_value",
-              "query": "SELECT mean(value) FROM \"mesos-slave_value\" WHERE type = 'counter' AND type_instance = 'slave_tasks_failed' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
-              "tags": [
+              'function': 'mean',
+              'groupByTags': [],
+              'measurement': 'mesos-slave_value',
+              'query': 'SELECT mean(value) FROM \'mesos-slave_value\' WHERE type = 'counter' AND type_instance = 'slave_tasks_failed' AND $timeFilter GROUP BY time($interval) ORDER BY asc',
+              'tags': [
                 {
-                  "key": "type",
-                  "value": "counter"
+                  'key': 'type',
+                  'value': 'counter'
                 },
                 {
-                  "condition": "AND",
-                  "key": "type_instance",
-                  "value": "slave_tasks_failed"
+                  'condition': 'AND',
+                  'key': 'type_instance',
+                  'value': 'slave_tasks_failed'
                 }
               ]
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Failed tasks",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
+          'timeFrom': null,
+          'timeShift': null,
+          'title': 'Failed tasks',
+          'tooltip': {
+            'shared': true,
+            'value_type': 'cumulative'
           },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
+          'type': 'graph',
+          'x-axis': true,
+          'y-axis': true,
+          'y_formats': [
+            'short',
+            'short'
           ]
         }
       ],
-      "showTitle": true,
-      "title": "Mesos stats"
+      'showTitle': true,
+      'title': 'Mesos stats'
     }
   ],
-  "nav": [
+  'nav': [
     {
-      "collapse": false,
-      "enable": true,
-      "notice": false,
-      "now": true,
-      "refresh_intervals": [
-        "5s",
-        "10s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d"
+      'collapse': false,
+      'enable': true,
+      'notice': false,
+      'now': true,
+      'refresh_intervals': [
+        '5s',
+        '10s',
+        '30s',
+        '1m',
+        '5m',
+        '15m',
+        '30m',
+        '1h',
+        '2h',
+        '1d'
       ],
-      "status": "Stable",
-      "time_options": [
-        "5m",
-        "15m",
-        "1h",
-        "6h",
-        "12h",
-        "24h",
-        "2d",
-        "7d",
-        "30d"
+      'status': 'Stable',
+      'time_options': [
+        '5m',
+        '15m',
+        '1h',
+        '6h',
+        '12h',
+        '24h',
+        '2d',
+        '7d',
+        '30d'
       ],
-      "type": "timepicker"
+      'type': 'timepicker'
     }
   ],
-  "time": {
-    "from": "now-6h",
-    "to": "now"
+  'time': {
+    'from': 'now-6h',
+    'to': 'now'
   },
-  "templating": {
-    "list": []
+  'templating': {
+    'list': []
   },
-  "annotations": {
-    "list": []
+  'annotations': {
+    'list': []
   },
-  "schemaVersion": 6,
-  "version": 11,
-  "links": []
+  'schemaVersion': 6,
+  'version': 11,
+  'links': []
 }

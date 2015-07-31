@@ -9,6 +9,10 @@ zk={{ zookeeper_hosts }}
 api=http://{{ framework_host }}:7000
 
 delete.topic.enable=true
-log.segment.bytes=1000000
-log.retention.hours=20
+
 failoverTimeout=60
+
+log.dirs=/tmp/kafka/$id
+log.segment.bytes=1000000
+log.retention.hours=1
+

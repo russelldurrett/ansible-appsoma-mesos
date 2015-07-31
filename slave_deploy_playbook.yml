@@ -34,6 +34,10 @@
             {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
 
+    - name: Add ssh keys to management user
+      authorized_key: key="{{ item }}" state=present user=ubuntu exclusive=no
+      with_items: additional_ssh_keys
+      when: additional_ssh_keys is defined
 
   roles:
     # Install CloudPassage Halo agent if available
@@ -84,6 +88,10 @@
       mesos_install_mode: "slave"
       mesos_cluster_name: "{{cluster_name}}"
       mesos_hostname: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+
+    - role: ansible-collectd
+      mesos_mode: 'slave'
+      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"
 
 - hosts: localhost
   gather_facts: no

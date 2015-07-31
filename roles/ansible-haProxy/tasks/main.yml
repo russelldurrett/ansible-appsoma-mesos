@@ -11,6 +11,7 @@
   get_url:
     url: "https://raw.githubusercontent.com/appsoma/devops/master/haproxy-marathon-bridge.py"
     dest: "/opt/haproxy/haproxy-marathon-bridge.py"
+    force: yes
 
 - name: Create backend template in etcd
   command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend.cfg.j2') }}"

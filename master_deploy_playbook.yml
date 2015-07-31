@@ -18,8 +18,6 @@
     - "cluster_vars/{{ cluster_name }}/required_vars.yml"
     - "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
   tasks:
-    - debug: msg="{{service_discovery_subnet}}"
-
     - name: Create Service Discovery subnet wildcard DNS record
       route53:
         command: create
@@ -67,6 +65,11 @@
     - name: Set master to not run slave
       set_fact: mesos_mode='master'
       when: run_slave_on_master is not defined or not run_slave_on_master
+
+    - name: Add ssh keys to management user
+      authorized_key: key="{{ item }}" state=present user=ubuntu exclusive=no
+      with_items: additional_ssh_keys
+      when: additional_ssh_keys is defined
 
   roles:
     # Install CloudPassage Halo agent if available
@@ -137,6 +140,12 @@
     - role: ansible-marathon
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
       when: inventory_hostname == groups[inventory_group_master][0]
+
+    - role: ansible-influxdb
+    - role: ansible-grafana
+    - role: ansible-collectd
+      mesos_mode: 'master'
+      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"
 
 - include: playbooks/kafka_playbook.yml
 - include: playbooks/storm_playbook.yml
