@@ -1,7 +1,3 @@
-
-# Storage for cluster state. Examples:
-# - file:kafka-mesos.json
-# - zk:/kafka-mesos
 storage=zk:/kafka-mesos
 
 master=zk://{{ zookeeper_hosts }}/mesos
@@ -15,4 +11,3 @@ failoverTimeout=60
 log.dirs=/tmp/kafka/$id
 log.segment.bytes=1000000
 log.retention.hours=1
-

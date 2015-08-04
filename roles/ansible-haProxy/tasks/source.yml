@@ -29,3 +29,9 @@
 
 - name: Link binary
   file: src=/usr/local/sbin/haproxy dest=/usr/sbin/haproxy state=link
+
+- name: Create config directory
+  file: path=/etc/haproxy state=directory
+
+- name: Create empty config
+  file: path=/etc/haproxy/haproxy.cfg state=touch
