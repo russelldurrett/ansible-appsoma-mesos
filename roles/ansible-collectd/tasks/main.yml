@@ -1,5 +1,6 @@
 - name: Install collectd
   apt: pkg=collectd state=present update_cache=yes
+  notify: Restart collectd
 
 - name: Make collect plugin directory
   file: path=/usr/share/collectd/plugins state=directory
@@ -32,7 +33,7 @@
 
 - name: Copy the master config file
   template: src=collectd_master.conf.j2 dest=/etc/collectd/collectd.conf
-  when: mesos_mode == 'master' or mesos_mode == 'master-slave'
+  when: mesos_mode != 'slave'
   notify: Restart collectd
 
 - name: Copy the slave config file

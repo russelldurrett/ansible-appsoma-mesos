@@ -26,6 +26,7 @@
     - name: Find NFS Server IP
       set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['ec2_private_ip_address'] }}
       when: groups[inventory_group_service] is defined
+
     - name:  Set zookeeper private IP list with ports
       set_fact:
         zookeeper_hosts_with_port: |
@@ -33,6 +34,9 @@
           {% for item in groups[inventory_group_master] -%}
             {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
+
+    - name: Save zookeeper private IP list to bash profile
+      lineinfile: dest=/etc/profile.d/zookeeper_host_list.sh line="export ZK_HOST_LIST={{ zookeeper_hosts_with_port }}" state=present create=yes
 
     - name: Add ssh keys to management user
       authorized_key: key="{{ item }}" state=present user=ubuntu exclusive=no

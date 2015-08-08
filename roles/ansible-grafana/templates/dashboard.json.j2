@@ -58,7 +58,7 @@
           "targets": [
           {% for h in groups[inventory_group_master] %}
             {
-              "alias": "master",
+              "alias": "master {{ hostvars[h]['ec2_tag_id'] }}",
               "function": "mean",
               "groupByTags": [],
               "hide": false,
@@ -80,7 +80,7 @@
           {% endfor %}
           {% for h in groups[inventory_group_slave] %}
             {
-              "alias": "slave {{ hostvars[h]['ec2_id'] }}",
+              "alias": "slave {{ hostvars[h]['ec2_tag_id'] }}",
               "function": "mean",
               "groupByTags": [],
               "hide": false,
@@ -102,7 +102,7 @@
           {% endfor %}
           {% for h in groups[inventory_group_service] %}
             {
-              "alias": "slave 1",
+              "alias": "service {{ hostvars[h]['ec2_tag_id'] }}",
               "function": "mean",
               "groupByTags": [],
               "hide": false,
