@@ -8,44 +8,31 @@
   file: path=/opt/haproxy state=directory
 
 - name: Get HAProxy bridge script and templates
+  git:
+    repo: "https://github.com/appsoma/gandalf.git"
+    dest: "/opt/haproxy/gandalf"
+    version: "{{ gandalf_version if gandalf_version is defined else 'HEAD' }}"
+    update: yes
+
+- name: Install Python Kazoo client
+  command: /usr/bin/pip install kazoo
+
+- name: Get zookeeper CLI
   get_url:
-    url: "https://raw.githubusercontent.com/appsoma/devops/master/haproxy-marathon-bridge.py"
-    dest: "/opt/haproxy/haproxy-marathon-bridge.py"
+    url: https://github.com/outbrain/zookeepercli/releases/download/v1.0.10/zookeepercli_1.0.10_amd64.deb
+    dest: /opt/haproxy/zookeepercli_1.0.10_amd64.deb
     force: yes
 
-- name: Create backend template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_backend.cfg" "{{ lookup('template', '../templates/haproxy_backend.cfg.j2') }}"
+- name: Install zookeeper CLI
+  apt: deb=/opt/haproxy/zookeepercli_1.0.10_amd64.deb state=present
 
-- name: Create frontends template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_frontends.cfg" "{{ lookup('template', '../templates/haproxy_frontends.cfg.j2') }}"
-
-- name: Create port template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy_port.cfg" "{{ lookup('template', '../templates/haproxy_port.cfg.j2') }}"
-
-- name: Create config template in etcd
-  command: /usr/local/bin/etcdctl set "/haproxy-marathon-bridge/haproxy.cfg" "{{ lookup('template', '../templates/haproxy_template.cfg.j2') }}"
-
-- name: Create services directory in etcd
-  shell: "/usr/local/bin/etcdctl mkdir /haproxy-marathon-bridge/services"
-  register: make_services_dir
-  changed_when: make_services_dir.stdout == "" and make_services_dir.stderr.find('Key already exists') == -1
-  failed_when: make_services_dir.stderr != "" and make_services_dir.stderr.find('Key already exists') == -1
-
-- name: Create subnet dns setting
-  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/subnet_dns '.{{ service_discovery_dns_suffix }}'"
-
-- name: Create service configuration in etcd
-  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/services/{{ item['app_name'] }} \'{{ lookup('template', '../templates/services.j2') }}\'"
-  with_items: haproxy_dns_services
-
-- name: Create marathons configuration in etcd
-  shell: "/usr/local/bin/etcdctl set /haproxy-marathon-bridge/marathons \'{{ marathon_server }}\'"
+- include: services.yml
 
 - name: Create SSL certificate
   copy: src="cluster_vars/{{ cluster_name }}/haproxy.pem" dest=/opt/haproxy/haproxy.pem mode=600
   when: haproxy_use_ssl
 
 - name: Create HAProxy cron job
-  shell: "python /opt/haproxy/haproxy-marathon-bridge.py createCronJob"
+  shell: "python /opt/haproxy/gandalf/gandalf.py --zookeeper {{ zookeeper_host_list }} install"
   args:
-    chdir: /opt/haproxy
+    chdir: /opt/haproxy/gandalf

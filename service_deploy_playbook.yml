@@ -51,8 +51,6 @@
 
     - role: ansible-go
 
-    - role: ansible-etcd
-
     # Create an Appsoma user as a member of the docker group (permission to run /usr/bin/docker)
     - role: ansible-welder-user
       dataDir: "{{ nfs_data_mount }}"
@@ -67,6 +65,6 @@
           "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
       when: inventory_hostname == groups[inventory_group_service][0]
 
-    - role: ansible-collectd
-      mesos_mode: 'none'
-      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"
+#    - role: ansible-collectd
+#      mesos_mode: 'none'
+#      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"

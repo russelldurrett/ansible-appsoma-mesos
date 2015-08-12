@@ -122,10 +122,9 @@
 
     - role: ansible-go
 
-    - role: ansible-etcd
-
     # Install High Availability Proxy
     - role: ansible-haProxy
+      zookeeper_host_list: "{{zookeeper_hosts_with_port}}"
 
     # Install zookeeper
     - role: ansible-zookeeper
@@ -144,11 +143,9 @@
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
       when: inventory_hostname == groups[inventory_group_master][0]
 
-    - role: ansible-collectd
-      mesos_mode: 'master'
-      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"
-    - role: ansible-influxdb
-    - role: ansible-grafana
+#    - role: ansible-collectd
+#      mesos_mode: 'master'
+#      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"
 
 - include: playbooks/kafka_playbook.yml
 - include: playbooks/storm_playbook.yml
