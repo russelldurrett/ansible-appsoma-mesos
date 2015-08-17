@@ -1,0 +1,14 @@
+all_plugins:
+  - sensu-plugins-cpu-checks
+  - sensu-plugins-memory-checks
+  - sensu-plugins-docker
+  - sensu-plugins-network-checks
+  - sensu-plugins-ntp
+
+
+master_plugins:
+  - sensu-plugins-mesos
+  - sensu-plugins-zookeeper
+  - sensu-plugins-haproxy
+
+

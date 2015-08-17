@@ -44,6 +44,9 @@
       when: additional_ssh_keys is defined
 
   roles:
+    # Install sysdig for troubleshooting
+    - role: ansible-sysdig
+
     # Install CloudPassage Halo agent if available
     - role: ansible-cphalo
       halo_agent_key: "{{ cp_agent_key }}"
@@ -90,10 +93,6 @@
       mesos_install_mode: "slave"
       mesos_cluster_name: "{{cluster_name}}"
       mesos_hostname: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
-
-#    - role: ansible-collectd
-#      mesos_mode: 'slave'
-#      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"
 
 - hosts: localhost
   gather_facts: no

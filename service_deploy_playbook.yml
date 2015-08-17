@@ -31,6 +31,9 @@
       when: additional_ssh_keys is defined
 
   roles:
+    # Install sysdig for troubleshooting
+    - role: ansible-sysdig
+
     # Install CloudPassage Halo agent if available
     - role: ansible-cphalo
       halo_agent_key: "{{ cp_agent_key }}"
@@ -64,7 +67,3 @@
         - "path": "{{ nfs_data_mount }}"
           "opts": "{{private_lan_subnet}}(rw,sync,no_subtree_check,no_root_squash,nohide)"
       when: inventory_hostname == groups[inventory_group_service][0]
-
-#    - role: ansible-collectd
-#      mesos_mode: 'none'
-#      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"

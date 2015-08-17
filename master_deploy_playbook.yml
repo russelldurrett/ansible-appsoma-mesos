@@ -75,6 +75,9 @@
       when: additional_ssh_keys is defined
 
   roles:
+    # Install sysdig for troubleshooting
+    - role: ansible-sysdig
+
     # Install CloudPassage Halo agent if available
     - role: ansible-cphalo
       halo_agent_key: "{{ cp_agent_key }}"
@@ -142,10 +145,6 @@
     - role: ansible-marathon
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
       when: inventory_hostname == groups[inventory_group_master][0]
-
-#    - role: ansible-collectd
-#      mesos_mode: 'master'
-#      grafana_host: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}"
 
 - include: playbooks/kafka_playbook.yml
 - include: playbooks/storm_playbook.yml

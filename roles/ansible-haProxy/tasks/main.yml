@@ -29,7 +29,7 @@
 - include: services.yml
 
 - name: Create SSL certificate
-  copy: src="cluster_vars/{{ cluster_name }}/haproxy.pem" dest=/opt/haproxy/haproxy.pem mode=600
+  copy: src="{{ haproxy_pem_file }}" dest=/opt/haproxy/haproxy.pem mode=600
   when: haproxy_use_ssl
 
 - name: Create HAProxy cron job

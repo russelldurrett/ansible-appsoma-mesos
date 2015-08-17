@@ -1,0 +1,15 @@
+- name: Add sysdig repo key
+  apt_key: url=https://s3.amazonaws.com/download.draios.com/DRAIOS-GPG-KEY.public
+
+- name: Add sysdig repo
+  apt_repository: repo="deb http://download.draios.com/stable/deb stable-$(ARCH)/" update_cache=yes state=present
+
+- name: Get Linux kernel version
+  shell: "uname -r"
+  register: version
+
+- name: Install Linux headers
+  apt: pkg="linux-headers-{{version.stdout}}" update_cache=yes state=present
+
+- name: Install sysdig
+  apt: pkg=sysdig update_cache=yes state=present

@@ -1,0 +1,22 @@
+---
+- hosts: [ "{{ inventory_group_master }}" ]
+
+  remote_user: ubuntu
+  sudo: True
+  vars_files:
+    - "../cluster_vars/common.yml"
+    - "../cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "../cluster_vars/{{ cluster_name }}/users.yml"
+
+  pre_tasks:
+    - name: Set zookeeper private IP list with port
+      set_fact:
+        zookeeper_hosts_with_port: |
+          {% set comma = joiner(':' + zookeeper_client_port + ',') %}
+          {% for item in groups[inventory_group_master] -%}
+            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+          {%- endfor %}
+  roles:
+    - role: ../roles/ansible-haproxy
+      zookeeper_host_list: "{{zookeeper_hosts_with_port}}"
+      haproxy_pem_file: "../cluster_vars/{{ cluster_name }}/haproxy.pem"

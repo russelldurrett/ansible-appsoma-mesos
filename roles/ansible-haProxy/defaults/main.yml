@@ -2,3 +2,4 @@ use_package: false
 use_source: true
 haproxy_version: "v1.5.0"
 marathon_server: "{{ hostvars[groups[inventory_group_master][0]]['ec2_private_ip_address'] }}:8080"
+haproxy_pem_file: "cluster_vars/{{ cluster_name }}/haproxy.pem"
