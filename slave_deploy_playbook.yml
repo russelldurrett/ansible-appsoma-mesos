@@ -82,7 +82,7 @@
 
     # Make sure we have usable JDKs on masters
     - role: ansible-java
-      java_versions: [6, 7]
+      java_versions: [6, 7, 8]
 
     - role: ansible-go
 

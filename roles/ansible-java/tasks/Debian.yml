@@ -1,11 +1,19 @@
-- name: Install os packages
+- name: Add OpenJDK PPA repo
+  apt_repository: repo='ppa:openjdk-r/ppa' update_cache=yes
+
+- name: Install JDK package
   apt: 
-    pkg: "{{item}}"
+    pkg: "openjdk-{{item}}-jdk"
     state: present 
     update_cache: yes
-  with_items: 
-    - openjdk-{{java_version}}-jre-headless
-    - openjdk-{{java_version}}-jdk
+  with_items: java_versions
+
+- name: Install JRE packages
+  apt:
+    pkg: "openjdk-{{java_version}}-jre-headless"
+    state: present
+    update_cache: yes
+  with_items: java_versions
 
 - name: Resolve {{java_libjvm_path}}
   shell: find {{java_libjvm_path}}
