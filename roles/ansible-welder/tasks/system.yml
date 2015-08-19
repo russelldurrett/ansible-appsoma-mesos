@@ -20,6 +20,9 @@
 - name: Create upload folder
   file: path="{{ upload_folder }}" state=directory  owner="{{ welder_user }}" group="{{ welder_group['name'] }}" mode=2775
 
+- name: Create service log folder
+  file: path="{{ upload_folder }}" state=directory  owner="{{ welder_user }}" group="{{ welder_group['name'] }}" mode=2775
+
 - name: Clone Welder source
   git:
     dest: /opt/welder

@@ -54,3 +54,8 @@
   lineinfile: line={{ marathon_port }} dest=/etc/marathon/conf/http_port create=yes
   notify:
     - Restart Marathon
+
+- name: Set --event_subscriber option
+  template: src=event_subscriber.j2 dest=/etc/marathon/conf/event_subscriber
+  notify:
+    - Restart Marathon

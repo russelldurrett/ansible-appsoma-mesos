@@ -7,8 +7,9 @@ use_containers: false
 db_folder: "/mnt/data/welder_db"
 db_port: 27017
 
-project_folder: "/mnt/data/welder/projects"
-upload_folder: "/mnt/data/welder/uploads"
+project_folder: "{{ data_mount_point }}/welder/projects"
+upload_folder: "/{{ data_mount_point }}/welder/uploads"
+service_log_folder: "{{ data_mount_point }}/welder/projects"
 
 scheduler: "rhino"
 

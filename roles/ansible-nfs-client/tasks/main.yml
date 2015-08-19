@@ -32,6 +32,6 @@
     - nfs
 
 - name: configure /etc/fstab on clients
-  mount: name={{nfsmount}} src={{nfsserver}}:{{nfspath}} fstype=nfs opts=rw,hard,intr,sync state=mounted
+  mount: name={{nfsmount}} src={{nfsserver}}:{{nfspath}} fstype=nfs opts="{{ mount_options }}" state=mounted
   tags:
     - nfs

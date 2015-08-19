@@ -1,0 +1,3 @@
+use_sync: true
+use_caching: false
+mount_options: "rw,hard,intr{{',sync' if use_sync else ''}}{{',noac' if not use_caching else ''}}"
