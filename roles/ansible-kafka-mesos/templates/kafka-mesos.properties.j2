@@ -5,7 +5,7 @@ zk={{ zookeeper_hosts }}
 api=http://{{ framework_host }}:7000
 
 delete.topic.enable=true
-num.partitions=256
+num.partitions=16
 failoverTimeout=60
 
 log.dirs=/tmp/kafka/$id

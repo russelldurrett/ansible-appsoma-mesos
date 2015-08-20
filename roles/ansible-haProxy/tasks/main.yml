@@ -7,7 +7,7 @@
 - name: Create HAProxy start directory
   file: path=/opt/haproxy state=directory
 
-- name: Get HAProxy bridge script and templates
+- name: Get Gandalf bridge
   git:
     repo: "https://github.com/appsoma/gandalf.git"
     dest: "/opt/haproxy/gandalf"
