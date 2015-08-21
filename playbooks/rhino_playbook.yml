@@ -13,7 +13,7 @@
         zookeeper_hosts_with_port: |
           {% set comma = joiner(':' + zookeeper_client_port + ',') %}
           {% for item in groups[inventory_group_master] -%}
-            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+            {{ comma() }}{{ hostvars[item].private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
 
   roles:

@@ -11,9 +11,9 @@
       debug: msg="Using version {{ welder_version if welder_version is defined else 'HEAD' }}"
   roles:
     - role: ../roles/ansible-welder
-      int_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
-      ext_ip: "{{ hostvars[inventory_hostname]['ec2_ip_address'] }}"
-      scheduler_ip: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+      int_ip: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
+      ext_ip: "{{ hostvars[inventory_hostname]['public_ip_address'] }}"
+      scheduler_ip: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
       db_folder: "{{ data_mount_point }}/welder_db"
       project_folder: "{{ data_mount_point }}/welder/projects"
       upload_folder: "{{ data_mount_point }}/welder/uploads"

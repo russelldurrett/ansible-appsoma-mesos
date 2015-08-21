@@ -13,7 +13,7 @@
         zookeeper_hosts_with_port: |
           {% set comma = joiner(':' + zookeeper_client_port + ',') %}
           {% for item in groups[inventory_group_master] -%}
-            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+            {{ comma() }}{{ hostvars[item].private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
 
     - name:  Set zookeeper private IP list
@@ -21,12 +21,12 @@
         zookeeper_hosts_no_port: |
           {% set comma = joiner(',') %}
           {% for item in groups[inventory_group_master] -%}
-            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}
+            {{ comma() }}{{ hostvars[item].private_ip_address }}
           {%- endfor %}
 
   roles:
     - role: ../roles/ansible-storm-mesos
       zookeeper_hosts: "{{ zookeeper_hosts_with_port }}"
       zookeeper_hosts_no_port_list: "{{ zookeeper_hosts_no_port.split(',') }}"
-      framework_host: "{{ hostvars[inventory_hostname]['ec2_private_dns_name'] }}"
+      framework_host: "{{ hostvars[inventory_hostname]['private_dns_name'] }}"
       when: inventory_hostname == groups[inventory_group_master][0]

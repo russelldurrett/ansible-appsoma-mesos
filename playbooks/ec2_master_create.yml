@@ -1,0 +1,18 @@
+---
+# Creates "master_count" mesos master nodes and adds to the hosts file, as well as the dynamic inventory in group mesos_master
+- hosts: localhost
+  vars_files:
+    - "../cluster_vars/common.yml"
+    - "../cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "../cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+  roles:
+    # Ensure that the VPC exists
+    - role: ec2Vpc
+      when: aws_master_security_group_id is not defined
+
+    # Boot the master nodes and add them to the live inventory
+    - role: ec2Boot
+      count: "{{ master_count }}"
+      node_class: "{{ master_class_name }}"
+      node_group_name: "{{ inventory_group_master }}"
+
