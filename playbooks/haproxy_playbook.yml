@@ -17,6 +17,6 @@
             {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
   roles:
-    - role: ../roles/ansible-haproxy
+    - role: ../roles/ansible-haProxy
       zookeeper_host_list: "{{zookeeper_hosts_with_port}}"
       haproxy_pem_file: "../cluster_vars/{{ cluster_name }}/haproxy.pem"
