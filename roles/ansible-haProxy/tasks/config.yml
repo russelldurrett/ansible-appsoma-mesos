@@ -75,15 +75,3 @@
 - name: Create marathons configuration in zookeeper
   command : zookeepercli --servers {{ zookeeper_host_list }} -c creater /gandalf/marathons "{{ marathon_server }}"
   when: marathons.changed
-
-- name: Set service configuration in zookeeper
-  command: zookeepercli --servers {{ zookeeper_host_list }} -c set "/gandalf/services/{{ item['app_name'] }}" "{{ lookup('template', '../templates/services.j2') }}"
-  with_items: haproxy_dns_services
-  register: services
-  changed_when: services.rc == 1
-  failed_when: false
-
-- name: Create service configuration in zookeeper
-  command: zookeepercli --servers {{ zookeeper_host_list }} -c creater "/gandalf/services/{{ item.item['app_name'] }}" "{{ lookup('template', '../templates/services.j2') }}"
-  with_items: services.results
-  when: item.changed

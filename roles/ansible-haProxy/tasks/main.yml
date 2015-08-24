@@ -26,13 +26,45 @@
 - name: Install zookeeper CLI
   apt: deb=/opt/haproxy/zookeepercli_1.0.10_amd64.deb state=present
 
-- include: services.yml
+- include: config.yml
 
 - name: Create SSL certificate
   copy: src="{{ haproxy_pem_file }}" dest=/opt/haproxy/haproxy.pem mode=600
   when: haproxy_use_ssl
 
-- name: Create HAProxy cron job
+- name: Remove Old Cron
+  file: path=/etc/cron.d/gandalf state=absent
+
+- name: Remove old gandalf
+  file: path=/usr/local/bin/gandalf-dir/gandalf.py state=absent
+
+- name: Install Gandalf
   shell: "python /opt/haproxy/gandalf/gandalf.py --zookeeper {{ zookeeper_host_list }} install"
   args:
     chdir: /opt/haproxy/gandalf
+
+- name: Install Gandalf stop script
+  template: src=stop_gandalf.j2 dest=/opt/haproxy/gandalf/stop_gandalf mode=0700
+
+- name: Install Gandalf start script
+  template: src=start_gandalf.j2 dest=/opt/haproxy/gandalf/start_gandalf mode=0700
+
+- name: Create Gandalf log directory
+  file: path="{{ gandalf_log_dir }}" state=directory
+
+- name: Stop Gandalf
+  command: /opt/haproxy/gandalf/stop_gandalf
+
+- name: Start Gandalf
+  command: /opt/haproxy/gandalf/start_gandalf
+  args:
+    chdir: /opt/haproxy/gandalf
+  register: start_gandalf
+  failed_when: " start_gandalf.stderr != '' and ( start_gandalf.stderr.find('already exists') == -1 and start_gandalf.stderr.find('object is not callable') == -1) "
+
+- name: Wait for Gandalf to start
+  wait_for: host=127.0.0.1 port=2288
+
+- name: Set service configuration in zookeeper
+  command:  curl -X POST localhost:2288/apps -d "url={{ item['url'] }}" -d "app_name={{ item['app_name'] }}" -d "service_port={{ item['service_port'] }}" -d "servers={{ hostvars[groups[inventory_group_master][0]]['private_ip_address'] }}:{{ item['port'] }}"
+  with_items: haproxy_dns_services
