@@ -1,6 +1,6 @@
 ---
 
-- include: playbooks/ec2_inventory_parse.yml
+- include: ../playbooks/ec2_inventory_parse.yml
   when: cloud_provider == "ec2"
 
 # Check for SSH port function

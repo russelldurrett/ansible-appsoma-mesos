@@ -16,6 +16,7 @@
     - "cluster_vars/common.yml"
     - "cluster_vars/{{ cluster_name }}/required_vars.yml"
     - "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+      when: cloud_provider == "ec2"
 
   tasks:
     - name: wait for service nodes to be available
