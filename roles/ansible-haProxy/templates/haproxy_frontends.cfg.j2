@@ -7,6 +7,8 @@ frontend http-in
    option tcplog
    $acls
    $use_backends
+
+   $internals
 {% endif %}
 
 {% if haproxy_use_ssl is defined and haproxy_use_ssl %}
@@ -17,4 +19,6 @@ frontend https-in
    option tcplog
    $acls
    $use_backends
+
+   $internals
 {% endif %}
