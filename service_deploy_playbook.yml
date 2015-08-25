@@ -1,7 +1,17 @@
 ---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+  roles:
+    - role: ../roles/ansible-cloud-inventory-parse
+      provider: "{{ cloud_provider }}"
+
 # Check for SSH port function
 - hosts: [ "{{ inventory_group_service }}" ]
-  remote_user: ubuntu
+  remote_user: "{{ management_user }}"
   gather_facts: no
   vars_files:
     - "cluster_vars/common.yml"
@@ -16,7 +26,7 @@
     - "cluster_vars/common.yml"
     - "cluster_vars/{{ cluster_name }}/required_vars.yml"
     - "cluster_vars/{{ cluster_name }}/users.yml"
-  remote_user: ubuntu
+  remote_user: "{{ management_user }}"
   sudo: yes
   pre_tasks:
     - name: Format data volume

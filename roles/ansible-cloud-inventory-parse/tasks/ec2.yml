@@ -1,0 +1,40 @@
+
+- name: Change values for Amazon EC2
+  debug: msg="{{ groups[inventory_group_service] }} ---- {{ groups[inventory_group_master] }} ---- {{ groups[inventory_group_slave] }} "
+
+- name: Add service node variables to host list
+  add_host:
+    hostname: "{{ hostvars[item]['ec2_ip_address'] }}"
+    groupname: "{{ inventory_group_service }}"
+    system_name: "{{ hostvars[item]['ec2_tag_Name'] }}"
+    id: "{{ hostvars[item]['ec2_tag_id'] }}"
+    public_ip_address: "{{ hostvars[item]['ec2_ip_address'] }}"
+    public_dns_name: "{{ hostvars[item]['ec2_public_dns_name'] }}"
+    private_ip_address: "{{ hostvars[item]['ec2_private_ip_address'] }}"
+    private_dns_name: "{{ hostvars[item]['ec2_private_dns_name'] }}"
+  with_items: groups[inventory_group_service]
+
+- name: Add master node variables to host list
+  add_host:
+    hostname: "{{ hostvars[item]['ec2_ip_address'] }}"
+    groupname: "{{ inventory_group_master }}"
+    system_name: "{{ hostvars[item]['ec2_tag_Name'] }}"
+    id: "{{ hostvars[item]['ec2_tag_id'] }}"
+    zoo_id: "{{ hostvars[item]['ec2_tag_zoo_id'] }}"
+    public_ip_address: "{{ hostvars[item]['ec2_ip_address'] }}"
+    public_dns_name: "{{ hostvars[item]['ec2_public_dns_name'] }}"
+    private_ip_address: "{{ hostvars[item]['ec2_private_ip_address'] }}"
+    private_dns_name: "{{ hostvars[item]['ec2_private_dns_name'] }}"
+  with_items: groups[inventory_group_master]
+
+- name: Add slave node variables to host list
+  add_host:
+    hostname: "{{ hostvars[item]['ec2_ip_address'] }}"
+    groupname: "{{ inventory_group_slave }}"
+    system_name: "{{ hostvars[item]['ec2_tag_Name'] }}"
+    id: "{{ hostvars[item]['ec2_tag_id'] }}"
+    public_ip_address: "{{ hostvars[item]['ec2_ip_address'] }}"
+    public_dns_name: "{{ hostvars[item]['ec2_public_dns_name'] }}"
+    private_ip_address: "{{ hostvars[item]['ec2_private_ip_address'] }}"
+    private_dns_name: "{{ hostvars[item]['ec2_private_dns_name'] }}"
+  with_items: groups[inventory_group_slave]

@@ -32,7 +32,7 @@
   when: build_etcd.changed
 
 - name: Create host items
-  set_fact: host_item="{{ hostvars[item]['ec2_tag_Name'] }}=http://{{ hostvars[item]['ec2_private_ip_address'] }}:2380"
+  set_fact: host_item="{{ hostvars[item]['system_name'] }}=http://{{ hostvars[item]['private_ip_address'] }}:2380"
   with_items: "groups[cluster_group]"
   register: host_items
 

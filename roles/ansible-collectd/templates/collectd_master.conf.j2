@@ -1,6 +1,6 @@
 
 
-Hostname "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+Hostname "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
 
 LoadPlugin logfile
 LoadPlugin syslog

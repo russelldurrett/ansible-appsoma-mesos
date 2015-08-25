@@ -1,7 +1,17 @@
 ---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "../cluster_vars/common.yml"
+    - "../cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "../cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+  roles:
+    - role: ../roles/ansible-cloud-inventory-parse
+      provider: "{{ cloud_provider }}"
+
 - hosts: [ "{{ inventory_group_master }}" ]
 
-  remote_user: ubuntu
+  remote_user: "{{ management_user }}"
   sudo: True
   vars_files:
     - "../cluster_vars/common.yml"
@@ -14,7 +24,7 @@
         zookeeper_hosts_with_port: |
           {% set comma = joiner(':' + zookeeper_client_port + ',') %}
           {% for item in groups[inventory_group_master] -%}
-            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+            {{ comma() }}{{ hostvars[item].private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
   roles:
     - role: ../roles/ansible-haProxy

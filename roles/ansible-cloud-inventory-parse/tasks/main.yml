@@ -1,0 +1,12 @@
+
+- name: Show nodes in clsuter groups
+  debug: msg="service nodes {{ groups[inventory_group_service] }} ---- masters {{ groups[inventory_group_master] }} ---- slaves {{ groups[inventory_group_slave] }}"
+
+- include: none.yml
+  when: provider == 'none'
+
+- include: gce.yml
+  when: provider == 'gce'
+
+- include: ec2.yml
+  when: provider == 'ec2'

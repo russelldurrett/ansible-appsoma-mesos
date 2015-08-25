@@ -1,18 +1,29 @@
 ---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+  roles:
+    - role: ../roles/ansible-cloud-inventory-parse
+      provider: "{{ cloud_provider }}"
 
 # Check for SSH port function
 - hosts: [ "{{ inventory_group_slave }}" ]
-  remote_user: ubuntu
+  remote_user: "{{ management_user }}"
   gather_facts: no
   vars_files:
     - "cluster_vars/common.yml"
     - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+  pre_tasks:
+    - debug: msg="{{hostvars[inventory_hostname]}}"
   roles:
     - role: ansible-find-ssh
       when: alternate_ssh_port is defined
 
 - hosts: [ "{{ inventory_group_slave }}" ]
-  remote_user: ubuntu
+  remote_user: "{{ management_user }}"
   sudo: True
   vars_files:
     - "cluster_vars/common.yml"
@@ -24,7 +35,7 @@
       lineinfile: regexp="tty" dest=/etc/sudoers/os_defaults state=absent
       tags: ['system']
     - name: Find NFS Server IP
-      set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['ec2_private_ip_address'] }}
+      set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['private_ip_address'] }}
       when: groups[inventory_group_service] is defined
 
     - name:  Set zookeeper private IP list with ports
@@ -32,7 +43,7 @@
         zookeeper_hosts_with_port: |
           {% set comma = joiner(':' + zookeeper_client_port + ',') %}
           {% for item in groups[inventory_group_master] -%}
-            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+            {{ comma() }}{{ hostvars[item].private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
 
     - name: Save zookeeper private IP list to bash profile
@@ -92,7 +103,7 @@
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port }}"
       mesos_install_mode: "slave"
       mesos_cluster_name: "{{cluster_name}}"
-      mesos_hostname: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+      mesos_hostname: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
 
 - hosts: localhost
   gather_facts: no

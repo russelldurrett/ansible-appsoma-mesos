@@ -58,17 +58,17 @@
           "targets": [
           {% for h in groups[inventory_group_master] %}
             {
-              "alias": "master {{ hostvars[h]['ec2_tag_id'] }}",
+              "alias": "master {{ hostvars[h]['id'] }}",
               "function": "mean",
               "groupByTags": [],
               "hide": false,
               "measurement": "cpu_value",
-              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "rawQuery": false,
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 },
                 {
                   "condition": "AND",
@@ -80,17 +80,17 @@
           {% endfor %}
           {% for h in groups[inventory_group_slave] %}
             {
-              "alias": "slave {{ hostvars[h]['ec2_tag_id'] }}",
+              "alias": "slave {{ hostvars[h]['id'] }}",
               "function": "mean",
               "groupByTags": [],
               "hide": false,
               "measurement": "cpu_value",
-              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "rawQuery": true,
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 },
                 {
                   "condition": "AND",
@@ -102,17 +102,17 @@
           {% endfor %}
           {% for h in groups[inventory_group_service] %}
             {
-              "alias": "service {{ hostvars[h]['ec2_tag_id'] }}",
+              "alias": "service {{ hostvars[h]['id'] }}",
               "function": "mean",
               "groupByTags": [],
               "hide": false,
               "measurement": "cpu_value",
-              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"cpu_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND type_instance = 'user' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "rawQuery": false,
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 },
                 {
                   "condition": "AND",
@@ -197,11 +197,11 @@
               "function": "mean",
               "groupByTags": [],
               "measurement": "df_value",
-              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 },
                 {
                   "condition": "AND",
@@ -217,11 +217,11 @@
               "function": "mean",
               "groupByTags": [],
               "measurement": "df_value",
-              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 },
                 {
                   "condition": "AND",
@@ -237,11 +237,11 @@
               "function": "mean",
               "groupByTags": [],
               "measurement": "df_value",
-              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"df_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND type_instance = 'free' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 },
                 {
                   "condition": "AND",
@@ -325,11 +325,11 @@
               "function": "mean",
               "groupByTags": [],
               "measurement": "swap_value",
-              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 }
               ]
             },
@@ -340,11 +340,11 @@
               "function": "mean",
               "groupByTags": [],
               "measurement": "swap_value",
-              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 }
               ]
             },
@@ -355,11 +355,11 @@
               "function": "mean",
               "groupByTags": [],
               "measurement": "swap_value",
-              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['ec2_private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
+              "query": "SELECT mean(value) FROM \"swap_value\" WHERE host = '{{ hostvars[h]['private_ip_address'] }}' AND $timeFilter GROUP BY time($interval) ORDER BY asc",
               "tags": [
                 {
                   "key": "host",
-                  "value": "{{ hostvars[h]['ec2_private_ip_address'] }}"
+                  "value": "{{ hostvars[h]['private_ip_address'] }}"
                 }
               ]
             {{ '}' if loop.last else '},' }}

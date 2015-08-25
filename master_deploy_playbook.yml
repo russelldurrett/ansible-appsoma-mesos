@@ -1,8 +1,17 @@
 ---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+  roles:
+    - role: ../roles/ansible-cloud-inventory-parse
+      provider: "{{ cloud_provider }}"
 
 # Check for SSH port function
 - hosts: [ "{{ inventory_group_master }}" ]
-  remote_user: ubuntu
+  remote_user: "{{ management_user }}"
   gather_facts: no
   vars_files:
     - "cluster_vars/common.yml"
@@ -26,11 +35,11 @@
         zone: "{{ route53_zone }}"
         ttl: 10
         record: "{{ service_discovery_subnet }}.{{ route53_zone }}"
-        value: "{{ hostvars[groups[inventory_group_master][0]]['ec2_public_dns_name'] }}"
+        value: "{{ hostvars[groups[inventory_group_master][0]]['public_dns_name'] }}"
       when: use_service_discovery_subnet is defined and use_service_discovery_subnet and use_route53 is defined and use_route53
 
 - hosts: [ "{{ inventory_group_master }}" ]
-  remote_user: ubuntu
+  remote_user: "{{ management_user }}"
   sudo: True
   vars_files:
     - "cluster_vars/common.yml"
@@ -39,7 +48,7 @@
   pre_tasks:
 
     - name: Find NFS Server IP
-      set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['ec2_private_ip_address'] }}
+      set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['private_ip_address'] }}
       when: groups[inventory_group_service] is defined
 
     - name: Set zookeeper private IP list with port
@@ -47,7 +56,7 @@
         zookeeper_hosts_with_port: |
           {% set comma = joiner(':' + zookeeper_client_port + ',') %}
           {% for item in groups[inventory_group_master] -%}
-            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}:{{ zookeeper_client_port }}
+            {{ comma() }}{{ hostvars[item].private_ip_address }}:{{ zookeeper_client_port }}
           {%- endfor %}
 
     - name: Save zookeeper private IP list to bash profile
@@ -58,7 +67,7 @@
         zookeeper_hosts_no_port: |
           {% set comma = joiner(',') %}
           {% for item in groups[inventory_group_master] -%}
-            {{ comma() }}{{ hostvars[item].ec2_private_ip_address }}
+            {{ comma() }}{{ hostvars[item].private_ip_address }}
           {%- endfor %}
 
     - name: Set master to run slave
@@ -131,7 +140,7 @@
     # Install zookeeper
     - role: ansible-zookeeper
       zookeeper_hosts: "{{ groups[inventory_group_master] }}"
-      zookeeper_id: "{{ hostvars[inventory_hostname]['ec2_tag_zoo_id'] }}"
+      zookeeper_id: "{{ hostvars[inventory_hostname]['zoo_id'] }}"
 
     # Install High Availability Proxy
     - role: ansible-haProxy
@@ -142,7 +151,7 @@
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
       mesos_install_mode: "{{ mesos_mode }}"
       mesos_cluster_name: "{{cluster_name}}"
-      mesos_hostname: "{{ hostvars[inventory_hostname]['ec2_private_ip_address'] }}"
+      mesos_hostname: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
 
     # Install marathon
     - role: ansible-marathon

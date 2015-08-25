@@ -1,0 +1,3 @@
+- name: Change values for Google Compute Engine
+  debug: msg="Not implemented yet!"
+  failed_when: true

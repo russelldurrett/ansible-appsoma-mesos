@@ -1,0 +1,8 @@
+[mycluster_master]
+192.168.100.1   public_ip_address=192.168.100.1 public_dns_name=master_0.mycluster.mydomain.com private_ip_address=10.10.0.1 private_dns_name=master_0.internal system_name=master_0 id=0 zoo_id=0
+
+[mycluster_service]
+192.168.100.254	public_ip_address=192.168.100.254 public_dns_name=service_0.mycluster.mydomain.com private_ip_address=10.10.0.254 private_dns_name=service_0.internal system_name=service_0 id=0
+
+[mycluster_slave]
+192.168.100.2   public_ip_address=192.168.100.2 public_dns_name=slave_0.mydomain.com private_ip_address=10.10.0.2 private_dns_name=slave_0.internal system_name=slave_0 id=0

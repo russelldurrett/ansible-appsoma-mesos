@@ -1,9 +1,14 @@
+provider_group_prefix:
+  ec2: "tag_Class_"
+  none: ""
+
+group_prefix: "{{ provider_group_prefix[cloud_provider] if provider_group_prefix[cloud_provider] is defined else '' }}"
 master_class_name: "{{cluster_name}}_master"
 slave_class_name: "{{cluster_name}}_slave"
 service_class_name: "{{cluster_name}}_service"
-inventory_group_service: "tag_Class_{{service_class_name}}"
-inventory_group_master: "tag_Class_{{master_class_name}}"
-inventory_group_slave: "tag_Class_{{slave_class_name}}"
+inventory_group_service: "{{ group_prefix }}{{service_class_name}}"
+inventory_group_master: "{{ group_prefix }}{{master_class_name}}"
+inventory_group_slave: "{{ group_prefix }}{{slave_class_name}}"
 
 zookeeper_client_port: "2181"
 
