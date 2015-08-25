@@ -119,8 +119,21 @@ This will add new users, and update existing users (and their passwords).  This 
 
 ### What you'll need
 
-You'll need to construct an Ansible inventory file with a few attributes for the nodes in your cluster
+You'll need to construct an Ansible inventory file with a few attributes for the nodes in your cluster.  
+A template with the required variables is in `cluster_vars/inventory.template` file.   This file can live anywhere, but we suggest `cluster_var/<cluster_name>/inventory`
 
+At least 3 nodes are required, one master, one service, and one slave.  You can also deploy with multiple master and slave nodes.
+
+Your inventory file should look like this, with `mycluster` replaced with the cluster name.
+
+    [mycluster_master]
+    192.168.100.1   public_ip_address=192.168.100.1 public_dns_name=master_0.mycluster.mydomain.com private_ip_address=10.10.0.1 private_dns_name=master_0.internal system_name=master_0 id=0 zoo_id=0
+    
+    [mycluster_service]
+    192.168.100.254	public_ip_address=192.168.100.254 public_dns_name=service_0.mycluster.mydomain.com private_ip_address=10.10.0.254 private_dns_name=service_0.internal system_name=service_0 id=0
+    
+    [mycluster_slave]
+    192.168.100.2   public_ip_address=192.168.100.2 public_dns_name=slave_0.mydomain.com private_ip_address=10.10.0.2 private_dns_name=slave_0.internal system_name=slave_0 id=0
 
 ### Running
 
@@ -163,8 +176,10 @@ The Welder users can be configured for ssh login by setting an authorized key in
 
 ## To Do
 
+* Cluster monitoring
+* Additional tools
+* Better utilization of docker
 * Cluster shutdown and cleanup 
-* Existing cluster support (mostly configuring values to be non-ec2 specific, and setting rules for host file variables)
 * Supporting other clouds (GCE, OpenStack, Azure)
 * Dynamic node management (add and remove capacity when needed)
 * Dynamic user management

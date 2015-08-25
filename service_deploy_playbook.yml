@@ -1,7 +1,13 @@
 ---
-
-- include: playbooks/ec2_inventory_parse.yml
-  when: cloud_provider == "ec2"
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "cluster_vars/common.yml"
+    - "cluster_vars/{{ cluster_name }}/required_vars.yml"
+    - "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+  roles:
+    - role: ../roles/ansible-cloud-inventory-parse
+      provider: "{{ cloud_provider }}"
 
 # Check for SSH port function
 - hosts: [ "{{ inventory_group_service }}" ]

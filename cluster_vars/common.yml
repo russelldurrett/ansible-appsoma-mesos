@@ -12,12 +12,4 @@ inventory_group_slave: "{{ group_prefix }}{{slave_class_name}}"
 
 zookeeper_client_port: "2181"
 
-public_ip_address: ""
-public_dns_name: ""
-private_ip_address: ""
-private_dns_name: ""
-system_name: ""
-zoo_id: ""
-id: ""
-
 

@@ -1,4 +1,7 @@
-- debug: msg="CLOUD PROVIDER? {{ cloud_provider }}"
+
+- name: Change values for Amazon EC2
+  debug: msg="{{ groups[inventory_group_service] }} ---- {{ groups[inventory_group_master] }} ---- {{ groups[inventory_group_slave] }} "
+
 - name: Add service node variables to host list
   add_host:
     hostname: "{{ hostvars[item]['ec2_ip_address'] }}"
