@@ -3,7 +3,18 @@
         "apiURL": "http://{{ int_ip }}:{{welder_port }}",
         "siteURL": "http://{{ ext_ip }}:{{ welder_port }}",
 
+        "marathonURL": "http://{{ int_ip }}:8080",
+        "marathonFiles": "/mnt/data/mesos/slaves",
+        "marathonSubscribeCommand": "sleep 1",
+        "newFilePermissionsForNonOwners": "",
+
+        {% if haproxy_use_ssl is defined and haproxy_use_ssl %}
+        "consoleHost": "https://welder_console.{{service_discovery_dns_suffix}}",
+        {% else %}
+        "consoleHost": "http://welder_console.{{service_discovery_dns_suffix}}",
+        {% endif %}
         "consolePort": "{{ welder_port | int + 1 }}",
+
         "projectsFolder": "{{ project_folder }}",
         "uploadFolder": "{{ upload_folder }}",
         "pamGroupName": "{{ welder_group['name'] }}",
@@ -27,7 +38,19 @@
     "TLS": {
         "apiURL": "https://{{ int_ip }}:{{welder_port }}",
         "siteURL": "https://{{ ext_ip }}:{{ welder_port }}",
+
+        "marathonURL": "http://{{ int_ip }}:8080",
+        "marathonFiles": "/mnt/data/mesos/slaves",
+        "marathonSubscribeCommand": "sleep 1",
+        "newFilePermissionsForNonOwners": "",
+
+        {% if haproxy_use_ssl is defined and haproxy_use_ssl %}
+        "consoleHost": "https://welder_console.{{service_discovery_dns_suffix}}",
+        {% else %}
+        "consoleHost": "http://welder_console.{{service_discovery_dns_suffix}}",
+        {% endif %}
         "consolePort": "{{ welder_port | int + 1 }}",
+
         "projectsFolder": "{{ project_folder }}",
         "uploadFolder": "{{ upload_folder }}",
         "pamGroupName": "docker",
