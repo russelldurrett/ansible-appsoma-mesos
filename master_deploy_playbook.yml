@@ -84,6 +84,9 @@
       when: additional_ssh_keys is defined
 
   roles:
+    # Install NTP for time sync
+    - role: ansible-ntp
+
     # Install sysdig for troubleshooting
     - role: ansible-sysdig
 
