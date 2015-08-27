@@ -1,6 +1,8 @@
 welder_user: "ubuntu"
 welder_port: 8890
-welder_log_dir: /var/log/appsoma
+welder_dir: "/opt/welder"
+welder_etc_dir: "{{ appsoma_etc_dir }}/welder"
+welder_log_dir: "{{ appsoma_log_dir }}"
 welder_use_tls: false
 use_containers: false
 
@@ -12,6 +14,7 @@ upload_folder: "/{{ data_mount_point }}/welder/uploads"
 service_log_folder: "{{ data_mount_point }}/welder/projects"
 
 scheduler: "rhino"
+rhino_url: "http://{{ scheduler_ip }}:8899/"
 
 use_https: False
 key_path: "/opt/welder/certificate.key"

@@ -8,31 +8,14 @@ limit nproc 32000 32000
 
 kill timeout 300 # wait 300s between SIGTERM and SIGKILL.
 
-pre-start script
-    if [ ! -d {{ project_folder }} ]; then
-        mkdir -p {{ project_folder }}
-        chgrp {{ welder_group['name'] }} {{ project_folder }}
-        chmod g+s {{ project_folder }}
-    fi
-    if [ ! -d {{ upload_folder }} ]; then
-        mkdir -p {{upload_folder}}
-        chgrp {{ welder_group['name'] }} {{ upload_folder }}
-        chmod g+s {{ upload_folder }}
-    fi
-end script
-
 start on runlevel [2345]
 stop on runlevel [06]
 
 script
   ENABLE_WELDER="yes"
-  DIR=/opt/welder
-{% if welder_use_tls %}
-  DAEMON_OPTS="TLS"
-{% else %}
-  DAEMON_OPTS="default"
-{% endif %}
-  DAEMON=/opt/welder/welder.sh
+  DIR={{ welder_dir }}
+  DAEMON_OPTS="{{ cluster_name }}"
+  DAEMON={{ welder_dir }}/welder.sh
 
   if [ "x$ENABLE_WELDER" = "xyes" ]
   then
