@@ -50,10 +50,10 @@
   when: welder_use_tls
 
 - name: Fetch Welder configuration template
-  fetch: src="/tmp/config.json.template" dest="../templates/{{ cluster_name }}.config.json.j2" flat=yes
+  fetch: src="/tmp/config.json.template" dest="../templates/{{ cluster_name }}.welder.config.json.j2" flat=yes
 
 - name: Create Welder Configuration
-  template: src="../templates/{{ cluster_name }}.config.json.j2" dest="{{ welder_etc_dir}}/config.json"
+  template: src="../templates/{{ cluster_name }}.welder.config.json.j2" dest="{{ welder_etc_dir}}/config.json"
   notify: Restart Welder
 
 - name: Create Welder Init script
