@@ -9,7 +9,7 @@
   when: ansible_os_family == "RedHat"
 
 - name: Create Welder dir
-  file: path="{{ welder_dir }}" state=directory owner="{{ welder_user }}" group="{{ welder_group['name'] }}"
+  file: path="{{ welder_dir }}" state=directory owner="{{ management_user }}" group="{{ management_user }}"
 
 - name: Create Welder etc dir
   file: path="{{ welder_etc_dir }}" state=directory
@@ -32,8 +32,9 @@
     repo: https://github.com/appsoma/welder.git
     version: "{{ welder_version if welder_version is defined else 'HEAD' }}"
     update: yes
+    force: yes
   sudo: yes
-  sudo_user: "{{ welder_user }}"
+  sudo_user: "{{ management_user }}"
   register: git_pull
   notify: Restart Welder
 
