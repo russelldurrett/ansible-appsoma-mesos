@@ -21,7 +21,7 @@ Successfully running this playbook will create:
     
 * All nodes have access to an NFS-mounted data directory, shared across all masters and slaves, to share job data.
 * All nodes have a series of initial users created (see `cluster_vars/users.yml.template`) to use when running Welder jobs.
-* When using a cloud provider (Amazon EC2-only for now), you get dynamic access to your cloud, with node creation and management 
+* When using a cloud provider (Amazon EC2), you get dynamic access to your cloud, with node creation and management 
 
 ## Prerequisites
 
@@ -158,7 +158,8 @@ If you edit `cluster_vars/<cluster_name>/users.yml`, you can update the entire c
 * Timeouts or `receive failed` messages
     * Custom repositories may not be responding (Docker, Mesosphere, Github. possibly core repos or cloud-served repos).
     * You may need to check the nodes internet connectivity or wait to rerun.  You can use the Ansible retry if it offers as well.
-    
+
+-------------------------------
 
 ## Connecting to the cluster
 The welder server will be listening on the master at the port specified in roles/ansible-welder/defaults/main.yml ( Defaults to `8890`)
