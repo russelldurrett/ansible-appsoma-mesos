@@ -14,11 +14,12 @@ stop on runlevel [06]
 script
   ENABLE_WELDER="yes"
   DIR={{ welder_dir }}
-  DAEMON_OPTS="{{ cluster_name }}"
+  CLUSTER_ID=$(cat {{ appsoma_etc_dir }}/cluster_id)
+  DAEMON_OPTS="--config={{ welder_etc_dir }}/config.json --config_block=$CLUSTER_ID"
   DAEMON={{ welder_dir }}/welder.sh
 
   if [ "x$ENABLE_WELDER" = "xyes" ]
   then
-    exec start-stop-daemon --chdir $DIR --start --exec $DAEMON $DAEMON_OPTS >> {{ welder_log_dir }}/welder.log 2>&1
+    exec start-stop-daemon --chdir $DIR --start --exec $DAEMON -- $DAEMON_OPTS >> {{ welder_log_dir }}/welder.log 2>&1
   fi
 end script

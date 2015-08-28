@@ -29,12 +29,17 @@
     - name: Create Appsoma log directory
       file: path="{{ appsoma_etc_dir }}" state=directory
 
+    - name: Check Mesos work dir
+      set_fact: mesos_work_dir="{{ data_mount_point }}/mesos"
+      when: mesos_work_dir is not defined
+
   roles:
     - role: ../roles/ansible-welder
       int_ip: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
       ext_ip: "{{ hostvars[inventory_hostname]['public_ip_address'] }}"
       scheduler_ip: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
       db_folder: "{{ data_mount_point }}/welder_db"
+      marathon_host: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
       project_folder: "{{ data_mount_point }}/welder/projects"
       upload_folder: "{{ data_mount_point }}/welder/uploads"
       scheduler: "rhino"

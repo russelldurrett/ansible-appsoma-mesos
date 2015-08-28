@@ -50,7 +50,7 @@
   when: welder_use_tls
 
 - name: Fetch Welder configuration template
-  fetch: src="/tmp/config.json.template" dest="../templates/{{ cluster_name }}.welder.config.json.j2" flat=yes
+  fetch: src="{{ welder_dir }}/config.json.template" dest="../templates/{{ cluster_name }}.welder.config.json.j2" flat=yes
 
 - name: Create Welder Configuration
   template: src="../templates/{{ cluster_name }}.welder.config.json.j2" dest="{{ welder_etc_dir}}/config.json"
