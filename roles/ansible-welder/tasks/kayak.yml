@@ -1,0 +1,12 @@
+- name: Create KaYak dir
+  file: path="{{ data_mount_point }}/kayak" state=directory owner="{{ management_user }}" group="{{ management_user }}"
+
+- name: Clone KaYak source
+  git:
+    dest: "{{ data_mount_point }}/kayak"
+    repo: https://github.com/appsoma/kayak.git
+    version: "{{ kayak_version if kayak_version is defined else 'HEAD' }}"
+    update: yes
+    force: yes
+  sudo: yes
+  sudo_user: "{{ management_user }}"
