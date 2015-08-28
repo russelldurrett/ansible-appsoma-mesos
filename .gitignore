@@ -1,2 +1,3 @@
 ansible-appsoma-mesos.iws
 cluster_vars/*/*
+templates/

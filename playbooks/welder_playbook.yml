@@ -19,12 +19,27 @@
   pre_tasks:
     - name: Check for version to use
       debug: msg="Using version {{ welder_version if welder_version is defined else 'HEAD' }}"
+
+    - name: Create Appsoma etc directory
+      file: path="{{ appsoma_etc_dir }}" state=directory
+
+    - name: Create Appsoma cluster_id file
+      lineinfile: dest="{{ appsoma_etc_dir }}/cluster_id" create=yes line="{{ cluster_name }}" state=present
+
+    - name: Create Appsoma log directory
+      file: path="{{ appsoma_etc_dir }}" state=directory
+
+    - name: Check Mesos work dir
+      set_fact: mesos_work_dir="{{ data_mount_point }}/mesos"
+      when: mesos_work_dir is not defined
+
   roles:
     - role: ../roles/ansible-welder
       int_ip: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
       ext_ip: "{{ hostvars[inventory_hostname]['public_ip_address'] }}"
       scheduler_ip: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
       db_folder: "{{ data_mount_point }}/welder_db"
+      marathon_host: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
       project_folder: "{{ data_mount_point }}/welder/projects"
       upload_folder: "{{ data_mount_point }}/welder/uploads"
       scheduler: "rhino"

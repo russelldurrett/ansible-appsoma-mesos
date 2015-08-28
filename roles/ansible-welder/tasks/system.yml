@@ -9,7 +9,10 @@
   when: ansible_os_family == "RedHat"
 
 - name: Create Welder dir
-  file: path=/opt/welder state=directory owner="{{ welder_user }}" group="{{ welder_group['name'] }}"
+  file: path="{{ welder_dir }}" state=directory owner="{{ welder_user }}" group="{{ welder_group['name'] }}"
+
+- name: Create Welder etc dir
+  file: path="{{ welder_etc_dir }}" state=directory
 
 - name: Create Welder log dir
   file: path="{{ welder_log_dir }}" state=directory
@@ -25,7 +28,7 @@
 
 - name: Clone Welder source
   git:
-    dest: /opt/welder
+    dest: "{{ welder_dir }}"
     repo: https://github.com/appsoma/welder.git
     version: "{{ welder_version if welder_version is defined else 'HEAD' }}"
     update: yes
@@ -35,27 +38,23 @@
   notify: Restart Welder
 
 - name: Add Certificate
-  copy: src="{{ welder_cert_path }}" dest="/opt/welder/certificate.crt" mode=600
+  copy: src="{{ welder_cert_path }}" dest="{{  welder_etc_dir }}/certificate.crt" mode=600
   sudo: yes
   sudo_user: "{{ welder_user }}"
   when: welder_use_tls
 
 - name: Add Certificate key
-  copy: src="{{ welder_key_path }}" dest="/opt/welder/certificate.key" mode=600
+  copy: src="{{ welder_key_path }}" dest="{{  welder_etc_dir }}/certificate.key" mode=600
   sudo: yes
   sudo_user: "{{ welder_user }}"
   when: welder_use_tls
 
-- name: Create Welder Configuration
-  template: src=welder_config.json.j2 dest=/opt/welder/config.json
-  sudo: yes
-  sudo_user: "{{ welder_user }}"
-  notify: Restart Welder
+- name: Fetch Welder configuration template
+  fetch: src="{{ welder_dir }}/config.json.template" dest="../templates/{{ cluster_name }}.welder.config.json.j2" flat=yes
 
-- name: Create Welder start script
-  template: src=welder.sh.j2 dest=/opt/welder/welder.sh mode=744
-  sudo: yes
-  sudo_user: "{{ welder_user }}"
+- name: Create Welder Configuration
+  template: src="../templates/{{ cluster_name }}.welder.config.json.j2" dest="{{ welder_etc_dir}}/config.json"
+  notify: Restart Welder
 
 - name: Create Welder Init script
   template: src=init_welder.conf.j2 dest=/etc/init/welder.conf
@@ -66,7 +65,7 @@
   notify: Restart Welder Widgets
 
 - name: Run NPM for widgets
-  shell: "cd /opt/welder/widgets; npm install;"
+  shell: "cd {{  welder_dir }}/widgets; npm install;"
   sudo: yes
   sudo_user: "{{ welder_user }}"
   register: npmwidgets
@@ -75,15 +74,14 @@
   notify: Restart Welder
 
 - name: Browserify widgets
-  shell: "cd /opt/welder/widgets; ./build"
+  shell: "cd {{  welder_dir }}/widgets; ./build"
   sudo: yes
   sudo_user: "{{ welder_user }}"
   register: browserifywidgets
   failed_when: browserifywidgets.stderr.find('ERROR') != -1
-  changed_when:
 
 - name: Run NPM for welder
-  shell: "cd /opt/welder; npm install"
+  shell: "cd {{  welder_dir }}; npm install"
   sudo: yes
   sudo_user: "{{ welder_user }}"
   register: npmwelder

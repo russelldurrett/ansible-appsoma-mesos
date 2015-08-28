@@ -12,4 +12,7 @@ inventory_group_slave: "{{ group_prefix }}{{slave_class_name}}"
 
 zookeeper_client_port: "2181"
 
+appsoma_etc_dir: "/etc/appsoma"
+appsoma_log_dir: "/var/log/appsoma"
+
 
