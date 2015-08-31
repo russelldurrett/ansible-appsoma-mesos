@@ -7,8 +7,10 @@ welder_log_dir: "{{ appsoma_log_dir }}"
 welder_use_tls: false
 use_containers: false
 
+external_welder_name: "{{ ext_ip }}:{{ welder_port }}"
+external_welder_console_name: "{{ ext_ip }}"
 int_welder_url: "{{ 'https' if welder_use_tls is defined and welder_use_tls else 'http' }}://{{ int_ip }}:{{welder_port }}"
-ext_welder_url: "{{ 'https' if welder_use_tls is defined and welder_use_tls else 'http' }}://{{ ext_ip }}:{{ welder_port }}"
+ext_welder_url: "{{ 'https' if welder_use_tls is defined and welder_use_tls else 'http' }}://{{ external_welder_name }}"
 
 db_folder: "/mnt/data/welder_db"
 db_host: "localhost"
