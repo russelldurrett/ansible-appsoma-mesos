@@ -15,4 +15,5 @@ zookeeper_client_port: "2181"
 appsoma_etc_dir: "/etc/appsoma"
 appsoma_log_dir: "/var/log/appsoma"
 
-
+mounted_work_dir: "{{ data_mount_point if data_mount_point is defined else '/tmp' }}/mesos"
+mesos_work_dir: "{{ '/tmp/mesos' if mesos_log_to_tmp is defined and mesos_log_to_tmp else mounted_work_dir }}"

@@ -107,7 +107,6 @@
       mesos_install_mode: "slave"
       mesos_cluster_name: "{{cluster_name}}"
       mesos_hostname: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
-      mesos_work_dir: "{{ data_mount_point }}/mesos"
 
 - hosts: localhost
   gather_facts: no

@@ -155,7 +155,6 @@
       mesos_install_mode: "{{ mesos_mode }}"
       mesos_cluster_name: "{{cluster_name}}"
       mesos_hostname: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
-      mesos_work_dir: "{{ data_mount_point }}/mesos"
 
     # Install marathon
     - role: ansible-marathon
@@ -166,5 +165,4 @@
 - include: playbooks/storm_playbook.yml
 - include: playbooks/rhino_playbook.yml
 - include: playbooks/welder_playbook.yml
-  mesos_work_dir: "{{ data_mount_point }}/mesos"
 
