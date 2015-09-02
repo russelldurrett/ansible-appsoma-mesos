@@ -11,4 +11,4 @@ master_plugins:
   - sensu-plugins-zookeeper
   - sensu-plugins-haproxy
 
-
+sensu_master: localhost

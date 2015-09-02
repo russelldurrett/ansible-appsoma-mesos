@@ -98,6 +98,7 @@
 - name: add masters to in-memory host list
   add_host:
     hostname: "{{ item.public_ip }}"
+    ec2_id: "{{ item.instance_id }"
     groupname: "{{node_group_name}}"
     system_name: "master_{{ item.ami_launch_index | int + start_id | int }}"
     public_ip_address: "{{ item.public_ip }}"
@@ -114,6 +115,7 @@
 - name: add slaves and other classes to in-memory host list
   add_host:
     hostname: "{{ item.public_ip }}"
+    ec2_id: "{{ item.instance_id }"
     groupname: "{{node_group_name}}"
     system_name: "slave_{{ item.ami_launch_index | int + start_id | int }}"
     id: "{{ item.ami_launch_index | int + start_id | int }}"

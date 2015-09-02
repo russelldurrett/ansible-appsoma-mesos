@@ -1,0 +1,10 @@
+- name: Install Redis
+  apt: pkg=redis-server update_cache=yes
+
+- name: Start Redis
+  service: name=redis-server state=started enabled=yes
+
+- name: Test Redis
+  command: redis-cli ping
+  register: redis_test
+  failed_when: redis_test.stdout.find('PONG') == -1

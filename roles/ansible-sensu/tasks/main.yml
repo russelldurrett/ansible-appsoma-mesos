@@ -1,0 +1,57 @@
+- include: rabbitmq.yml
+  when: sensu_mode == "master"
+
+- include: redis.yml
+  when: sensu_mode == "master"
+
+- name: Install Sensu core repo key
+  apt_key: url=http://repos.sensuapp.org/apt/pubkey.gpg state=present
+
+- name: Add Sensu core repo
+  apt_repository: repo="deb http://repos.sensuapp.org/apt sensu main" state=present
+
+- name: Install Sensu core
+  apt: pkg=sensu state=present update_cache=yes
+
+- name: Install Ruby
+  apt: pkg="{{ item }}" state=present
+  with_items:
+    - build-essential
+    - ruby
+    - ruby-dev
+
+- name: Install Sensu plugin gem
+  command: gem install sensu-plugin
+
+- name: Install Sensu plugins for all nodes
+  command: gem install "{{ item }}"
+  with_items: all_plugins
+
+- name: Install Sensu plugins for master nodes
+  command: gem install "{{ item }}"
+  with_items: master_plugins
+  when: sensu_mode == "master"
+
+- name: Install Sensu config
+  template: src=sensu_config.json.j2 dest=/etc/sensu/config.json
+
+- name: Install Sensu client config
+  template: src=sensu_slave_client.json.j2 dest=/etc/sensu/conf.d/client.json
+
+- name: Install Checks
+  template: src="sensu_all_checks.json.j2" dest="/etc/sensu/conf.d/all_checks.json"
+
+- name: Install Master Checks
+  template: src="sensu_master_checks.json.j2" dest="/etc/sensu/conf.d/master_checks.json"
+  when: sensu_mode == "master"
+
+- name: Start Sensu server
+  service: name=sensu-server state=started enabled=yes
+  when: sensu_mode =="master"
+
+- name: Start Sensu API
+  service: name=sensu-api state=started enabled=yes
+  when: sensu_mode =="master"
+
+- name: Start Sensu client
+  service: name=sensu-client state=started enabled=yes
