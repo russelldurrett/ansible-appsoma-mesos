@@ -162,8 +162,19 @@
       zookeeper_hostnames: "{{ zookeeper_hosts_with_port  }}"
       when: inventory_hostname == groups[inventory_group_master][0]
 
+    - role: ansible-mesos-dns
+      zookeeper_host_list: "{{ zookeeper_hosts_with_port }}"
+      marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
+      mesos_dns_hosts: [ "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}" ]
+      is_mesos_dns_starter: true
+
+
 - include: playbooks/kafka_playbook.yml
+  when: use_kafka is not defined or use_kafka
+
 - include: playbooks/storm_playbook.yml
+  when: use_storm is not defined or use_storm
 - include: playbooks/rhino_playbook.yml
+
 - include: playbooks/welder_playbook.yml
 

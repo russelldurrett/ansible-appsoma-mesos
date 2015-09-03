@@ -1,20 +1,13 @@
-- name: Make Mesos-DNS dir
-  file: path="{{ mesos_dns_dir }}" state=directory owner="{{ management_user }}"
+- include: install.yml
+  when: is_mesos_dns_starter
 
-- name: Install Mesos-DNS config
-  template: src=config.json.j2 dest="{{ mesos_dns_dir }}/config.json" owner="{{ management_user }}"
+- name: Add Mesos-DNS as nameserver
+  lineinfile: dest=/etc/resolvconf/resolv.conf.d/head line="nameserver {{ item }}"
+  with_items: mesos_dns_hosts
 
-- name: Install Mesos-DNS marathon json
-  template: src=mesos_dns_marathon.json.j2 dest="{{ mesos_dns_dir }}/mesos_dns_marathon.json" owner="{{ management_user }}"
+- name: Add "mesos" domain search
+  lineinfile: dest=/etc/resolvconf/resolv.conf.d/base line="search mesos"
 
-- name: Install Mesos-DNS start script
-  template: src=run_mesos_dns.sh.j2 dest="{{ mesos_dns_dir }}/run_mesos_dns.sh" owner="{{ management_user }}" mode=700
+- name: Refresh resolv.conf
+  command: resolvconf -u
 
-- name: Start Mesos-DNS
-  shell: "{{ mesos_dns_docker_cmd }}"
-  register: start_local_docker
-  changed_when: start_local_docker.stderr == "" or start_local_docker.stderr.find('already in use') == -1
-  failed_when: start_local_docker.stderr != "" and start_local_docker.stderr.find('already in use') == -1
-
-#- name: Start Mesos-DNS
-#  shell: "{{ mesos_dns_dir }}/run_mesos_dns.sh start"
