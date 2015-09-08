@@ -34,6 +34,12 @@
     - Restart mesos-slave
   when: mesos_install_mode == "slave" or mesos_install_mode == "master-slave"
 
+- name: Set Mesos Resources File
+  template: src=slave_resources.j2 dest=/etc/mesos-slave/resources
+  notify:
+    - Restart mesos-slave
+  when: mesos_install_mode == "slave" or mesos_install_mode == "master-slave"
+
 - name: Mesos default config file
   template: src=conf-mesos.j2 dest=/etc/default/mesos
   notify:

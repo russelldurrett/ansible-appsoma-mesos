@@ -1,37 +1,71 @@
 /var/log/syslog
 {
-	rotate 10
-	size 100mb
-	missingok
-	notifempty
-	delaycompress
-	compress
-	postrotate
-		reload rsyslog >/dev/null 2>&1 || true
-	endscript
+    daily
+    size 100M
+    rotate 10
+    missingok
+    notifempty
+    compress
+    delaycompress
+    su root syslog
+    postrotate
+        invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
+    endscript
 }
 
 /var/log/mail.info
+{
+    su root syslog
+}
 /var/log/mail.warn
+{
+    su root syslog
+}
 /var/log/mail.err
+{
+    su root syslog
+}
 /var/log/mail.log
+{
+    su root syslog
+}
 /var/log/daemon.log
+{
+    su root syslog
+}
 /var/log/kern.log
+{
+    su root syslog
+}
 /var/log/auth.log
 /var/log/user.log
+{
+    su root syslog
+}
 /var/log/lpr.log
+{
+    su root syslog
+}
 /var/log/cron.log
+{
+    su root syslog
+}
 /var/log/debug
+{
+    su root syslog
+}
 /var/log/messages
 {
-	rotate 4
-	weekly
-	missingok
-	notifempty
-	compress
-	delaycompress
-	sharedscripts
-	postrotate
-		reload rsyslog >/dev/null 2>&1 || true
-	endscript
+    rotate 4
+    weekly
+    missingok
+    notifempty
+    compress
+    delaycompress
+    sharedscripts
+    su root syslog
+    postrotate
+        reload rsyslog >/dev/null 2>&1 || true
+    endscript
 }
+

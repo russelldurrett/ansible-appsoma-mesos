@@ -26,3 +26,11 @@
 - name: Fix logrotate to use smaller syslog files
   template: src=rsyslog.rotate.j2 dest=/etc/logrotate.d/rsyslog
   notify: Restart rsyslog
+
+- name: Fix Syslog to use separate files for mesos and marathon
+  template: src=syslog_mesos.conf.j2 dest=/etc/rsyslog.d/mesos.conf
+  notify: Restart rsyslog
+
+- name: Fix logrotate to rotate mesos files
+  template: src=mesos.rotate.j2 dest=/etc/logrotate.d/mesos
+  notify: Restart rsyslog
