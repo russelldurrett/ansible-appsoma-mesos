@@ -1,5 +1,5 @@
 
-- name: Show nodes in clsuter groups
+- name: Show nodes in cluster groups
   debug: msg="service nodes {{ groups[inventory_group_service] }} ---- masters {{ groups[inventory_group_master] }} ---- slaves {{ groups[inventory_group_slave] }}"
 
 - include: none.yml
