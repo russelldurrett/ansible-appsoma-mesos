@@ -13,6 +13,7 @@
     dest: "/opt/haproxy/gandalf"
     version: "{{ gandalf_version if gandalf_version is defined else 'HEAD' }}"
     update: yes
+    force: yes
 
 - name: Install Python Kazoo client
   command: /usr/bin/pip install kazoo
