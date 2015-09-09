@@ -14,7 +14,7 @@
   changed_when: cphalo_id.state == 'absent'
 
 - name: Start cphalod for the first time
-  shell: "/etc/init.d/cphalod start --daemon-key={{ halo_agent_key }} --tag={{ halo_agent_tag }}"
+  shell: "sudo /opt/cloudpassage/bin/configure --agent-key={{ halo_agent_key }} --tag={{ halo_agent_tag }}"
   when: cphalo_id.state == 'absent'
 
 - name: Start cphalod using existing id
