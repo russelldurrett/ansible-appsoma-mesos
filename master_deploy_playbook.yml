@@ -148,7 +148,7 @@
     # Install High Availability Proxy
     - role: ../roles/ansible-haProxy
       zookeeper_host_list: "{{zookeeper_hosts_with_port}}"
-      haproxy_pem_file: "../cluster_vars/{{ cluster_name }}/haproxy.pem"
+      haproxy_pem_file: "cluster_vars/{{ cluster_name }}/haproxy.pem"
 
     # Install mesos in master mode
     - role: ansible-mesos

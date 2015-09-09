@@ -16,8 +16,6 @@
   vars_files:
     - "cluster_vars/common.yml"
     - "cluster_vars/{{ cluster_name }}/required_vars.yml"
-  pre_tasks:
-    - debug: msg="{{hostvars[inventory_hostname]}}"
   roles:
     - role: ansible-find-ssh
       when: alternate_ssh_port is defined
