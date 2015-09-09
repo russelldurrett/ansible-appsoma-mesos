@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ $1 = "start" ] ; then
+	curl -X POST -H "Content-Type: application/json" -d @{{ cassandra_marathon_dir}}/cm-seed.json http://{{ marathon_host }}:8080/v2/apps
+    curl -X POST -H "Content-Type: application/json" -d @{{ cassandra_marathon_dir}}/cm-worker.json http://{{ marathon_host }}:8080/v2/apps
+elif [ $1 = "stop" ] ; then
+	curl -X DELETE  -H "Content-Type: application/json" http://{{ marathon_host }}:8080/v2/apps/cassandra
+	curl -X DELETE  -H "Content-Type: application/json" http://{{ marathon_host }}:8080/v2/apps/cassandra-seed
+fi

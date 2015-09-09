@@ -1,0 +1,56 @@
+/var/log/zookeeper.log
+{
+    daily
+    size 100M
+    rotate 10
+    missingok
+    notifempty
+    compress
+    delaycompress
+    su root syslog
+    postrotate
+        invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
+    endscript
+}
+/var/log/mesos-master.log
+{
+    daily
+    size 100M
+    rotate 10
+    missingok
+    notifempty
+    compress
+    delaycompress
+    su root syslog
+    postrotate
+        invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
+    endscript
+}
+/var/log/mesos-slave.log
+{
+    daily
+    size 100M
+    rotate 10
+    missingok
+    notifempty
+    compress
+    delaycompress
+    su root syslog
+    postrotate
+        invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
+    endscript
+}
+/var/log/marathon.log
+{
+    daily
+    size 100M
+    rotate 10
+    missingok
+    notifempty
+    compress
+    delaycompress
+    su root syslog
+    postrotate
+        invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
+    endscript
+}

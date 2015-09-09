@@ -1,0 +1,12 @@
+if $programname == 'marathon' then {
+  action(type="omfile" file="/var/log/marathon.log")
+ }
+ if $programname == 'zookeeper' then {
+  action(type="omfile" file="/var/log/zookeeper.log")
+ }
+ if $programname == 'mesos-master' then {
+  action(type="omfile" file="/var/log/mesos-master.log")
+ }
+  if $programname == 'mesos-slave' then {
+  action(type="omfile" file="/var/log/mesos-slave.log")
+ }

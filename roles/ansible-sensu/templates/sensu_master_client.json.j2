@@ -1,0 +1,10 @@
+{
+  "client": {
+    "name": "{{ hostvars[inventory_hostname]['system_name'] }}",
+    "address": "{{ sensu_master }}",
+    "subscriptions": [
+      "{{ cluster_name }}"
+      "{{ cluster_name }}-master"
+    ]
+  }
+}

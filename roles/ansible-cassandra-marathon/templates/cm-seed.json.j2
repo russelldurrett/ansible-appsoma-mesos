@@ -1,0 +1,23 @@
+{
+    "id": "cassandra-seed",
+    "constraints": [["hostname", "UNIQUE"]],
+    "ports": [7199, 7000, 7001, 9160, 9042],
+    "requirePorts": true,
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "3h4x/cassandra",
+            "network": "HOST",
+            "privileged": true
+        }
+    },
+    "env": {
+       "SEED": "cassandra-seed.marathon.mesos"
+    },
+    "cpus": 2,
+    "mem": 4096.0,
+    "instances": {{ seed_count }},
+    "backoffSeconds": 1,
+    "backoffFactor": 1.15,
+    "maxLaunchDelaySeconds": 3600
+}
