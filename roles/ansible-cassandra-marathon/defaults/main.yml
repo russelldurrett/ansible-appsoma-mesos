@@ -1,0 +1,4 @@
+cassandra_marathon_dir: /opt/cassandra-marathon
+seed_count: 2
+worker_count: 1
+

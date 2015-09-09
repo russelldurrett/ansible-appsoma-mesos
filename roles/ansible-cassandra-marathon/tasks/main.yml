@@ -1,0 +1,11 @@
+- name: Create Cassandra-marathon directory
+  file: path="{{ cassandra_marathon_dir }}" state=directory owner="{{ management_user }}"
+
+- name: Copy Seed start json
+  template: src=cm-seed.json.j2 dest="{{ cassandra_marathon_dir }}/cm-seed.json" owner="{{ management_user }}"
+
+- name: Copy Worker start json
+  template: src=cm-worker.json.j2 dest="{{ cassandra_marathon_dir }}/cm-worker.json" owner="{{ management_user }}"
+
+- name: Copy Cassandra Marathon start script
+  template: src=start_cassandra.sh.j2 dest="{{ cassandra_marathon_dir }}/start_cassandra.sh" owner="{{ management_user }}" mode=700

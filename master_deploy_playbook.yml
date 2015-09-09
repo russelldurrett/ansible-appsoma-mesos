@@ -168,6 +168,9 @@
       mesos_dns_hosts: [ "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}" ]
       is_mesos_dns_starter: true
 
+    - role: ansible-cassandra-marathon
+      marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
+
 
 - include: playbooks/kafka_playbook.yml
   when: use_kafka is not defined or use_kafka
