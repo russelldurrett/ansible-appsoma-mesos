@@ -20,5 +20,5 @@
 - name: Start cphalod
   shell: "/etc/init.d/cphalod start"
   register: cphalo_start
-  failed_when: cphalo_start.stdout != '' and cphalo_start.stdout.find('cphalo is running') == -1
+  failed_when: cphalo_start.stdout != '' and cphalo_start.stdout.find('cphalo is running') == -1 and cphalo_start.stdout.find('Starting CloudPassage Halo Agent cphalo') == -1
   changed_when: cphalo_start.stdout.find('cphalo is running') == -1 or cphalo_start.stdout.find('...done') == 1
