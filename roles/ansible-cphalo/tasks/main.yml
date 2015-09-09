@@ -17,9 +17,8 @@
   shell: "sudo /opt/cloudpassage/bin/configure --agent-key={{ halo_agent_key }} --tag={{ halo_agent_tag }}"
   when: cphalo_id.state == 'absent'
 
-- name: Start cphalod using existing id
+- name: Start cphalod
   shell: "/etc/init.d/cphalod start"
-  when: cphalo_id.state == 'file'
-  register: cphalo_second_start
-  failed_when: cphalo_second_start.stdout != '' and cphalo_second_start.stdout.find('cphalo is running') == -1
-  changed_when: cphalo_second_start.stdout.find('cphalo is running') == -1 or cphalo_second_start.stdout.find('...done') == 1
+  register: cphalo_start
+  failed_when: cphalo_start.stdout != '' and cphalo_start.stdout.find('cphalo is running') == -1
+  changed_when: cphalo_start.stdout.find('cphalo is running') == -1 or cphalo_start.stdout.find('...done') == 1
