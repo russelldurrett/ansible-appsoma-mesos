@@ -14,6 +14,7 @@
     "env": {
         "SEED": "cassandra-seed.marathon.mesos"
     },
+    "constraints": [["rack", "CLUSTER", "cassandra"]],
     "cpus": 2,
     "mem": 4096.0,
     "instances": {{ worker_count }},

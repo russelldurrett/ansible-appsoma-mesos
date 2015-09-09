@@ -6,8 +6,7 @@
 #
 
 - name: install dependencies via APT
-  sudo: True
-  apt: name={{ item }} state=present update_cache=yes
+  apt: pkg={{ item }} state=present update_cache=yes
   with_items:
     - git
     - curl
@@ -16,7 +15,6 @@
   when: ansible_pkg_mgr == "apt"
 
 - name: install dependencies via YUM
-  sudo: True
   yum: name={{ item }} state=present
   with_items:
     - git
@@ -26,8 +24,6 @@
     - openssl-devel
     - libselinux-python
   when: ansible_pkg_mgr == "yum"
-
-
 
 - name: install NVM (Node Version Manager)
   sudo: True
