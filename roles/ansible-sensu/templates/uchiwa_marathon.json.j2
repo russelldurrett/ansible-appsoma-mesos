@@ -1,0 +1,28 @@
+{
+    "id": "uchiwa-dashboard",
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+          "image": "uchiwa/uchiwa",
+          "network": "BRIDGE",
+          "portMappings": [
+            {
+              "containerPort": 8100,
+              "hostPort": 0,
+              "servicePort": 8100
+            }
+          ]
+        },
+        "volumes": [
+          {
+            "containerPath": "/config",
+            "hostPath": "{{ uchiwa_dir }}",
+            "mode": "RO"
+        }
+        ]
+
+    },
+    "cpus": 0.1,
+    "mem": 256.0,
+    "instances": 1
+}

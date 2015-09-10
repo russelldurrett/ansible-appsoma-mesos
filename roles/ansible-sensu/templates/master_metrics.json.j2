@@ -1,0 +1,20 @@
+{
+  "checks": {
+    "mesos_metrics": {
+        "type": "metric",
+        "command": "/usr/local/bin/metrics-mesos.rb -h {{ mesos_master_list }} -m master",
+        "subscribers": [
+            "{{ cluster_name }}-master"
+        ],
+        "interval": 10
+    },
+    "marathon_metrics": {
+        "type": "metric",
+        "command": "/usr/local/bin/metrics-marathon.rb -h {{ marathon_host }}",
+        "subscribers": [
+            "{{ cluster_name }}-master"
+        ],
+        "interval": 10
+    }
+  }
+}

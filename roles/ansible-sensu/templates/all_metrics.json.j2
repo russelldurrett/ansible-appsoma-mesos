@@ -1,0 +1,28 @@
+{
+  "checks": {
+   "cpu_metrics": {
+        "type": "metric",
+        "command": "/usr/local/bin/metrics-cpu.rb",
+        "subscribers": [
+            "{{ cluster_name }}"
+        ],
+        "interval": 10
+    },
+    "memory_metrics": {
+        "type": "metric",
+        "command": "/usr/local/bin/metrics-memory.rb",
+        "subscribers": [
+            "{{ cluster_name }}"
+        ],
+        "interval": 10
+    },
+    "network_metrics": {
+        "type": "metric",
+        "command": "/usr/local/bin/metrics-net.rb",
+        "subscribers": [
+            "{{ cluster_name }}"
+        ],
+        "interval": 10
+    }
+  }
+}

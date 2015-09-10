@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ $1 = "start" ] ; then
+	curl -X POST -H "Content-Type: application/json" -d @{{ uchiwa_dir }}/uchiwa_marathon.json http://{{ marathon_host }}:8080/v2/apps
+elif [ $1 = "stop" ] ; then
+	curl -X DELETE  -H "Content-Type: application/json" http://{{ marathon_host }}:8080/v2/apps/uchiwa-dashboard
+fi

@@ -1,0 +1,8 @@
+- name: Restart Sensu Server
+  service: name=sensu-server state=restarted enabled=true
+
+- name: Restart Sensu API
+  service: name=sensu-api state=restarted enabled=true
+
+- name: Restart Sensu Client
+  service: name=sensu-client state=restarted enabled=true

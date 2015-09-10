@@ -171,6 +171,16 @@
     - role: ansible-cassandra-marathon
       marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
 
+    - role: ansible-rabbitmq
+
+    - role: ansible-redis
+
+    - role: ansible-sensu
+      sensu_mode: "master"
+      sensu_master: "{{ hostvars[groups[inventory_group_master][0]]['private_ip_address'] }}"
+      marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
+      mesos_master_list: "{{ zookeeper_hosts_no_port }}"
+
 
 - include: playbooks/kafka_playbook.yml
   when: use_kafka is not defined or use_kafka
