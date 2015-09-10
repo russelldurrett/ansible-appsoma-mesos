@@ -11,4 +11,9 @@ master_plugins:
   - sensu-plugins-zookeeper
   - sensu-plugins-haproxy
 
+sensu_mode: "client"
 sensu_master: localhost
+uchiwa_dir: "{{ data_mount_point }}/uchiwa"
+
+uchiwa_docker_cmd: "sudo docker run -d --name uchiwa-dashboard --restart=always -p 18100:8100 -v {{ uchiwa_dir }}/config.json:/config/config.json uchiwa/uchiwa"
+

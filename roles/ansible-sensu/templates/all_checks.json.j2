@@ -1,0 +1,24 @@
+{
+  "handlers": {
+    "default": {
+      "type": "pipe",
+      "command": "cat"
+    }
+  },
+  "checks": {
+    "cpu": {
+        "command": "/usr/local/bin/check-cpu.rb -w 95 -c 100",
+        "interval": 10,
+        "subscribers": [
+            "{{ cluster_name }}"
+        ]
+    },
+    "memory": {
+        "command": "/usr/local/bin/check-memory.rb -w 128 -c 32",
+        "interval": 10,
+        "subscribers": [
+            "{{ cluster_name }}"
+        ]
+    }
+  }
+}

@@ -1,9 +1,9 @@
 {
   "client": {
     "name": "{{ hostvars[inventory_hostname]['system_name'] }}",
-    "address": "{{ sensu_master }}",
+    "address": "{{ hostvars[inventory_hostname]['private_ip_address']  }}",
     "subscriptions": [
-      "{{ cluster_name }}"
+      "{{ cluster_name }}",
       "{{ cluster_name }}-slave"
     ]
   }

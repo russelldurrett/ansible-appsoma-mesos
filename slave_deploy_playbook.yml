@@ -111,6 +111,9 @@
       marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
       mesos_dns_hosts: [ "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}" ]
 
+    - role: ansible-sensu
+      sensu_master: "{{ hostvars[groups[inventory_group_master][0]]['private_ip_address'] }}"
+
 - hosts: localhost
   gather_facts: no
   vars_files:
