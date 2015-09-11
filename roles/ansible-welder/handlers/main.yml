@@ -3,3 +3,11 @@
 
 - name: Restart Welder Widgets
   service: name=welder-widgets state=restarted enabled=yes
+
+- name: Stop wsyak
+  shell: ". /etc/profile.d/zookeeper_host_list.sh; {{ welder_data_dir }}/yak/wsyak/wsyak.sh stop"
+  when: yak_mode == 'wsyak'
+
+- name: Start wsyak
+  shell: ". /etc/profile.d/zookeeper_host_list.sh; {{ welder_data_dir }}/yak/wsyak/wsyak.sh start"
+  when: yak_mode == 'wsyak'
