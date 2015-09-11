@@ -3,6 +3,7 @@ welder_port: 8890
 welder_dir: "/opt/welder"
 welder_etc_dir: "{{ appsoma_etc_dir }}/welder"
 welder_log_dir: "{{ appsoma_log_dir }}"
+welder_data_dir: "{{ data_mount_point }}/welder"
 
 welder_use_tls: false
 use_containers: false
@@ -12,22 +13,24 @@ external_welder_console_name: "{{ ext_ip }}"
 int_welder_url: "{{ 'https' if welder_use_tls is defined and welder_use_tls else 'http' }}://{{ int_ip }}:{{welder_port }}"
 ext_welder_url: "{{ 'https' if welder_use_tls is defined and welder_use_tls else 'http' }}://{{ external_welder_name }}"
 
-db_folder: "/mnt/data/welder_db"
+db_folder: "{{ data_mount_point }}/welder_db"
 db_host: "localhost"
 db_port: 27017
 
 marathon_host: "{{ hostvars[inventory_hostname]['private_ip_address'] }}"
 marathon_url: "http://{{ marathon_host }}:8080"
 
-project_folder: "{{ data_mount_point }}/welder/projects"
-upload_folder: "/{{ data_mount_point }}/welder/uploads"
-service_log_folder: "{{ data_mount_point }}/welder/projects"
+project_folder: "{{ welder_data_dir }}/projects"
+upload_folder: "/{{ welder_data_dir }}/uploads"
+service_log_folder: "{{ welder_data_dir }}/log"
 
 scheduler: "rhino"
 rhino_url: "http://{{ scheduler_ip }}:8899/"
 
 use_https: False
-key_path: "/opt/welder/certificate.key"
-cert_path: "/opt/welder/certificate.crt"
+key_path: "{{ welder_dir }}/certificate.key"
+cert_path: "{{ welder_dir }}/certificate.crt"
+
+yak_mode: "wsyak"
 
 
