@@ -9,7 +9,7 @@
   register: version
 
 - name: Install Linux headers
-  apt: pkg="linux-headers-{{version.stdout}}" update_cache=yes state=present
+  apt: pkg="linux-headers-{{version.stdout}}" state=present
 
 - name: Install sysdig
   apt: pkg=sysdig update_cache=yes state=present

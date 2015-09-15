@@ -1,8 +1,8 @@
 - name: Check if InfluxDB is installed
-  command: dpkg-query -W influxdb
+  command: dpkg-query -s influxdb
   register: check_deb
   failed_when: check_deb.rc > 1
-  changed_when: check_deb.rc == 1 and check_deb.stdout.find("{{ influxdb_version }}") == -1
+  changed_when: check_deb.rc == 1 and check_deb.stdout.find("{{ influxdb_version }}") == -1  or check_deb.stdout.find("deinstall") != -1
 
 - name: Download InfluxDB deb file
   get_url: url="http://influxdb.s3.amazonaws.com/influxdb_{{ influxdb_version }}_amd64.deb" dest="/tmp/influxdb_{{ influxdb_version }}_amd64.deb"
@@ -21,6 +21,8 @@
 - name: Check if InfluxDB database exists
   command: /opt/influxdb/influx -execute "show databases;"
   register: influxdb_exists
+  until: influxdb_exists.stdout.find("Failed to connect") == -1
+  retries: 15
   changed_when: influxdb_exists.stdout.find('{{ cluster_name }}') == -1
 
 - name: Create InfluxDB database

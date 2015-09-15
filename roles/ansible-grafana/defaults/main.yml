@@ -1,4 +1,6 @@
 grafana_version: "2.0.2"
+influx_db_url: "{{ 'https' if haproxy_use_ssl else 'http' }}://influx.{{ service_discovery_dns_suffix }}"
+
 data_source_columns: "(org_id, version, type, name, access, url, password, user, database, basic_auth, basic_auth_user, basic_auth_password, is_default, created, updated)"
-data_source_values: "(1, 0, 'influxdb', '{{cluster_name}}', 'direct', 'http://{{ inventory_hostname }}:8086', 'admin', 'admin', '{{ cluster_name }}', 0, 'admin', 'admin', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
+data_source_values: "(1, 0, 'influxdb', '{{cluster_name}}', 'direct', '{{ influx_db_url }}', 'admin', 'admin', '{{ cluster_name }}', 0, 'admin', 'admin', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
 mesos_version: "0.22.1"

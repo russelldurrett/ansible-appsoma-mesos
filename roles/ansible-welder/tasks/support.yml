@@ -1,0 +1,25 @@
+- name: Create Support dir
+  file: path="{{ welder_support_dir }}" state=directory owner="{{ management_user }}" group="{{ welder_group['name'] }}" mode=2775
+
+- name: Clone Support source
+  git:
+    dest: "{{ welder_support_dir }}"
+    repo: https://github.com/appsoma/welder_support.git
+    version: "{{ welder_support_version if welder_support_version is defined else 'HEAD' }}"
+    update: yes
+    force: yes
+  sudo: yes
+  sudo_user: "{{ management_user }}"
+  notify: Stop wsyak
+  notify: Start wsyak
+
+- name: Run NPM for wsyak
+  shell: "cd {{ welder_support_dir }}/wsyak; npm install;"
+  sudo: yes
+  sudo_user: "{{ management_user }}"
+  register: npmwsyak
+  failed_when: npmwsyak.stderr.find('ERROR') != -1
+  changed_when: npmwsyak.stdout != ''
+  notify: Stop wsyak
+  notify: Start wsyak
+  when: yak_mode == 'wsyak'

@@ -1,8 +1,10 @@
 - name: Restart Sensu Server
   service: name=sensu-server state=restarted enabled=true
+  when: sensu_mode == "master"
 
 - name: Restart Sensu API
   service: name=sensu-api state=restarted enabled=true
+  when: sensu_mode == "master"
 
 - name: Restart Sensu Client
   service: name=sensu-client state=restarted enabled=true

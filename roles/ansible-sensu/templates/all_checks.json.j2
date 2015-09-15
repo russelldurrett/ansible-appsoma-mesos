@@ -1,21 +1,43 @@
 {
-  "handlers": {
-    "default": {
-      "type": "pipe",
-      "command": "cat"
-    }
-  },
   "checks": {
     "cpu": {
         "command": "/usr/local/bin/check-cpu.rb -w 95 -c 100",
-        "interval": 10,
+        "interval": {{ check_interval | int }},
         "subscribers": [
             "{{ cluster_name }}"
         ]
     },
     "memory": {
         "command": "/usr/local/bin/check-memory.rb -w 128 -c 32",
-        "interval": 10,
+        "interval": {{ check_interval | int }},
+        "subscribers": [
+            "{{ cluster_name }}"
+        ]
+    },
+    "disk": {
+        "command": "/usr/local/bin/check-disk-usage.rb -x nfs -w 85 -c 95",
+        "interval": {{ check_interval | int }},
+        "subscribers": [
+            "{{ cluster_name }}"
+        ]
+    },
+    "time": {
+        "command": "/usr/local/bin/check-ntp.rb -w 100 -c 1000",
+        "interval": {{ check_interval | int }},
+        "subscribers": [
+            "{{ cluster_name }}"
+        ]
+    },
+    "mesos_dns": {
+        "command": "/usr/local/bin/check-dns.rb -d master.mesos",
+        "interval": {{ check_interval | int }},
+        "subscribers": [
+            "{{ cluster_name }}"
+        ]
+    },
+    "internet_dns": {
+        "command": "/usr/local/bin/check-dns.rb -d appsoma.com",
+        "interval": {{ check_interval | int }},
         "subscribers": [
             "{{ cluster_name }}"
         ]

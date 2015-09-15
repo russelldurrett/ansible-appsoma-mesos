@@ -1,15 +1,23 @@
 all_plugins:
   - sensu-plugins-cpu-checks
   - sensu-plugins-memory-checks
+  - sensu-plugins-disk-checks
+  - sensu-plugins-dns
   - sensu-plugins-docker
   - sensu-plugins-network-checks
   - sensu-plugins-ntp
+  - sensu-plugins-influxdb
 
+mesos_plugins:
+  - sensu-plugins-mesos
 
 master_plugins:
-  - sensu-plugins-mesos
   - sensu-plugins-zookeeper
+  - sensu-plugins-mongodb
   - sensu-plugins-haproxy
+
+metric_interval: 30
+check_interval: 15
 
 sensu_mode: "client"
 sensu_master: localhost

@@ -1,0 +1,12 @@
+{
+  "handlers": {
+    "default": {
+      "type": "pipe",
+      "command": "cat"
+    },
+    "influxdb": {
+      "type": "pipe",
+      "command": "/usr/local/bin/metrics-influxdb.rb influxdb"
+    }
+  }
+}

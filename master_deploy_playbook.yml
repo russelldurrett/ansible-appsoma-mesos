@@ -175,9 +175,13 @@
 
     - role: ansible-redis
 
+    - role: ansible-influxdb
+
+    - role: ansible-grafana
+
     - role: ansible-sensu
       sensu_mode: "master"
-      sensu_master: "{{ hostvars[groups[inventory_group_master][0]]['private_ip_address'] }}"
+      sensu_master: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
       marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
       mesos_master_list: "{{ zookeeper_hosts_no_port }}"
 
@@ -187,6 +191,7 @@
 
 - include: playbooks/storm_playbook.yml
   when: use_storm is not defined or use_storm
+
 - include: playbooks/rhino_playbook.yml
 
 - include: playbooks/welder_playbook.yml

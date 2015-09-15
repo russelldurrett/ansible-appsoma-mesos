@@ -15,18 +15,32 @@
     - ruby-dev
 
 - name: Install Sensu plugin gem
-  command: gem install sensu-plugin
+  command: gem install --conservative sensu-plugin
+  register: gem_plugin
+  changed_when: gem_plugin.stdout != ""
   notify: Restart Sensu Client
 
 - name: Install Sensu plugins for all nodes
-  command: gem install "{{ item }}"
+  command: gem install --conservative "{{ item }}"
+  register: all_gem_plugins
+  changed_when: all_gem_plugins.stdout != ""
   with_items: all_plugins
   notify: Restart Sensu Client
 
+- name: Install Sensu plugins for Mesos
+  command: gem install --conservative "{{ item }}"
+  register: mesos_gem_plugins
+  changed_when: mesos_gem_plugins.stdout != ""
+  with_items: mesos_plugins
+  when: inventory_group_master in group_names or inventory_group_slave in group_names
+  notify: Restart Sensu Client
+
 - name: Install Sensu plugins for master nodes
-  command: gem install "{{ item }}"
+  command: gem install --conservative "{{ item }}"
+  register: master_gem_plugins
+  changed_when: master_gem_plugins.stdout != ""
   with_items: master_plugins
-  when: sensu_mode == "master"
+  when: inventory_group_master in group_names
   notify: Restart Sensu Client
 
 - name: Install Sensu config
@@ -36,37 +50,98 @@
     - Restart Sensu API
     - Restart Sensu Client
 
-- name: Install Sensu client config
-  template: src="sensu_{{'master' if sensu_mode == 'master' else 'slave' }}_client.json.j2" dest=/etc/sensu/conf.d/client.json
+- name: Install Sensu service client config
+  template: src="sensu_service_client.json.j2" dest=/etc/sensu/conf.d/client.json
+  when: inventory_group_service in group_names
   notify: Restart Sensu Client
+
+- name: Install Sensu slave client config
+  template: src="sensu_slave_client.json.j2" dest=/etc/sensu/conf.d/client.json
+  when: inventory_group_slave in group_names
+  notify: Restart Sensu Client
+
+- name: Install Sensu master client config
+  template: src="sensu_master_client.json.j2" dest=/etc/sensu/conf.d/client.json
+  when: inventory_group_master in group_names
+  notify: Restart Sensu Client
+
+- name: Install InfluxDB config json
+  template: src=influxdb.json.j2 dest=/etc/sensu/conf.d/influxdb.json
+  notify:
+    - Restart Sensu Server
+    - Restart Sensu API
+    - Restart Sensu Client
+
+- name: Install handlers json
+  template: src=handlers.json.j2 dest=/etc/sensu/conf.d/handlers.json
+  notify:
+    - Restart Sensu Server
+    - Restart Sensu API
+    - Restart Sensu Client
 
 - name: Install Checks
   template: src="all_checks.json.j2" dest="/etc/sensu/conf.d/all_checks.json"
   notify:
+    - Restart Sensu Server
+    - Restart Sensu API
+    - Restart Sensu Client
+
+- name: Install Slave Checks
+  template: src="slave_checks.json.j2" dest="/etc/sensu/conf.d/slave_checks.json"
+  notify:
+    - Restart Sensu Server
+    - Restart Sensu API
     - Restart Sensu Client
 
 - name: Install Master Checks
   template: src="master_checks.json.j2" dest="/etc/sensu/conf.d/master_checks.json"
-  when: sensu_mode == "master"
-  notify: Restart Sensu Client
+  when: inventory_group_master in group_names
+  notify:
+    - Restart Sensu Server
+    - Restart Sensu API
+    - Restart Sensu Client
 
 - name: Install Metrics
   template: src="all_metrics.json.j2" dest="/etc/sensu/conf.d/all_metrics.json"
   notify:
+    - Restart Sensu Server
+    - Restart Sensu API
+    - Restart Sensu Client
+
+- name: Install Slave Metrics
+  template: src="slave_metrics.json.j2" dest="/etc/sensu/conf.d/slave_metrics.json"
+  notify:
+    - Restart Sensu Server
+    - Restart Sensu API
     - Restart Sensu Client
 
 - name: Install Master Metrics
   template: src="master_metrics.json.j2" dest="/etc/sensu/conf.d/master_metrics.json"
+  when: inventory_group_master in group_names
+  notify:
+    - Restart Sensu Server
+    - Restart Sensu API
+    - Restart Sensu Client
+
+- name: Restart Redis to prepare
+  service: name=redis-server state=restarted enabled=yes
   when: sensu_mode == "master"
-  notify: Restart Sensu Client
 
 - name: Start Sensu server
   service: name=sensu-server state=started enabled=yes
-  when: sensu_mode =="master"
+  when: sensu_mode == "master"
 
 - name: Start Sensu API
   service: name=sensu-api state=started enabled=yes
-  when: sensu_mode =="master"
+  when: sensu_mode == "master"
+
+- name: Turn off Sensu API
+  service: name=sensu-api state=stopped enabled=no
+  when: sensu_mode != "master"
+
+- name: Turn off Sensu Server
+  service: name=sensu-server state=stopped enabled=no
+  when: sensu_mode != "master"
 
 - include: uchiwa.yml
   when: sensu_mode == "master"

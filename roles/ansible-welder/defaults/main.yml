@@ -4,6 +4,7 @@ welder_dir: "/opt/welder"
 welder_etc_dir: "{{ appsoma_etc_dir }}/welder"
 welder_log_dir: "{{ appsoma_log_dir }}"
 welder_data_dir: "{{ data_mount_point }}/welder"
+welder_support_dir: "{{ welder_data_dir }}/support"
 
 welder_use_tls: false
 use_containers: false

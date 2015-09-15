@@ -1,12 +1,13 @@
 {
   "checks": {
-    "mesos_metrics": {
+    "mesos_master_metrics": {
         "type": "metric",
-        "command": "/usr/local/bin/metrics-mesos.rb -h {{ mesos_master_list }} -m master",
+        "command": "/usr/local/bin/metrics-mesos.rb -h {{ hostvars[inventory_hostname].private_ip_address }} -m master",
         "subscribers": [
             "{{ cluster_name }}-master"
         ],
-        "interval": 10
+        "handlers": [ "influxdb" ],
+        "interval": {{ metric_interval | int }}
     },
     "marathon_metrics": {
         "type": "metric",
@@ -14,7 +15,8 @@
         "subscribers": [
             "{{ cluster_name }}-master"
         ],
-        "interval": 10
+        "handlers": [ "influxdb" ],
+        "interval": {{ metric_interval | int }}
     }
   }
 }

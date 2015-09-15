@@ -1,3 +1,4 @@
+
 - name: Create directory for Grafana
   file: path=/opt/grafana state=directory
 
@@ -13,7 +14,7 @@
 #  apt_repository: repo="deb https://packagecloud.io/grafana/stable/debian/ wheezy main" state=present
 
 - name: Install Graphana prerequisite packages
-  apt: pkg="{{item}}" state=present update_cache=yes
+  apt: pkg="{{item}}" state=present # update_cache=yes
   with_items:
     - adduser
     - libfontconfig

@@ -2,5 +2,6 @@
   when: not use_containers
 
 - include: demo_project.yml
-- include: yak.yml
+
+- include: support.yml
 
