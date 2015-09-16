@@ -17,7 +17,7 @@
           {
             "aliasColors": {},
             "bars": false,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "editable": true,
             "error": false,
             "fill": 1,
@@ -99,7 +99,7 @@
           {
             "aliasColors": {},
             "bars": false,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "editable": true,
             "error": false,
             "fill": 1,
@@ -177,7 +177,7 @@
           {
             "aliasColors": {},
             "bars": false,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "editable": true,
             "error": false,
             "fill": 1,
@@ -264,7 +264,7 @@
           {
             "aliasColors": {},
             "bars": false,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "editable": true,
             "error": false,
             "fill": 1,
@@ -346,7 +346,7 @@
             "editable": true,
             "type": "graph",
             "id": 10,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "renderer": "flot",
             "x-axis": true,
             "y-axis": true,
@@ -454,7 +454,7 @@
             "editable": true,
             "type": "graph",
             "id": 11,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "renderer": "flot",
             "x-axis": true,
             "y-axis": true,
@@ -567,7 +567,7 @@
             "editable": true,
             "type": "graph",
             "id": 12,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "renderer": "flot",
             "x-axis": true,
             "y-axis": true,
@@ -680,7 +680,7 @@
             "editable": true,
             "type": "graph",
             "id": 13,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "renderer": "flot",
             "x-axis": true,
             "y-axis": true,
@@ -787,7 +787,7 @@
             "editable": true,
             "type": "graph",
             "id": 15,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "renderer": "flot",
             "x-axis": true,
             "y-axis": true,
@@ -886,7 +886,7 @@
             "editable": true,
             "type": "graph",
             "id": 9,
-            "datasource": null,
+            "datasource": "{{ cluster_name }}",
             "renderer": "flot",
             "x-axis": true,
             "y-axis": true,
@@ -995,14 +995,14 @@
       }
     ],
     "time": {
-      "from": "now-1h",
+      "from": "now-6h",
       "to": "now"
     },
     "templating": {
       "list": [
         {
           "type": "query",
-          "datasource": null,
+          "datasource": "{{ cluster_name }}",
           "refresh_on_load": false,
           "name": "slave",
           "options": [
@@ -1031,7 +1031,7 @@
         },
         {
           "type": "query",
-          "datasource": null,
+          "datasource": "{{ cluster_name }}",
           "refresh_on_load": false,
           "name": "master",
           "options": [
@@ -1058,7 +1058,7 @@
         },
         {
           "type": "query",
-          "datasource": null,
+          "datasource": "{{ cluster_name }}",
           "refresh_on_load": false,
           "name": "service",
           "options": [
@@ -1084,7 +1084,7 @@
         },
         {
           "type": "query",
-          "datasource": null,
+          "datasource": "{{ cluster_name }}",
           "refresh_on_load": false,
           "name": "nodes",
           "options": [
@@ -1114,7 +1114,7 @@
     "annotations": {
       "list": []
     },
-    "refresh": "10s",
+    "refresh": "60s",
     "schemaVersion": 6,
     "version": 7,
     "links": [
