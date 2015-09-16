@@ -1,979 +1,1151 @@
 {
-  "id": 1,
-  "title": "{{ cluster_name }} Dashboard",
-  "originalTitle": "{{ cluster_name }} Dashboard",
-  "tags": [],
-  "style": "dark",
-  "timezone": "browser",
-  "editable": true,
-  "hideControls": false,
-  "sharedCrosshair": false,
-  "rows": [
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 2,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_slave] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "disk_usage_root_used_percentage",
-              "query": "SELECT mean(value) FROM \"disk_usage_root_used_percentage\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Slave Disk Used Percent",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 5,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_master] + groups[inventory_group_service] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "disk_usage_root_used_percentage",
-              "query": "SELECT mean(value) FROM \"disk_usage_root_used_percentage\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Other Nodes Disk Used Percent",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        }
-      ],
-      "title": "Disk"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 3,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_slave] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "memory_used",
-              "query": "SELECT mean(value) FROM \"memory_used\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Slave Memory Used",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 4,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_master] + groups[inventory_group_service] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "memory_used",
-              "query": "SELECT mean(value) FROM \"memory_used\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Other Nodes Memory Used",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        }
-      ],
-      "title": "Memory"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 1,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_slave] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "cpu_total_",
-              "query": "SELECT mean(value) FROM \"cpu_total_\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Slave CPU Total",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 6,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_master] + groups[inventory_group_service] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "cpu_total_",
-              "query": "SELECT mean(value) FROM \"cpu_total_\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Other Nodes CPU Total",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        }
-      ],
-      "title": "CPU"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 7,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_slave] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "mesos-slave_slave_executors_running",
-              "query": "SELECT mean(value) FROM \"mesos-slave_slave_executors_running\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Mesos Slave Executors Running",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 8,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_slave] %}
-            {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "mesos-slave_slave_tasks_running",
-              "query": "SELECT mean(value) FROM \"mesos-slave_slave_tasks_running\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Mesos Slave Running Tasks",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        }
-      ],
-      "title": "Mesos Slaves"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 9,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "Activated Slaves",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "mesos-master_activated_slaves",
-              "query": "SELECT mean(value) FROM \"mesos-master_activated_slaves\" WHERE $timeFilter GROUP BY time($interval)",
-              "tags": []
+  "dashboard": {
+    "title": "Dashboard for {{ cluster_name }} cluster",
+    "originalTitle": "Dashboard for {{ cluster_name }} cluster",
+    "tags": [],
+    "style": "dark",
+    "timezone": "browser",
+    "editable": true,
+    "hideControls": false,
+    "sharedCrosshair": false,
+    "rows": [
+      {
+        "collapse": false,
+        "editable": true,
+        "height": "250px",
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "datasource": null,
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": 100,
+              "leftMin": 0,
+              "rightLogBase": 1,
+              "rightMax": null,
+              "rightMin": null,
+              "threshold1": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2": null,
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
             },
-            {
-              "alias": "Active Frameworks",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "mesos-master_master_frameworks_active",
-              "query": "SELECT mean(value) FROM \"mesos-master_master_frameworks_active\" WHERE $timeFilter GROUP BY time($interval)",
-              "tags": [],
-              "target": ""
+            "id": 2,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
             },
-            {
-              "alias": "Dropped Messages",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "mesos-master_master_dropped_messages",
-              "query": "SELECT mean(value) FROM \"mesos-master_master_dropped_messages\" WHERE $timeFilter GROUP BY time($interval)",
-              "tags": [],
-              "target": ""
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "span": 4,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "target": "",
+                "tags": [
+                  {
+                    "key": "host",
+                    "value": "/$nodes/"
+                  }
+                ],
+                "groupByTags": [
+                  "host"
+                ],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "disk_usage_root_used_percentage",
+                "query": "SELECT mean(value) FROM \"disk_usage_root_used_percentage\" WHERE \"host\" =~ /$nodes/ AND $timeFilter GROUP BY time($interval), \"host\" fill(null)",
+                "rawQuery": false,
+                "fill": "null",
+                "hide": false,
+                "alias": "$tag_host"
+              }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Disk Free Percent",
+            "tooltip": {
+              "shared": true,
+              "value_type": "cumulative"
             },
+            "type": "graph",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ]
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "datasource": null,
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "leftMin": 0,
+              "rightLogBase": 1,
+              "rightMax": null,
+              "rightMin": null,
+              "threshold1": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2": null,
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "id": 1,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "span": 4,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "alias": "$tag_host",
+                "fields": [
+                  {
+                    "func": "mean",
+                    "name": "value"
+                  }
+                ],
+                "groupByTags": [
+                  "host"
+                ],
+                "measurement": "cpu_total_",
+                "query": "SELECT mean(value) FROM \"cpu_total_\" WHERE \"host\" =~ /$nodes/ AND $timeFilter GROUP BY time($interval), \"host\"",
+                "tags": [
+                  {
+                    "key": "host",
+                    "value": "/$nodes/"
+                  }
+                ]
+              }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "CPU Total",
+            "tooltip": {
+              "shared": true,
+              "value_type": "cumulative"
+            },
+            "type": "graph",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ]
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "datasource": null,
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": 100,
+              "leftMin": 0,
+              "rightLogBase": 1,
+              "rightMax": null,
+              "rightMin": null,
+              "threshold1": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2": null,
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "id": 3,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "span": 4,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "alias": "$tag_host",
+                "fields": [
+                  {
+                    "func": "mean",
+                    "name": "value"
+                  }
+                ],
+                "groupByTags": [
+                  "host"
+                ],
+                "measurement": "memory_percent_freeWOBuffersCaches",
+                "query": "SELECT mean(value) FROM \"memory_percent_freeWOBuffersCaches\" WHERE \"host\" =~ /$nodes/ AND $timeFilter GROUP BY time($interval), \"host\"",
+                "rawQuery": false,
+                "tags": [
+                  {
+                    "key": "host",
+                    "value": "/$nodes/"
+                  }
+                ]
+              }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Memory Percent Free",
+            "tooltip": {
+              "shared": true,
+              "value_type": "cumulative"
+            },
+            "type": "graph",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ]
+          }
+        ],
+        "title": "CPU, Disk, Memory"
+      },
+      {
+        "collapse": false,
+        "editable": true,
+        "height": "250px",
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "datasource": null,
+            "editable": true,
+            "error": false,
+            "fill": 1,
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "leftMin": 0,
+              "rightLogBase": 1,
+              "rightMax": null,
+              "rightMin": null,
+              "threshold1": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2": null,
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "id": 7,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 2,
+            "links": [],
+            "nullPointMode": "connected",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "span": 6,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "alias": "$tag_host tasks",
+                "fields": [
+                  {
+                    "func": "mean",
+                    "name": "value"
+                  }
+                ],
+                "groupByTags": [
+                  "host"
+                ],
+                "measurement": "mesos-slave_slave_tasks_running",
+                "query": "SELECT mean(value) FROM \"mesos-slave_slave_tasks_running\" WHERE \"host\" =~ /$slave/ AND $timeFilter GROUP BY time($interval), \"host\"",
+                "tags": [
+                  {
+                    "key": "host",
+                    "value": "/$slave/"
+                  }
+                ]
+              }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Mesos Slave Workload",
+            "tooltip": {
+              "shared": true,
+              "value_type": "cumulative"
+            },
+            "type": "graph",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ]
+          },
+          {
+            "title": "Mesos Cluster Utilization",
+            "error": false,
+            "span": 6,
+            "editable": true,
+            "type": "graph",
+            "id": 10,
+            "datasource": null,
+            "renderer": "flot",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ],
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": 1,
+              "rightMax": null,
+              "leftMin": 0,
+              "rightMin": null,
+              "rightLogBase": 1,
+              "threshold1": null,
+              "threshold2": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "lines": true,
+            "fill": 1,
+            "linewidth": 2,
+            "points": false,
+            "pointradius": 5,
+            "bars": false,
+            "stack": false,
+            "percentage": false,
+            "legend": {
+              "show": true,
+              "values": false,
+              "min": false,
+              "max": false,
+              "current": false,
+              "total": false,
+              "avg": false
+            },
+            "nullPointMode": "connected",
+            "steppedLine": false,
+            "tooltip": {
+              "value_type": "cumulative",
+              "shared": true
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "targets": [
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_cpus_percent",
+                "query": "SELECT mean(value) FROM \"mesos-master_cpus_percent\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "% CPU used"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_mem_percent",
+                "query": "SELECT mean(value) FROM \"mesos-master_mem_percent\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "% Memory Used"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_disk_percent",
+                "query": "SELECT mean(value) FROM \"mesos-master_disk_percent\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "% Disk used"
+              }
+            ],
+            "aliasColors": {},
+            "seriesOverrides": [],
+            "links": []
+          }
+        ],
+        "title": "Mesos Cluster Info"
+      },
+      {
+        "collapse": false,
+        "editable": true,
+        "height": "250px",
+        "panels": [
+          {
+            "title": "Mesos Frameworks",
+            "error": false,
+            "span": 4,
+            "editable": true,
+            "type": "graph",
+            "id": 11,
+            "datasource": null,
+            "renderer": "flot",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ],
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "rightMax": null,
+              "leftMin": null,
+              "rightMin": null,
+              "rightLogBase": 1,
+              "threshold1": null,
+              "threshold2": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "lines": true,
+            "fill": 1,
+            "linewidth": 2,
+            "points": false,
+            "pointradius": 5,
+            "bars": false,
+            "stack": false,
+            "percentage": false,
+            "legend": {
+              "show": true,
+              "values": false,
+              "min": false,
+              "max": false,
+              "current": false,
+              "total": false,
+              "avg": false
+            },
+            "nullPointMode": "connected",
+            "steppedLine": false,
+            "tooltip": {
+              "value_type": "cumulative",
+              "shared": true
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "targets": [
+              {
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_frameworks_active",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_frameworks_active\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Active"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_frameworks_connected",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_frameworks_connected\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Connected"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_frameworks_disconnected",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_frameworks_disconnected\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Disconnected"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_frameworks_inactive",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_frameworks_inactive\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Inactive"
+              }
+            ],
+            "aliasColors": {},
+            "seriesOverrides": [],
+            "links": []
+          },
+          {
+            "title": "Mesos Slave counts",
+            "error": false,
+            "span": 4,
+            "editable": true,
+            "type": "graph",
+            "id": 12,
+            "datasource": null,
+            "renderer": "flot",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ],
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "rightMax": null,
+              "leftMin": null,
+              "rightMin": null,
+              "rightLogBase": 1,
+              "threshold1": null,
+              "threshold2": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "lines": true,
+            "fill": 1,
+            "linewidth": 2,
+            "points": false,
+            "pointradius": 5,
+            "bars": false,
+            "stack": false,
+            "percentage": false,
+            "legend": {
+              "show": true,
+              "values": false,
+              "min": false,
+              "max": false,
+              "current": false,
+              "total": false,
+              "avg": false
+            },
+            "nullPointMode": "connected",
+            "steppedLine": false,
+            "tooltip": {
+              "value_type": "cumulative",
+              "shared": true
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "targets": [
+              {
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_slaves_active",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_slaves_active\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Active"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_slaves_connected",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_slaves_connected\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Connected"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_slaves_disconnected",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_slaves_disconnected\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Disconnected"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "mesos-master_master_slaves_inactive",
+                "query": "SELECT mean(value) FROM \"mesos-master_master_slaves_inactive\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Inactive"
+              }
+            ],
+            "aliasColors": {},
+            "seriesOverrides": [],
+            "links": []
+          },
+          {
+            "title": "Marathon",
+            "error": false,
+            "span": 4,
+            "editable": true,
+            "type": "graph",
+            "id": 13,
+            "datasource": null,
+            "renderer": "flot",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ],
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "rightMax": null,
+              "leftMin": null,
+              "rightMin": null,
+              "rightLogBase": 1,
+              "threshold1": null,
+              "threshold2": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "lines": true,
+            "fill": 1,
+            "linewidth": 2,
+            "points": false,
+            "pointradius": 5,
+            "bars": false,
+            "stack": false,
+            "percentage": false,
+            "legend": {
+              "show": true,
+              "values": false,
+              "min": false,
+              "max": false,
+              "current": false,
+              "total": false,
+              "avg": false
+            },
+            "nullPointMode": "connected",
+            "steppedLine": false,
+            "tooltip": {
+              "value_type": "cumulative",
+              "shared": true
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "targets": [
+              {
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "marathon_counters_org_eclipse_jetty_servlet_ServletContextHandler_active-dispatches_count",
+                "query": "SELECT mean(value) FROM \"marathon_counters_org_eclipse_jetty_servlet_ServletContextHandler_active-dispatches_count\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Active Dispatches"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "marathon_counters_org_eclipse_jetty_servlet_ServletContextHandler_active-requests_count",
+                "query": "SELECT mean(value) FROM \"marathon_counters_org_eclipse_jetty_servlet_ServletContextHandler_active-requests_count\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Active Requests"
+              },
+              {
+                "target": "",
+                "tags": [],
+                "groupByTags": [],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "marathon_counters_org_eclipse_jetty_servlet_ServletContextHandler_active-suspended-requests_count",
+                "query": "SELECT mean(value) FROM \"marathon_counters_org_eclipse_jetty_servlet_ServletContextHandler_active-suspended-requests_count\" WHERE $timeFilter GROUP BY time($interval)",
+                "alias": "Active Suspended Requests"
+              }
+            ],
+            "aliasColors": {},
+            "seriesOverrides": [],
+            "links": []
+          }
+        ],
+        "title": "Mesos Master Data"
+      },
+      {
+        "collapse": false,
+        "editable": true,
+        "height": "250px",
+        "panels": [
+          {
+            "title": "Network Usage",
+            "error": false,
+            "span": 6,
+            "editable": true,
+            "type": "graph",
+            "id": 15,
+            "datasource": null,
+            "renderer": "flot",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ],
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "rightMax": null,
+              "leftMin": null,
+              "rightMin": null,
+              "rightLogBase": 1,
+              "threshold1": null,
+              "threshold2": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "lines": true,
+            "fill": 1,
+            "linewidth": 2,
+            "points": false,
+            "pointradius": 5,
+            "bars": false,
+            "stack": false,
+            "percentage": false,
+            "legend": {
+              "show": true,
+              "values": false,
+              "min": false,
+              "max": false,
+              "current": false,
+              "total": false,
+              "avg": false
+            },
+            "nullPointMode": "connected",
+            "steppedLine": false,
+            "tooltip": {
+              "value_type": "cumulative",
+              "shared": true
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "targets": [
+              {
+                "tags": [
+                  {
+                    "key": "host",
+                    "value": "/$nodes/"
+                  }
+                ],
+                "groupByTags": [
+                  "host"
+                ],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "net_eth0_tx_bytes",
+                "query": "SELECT mean(value) FROM \"net_eth0_tx_bytes\" WHERE \"host\" =~ /$nodes/ AND $timeFilter GROUP BY time($interval), \"host\"",
+                "alias": "Xmit $tag_host"
+              },
+              {
+                "target": "",
+                "tags": [
+                  {
+                    "key": "host",
+                    "value": "/$nodes/"
+                  }
+                ],
+                "groupByTags": [
+                  "host"
+                ],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "net_eth0_rx_bytes",
+                "query": "SELECT mean(value) FROM \"net_eth0_rx_bytes\" WHERE \"host\" =~ /$nodes/ AND $timeFilter GROUP BY time($interval), \"host\"",
+                "alias": "Recv $tag_host"
+              }
+            ],
+            "aliasColors": {},
+            "seriesOverrides": [],
+            "links": []
+          },
+          {
+            "title": "Time Offset",
+            "error": false,
+            "span": 6,
+            "editable": true,
+            "type": "graph",
+            "id": 9,
+            "datasource": null,
+            "renderer": "flot",
+            "x-axis": true,
+            "y-axis": true,
+            "y_formats": [
+              "short",
+              "short"
+            ],
+            "grid": {
+              "leftLogBase": 1,
+              "leftMax": null,
+              "rightMax": null,
+              "leftMin": null,
+              "rightMin": null,
+              "rightLogBase": 1,
+              "threshold1": null,
+              "threshold2": null,
+              "threshold1Color": "rgba(216, 200, 27, 0.27)",
+              "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            },
+            "lines": false,
+            "fill": 1,
+            "linewidth": 2,
+            "points": false,
+            "pointradius": 5,
+            "bars": true,
+            "stack": false,
+            "percentage": false,
+            "legend": {
+              "show": true,
+              "values": false,
+              "min": false,
+              "max": false,
+              "current": false,
+              "total": false,
+              "avg": false
+            },
+            "nullPointMode": "connected",
+            "steppedLine": false,
+            "tooltip": {
+              "value_type": "cumulative",
+              "shared": true
+            },
+            "timeFrom": null,
+            "timeShift": null,
+            "targets": [
+              {
+                "tags": [
+                  {
+                    "key": "host",
+                    "value": "/$nodes/"
+                  }
+                ],
+                "groupByTags": [
+                  "host"
+                ],
+                "fields": [
+                  {
+                    "name": "value",
+                    "func": "mean"
+                  }
+                ],
+                "measurement": "ntpdate_offset",
+                "query": "SELECT mean(value) FROM \"ntpdate_offset\" WHERE \"host\" =~ /$nodes/ AND $timeFilter GROUP BY time($interval), \"host\"",
+                "alias": "$tag_host"
+              }
+            ],
+            "aliasColors": {},
+            "seriesOverrides": [],
+            "links": []
+          }
+        ],
+        "title": "Network and Time"
+      }
+    ],
+    "nav": [
+      {
+        "collapse": false,
+        "enable": true,
+        "notice": false,
+        "now": true,
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ],
+        "status": "Stable",
+        "time_options": [
+          "5m",
+          "15m",
+          "1h",
+          "6h",
+          "12h",
+          "24h",
+          "2d",
+          "7d",
+          "30d"
+        ],
+        "type": "timepicker"
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "templating": {
+      "list": [
+        {
+          "type": "query",
+          "datasource": null,
+          "refresh_on_load": false,
+          "name": "slave",
+          "options": [
             {
-              "alias": "Active Tasks",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "mesos-master_active_tasks_gauge",
-              "query": "SELECT mean(value) FROM \"mesos-master_active_tasks_gauge\" WHERE $timeFilter GROUP BY time($interval)",
-              "tags": [],
-              "target": ""
+              "text": "All",
+              "value": ".*",
+              "selected": true
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Mesos Master Stats",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
+          "includeAll": true,
+          "allFormat": "regex wildcard",
+          "multi": true,
+          "multiFormat": "glob",
+          "query": "SHOW TAG VALUES WITH KEY = \"host\"",
+          "current": {
+            "text": "All",
+            "value": ".*",
+            "tags": []
           },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
+          "regex": "/{{ cluster_name }}_slave_*/",
+          "label": "Slave",
+          "useTags": true,
+          "tagsQuery": "",
+          "tagValuesQuery": "",
+          "refresh": true
         },
         {
-          "aliasColors": {},
-          "bars": false,
+          "type": "query",
           "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 10,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Marathon Stats",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
-        }
-      ],
-      "title": "Mesos Master"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "leftLogBase": 1,
-            "leftMax": null,
-            "leftMin": null,
-            "rightLogBase": 1,
-            "rightMax": null,
-            "rightMin": null,
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 11,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {% for h in groups[inventory_group_master] + groups[inventory_group_service] + groups[inventory_group_slave] %}
+          "refresh_on_load": false,
+          "name": "master",
+          "options": [
             {
-              "alias": "{{ hostvars[h].system_name }}",
-              "fields": [
-                {
-                  "func": "mean",
-                  "name": "value"
-                }
-              ],
-              "groupByTags": [],
-              "measurement": "ntpdate_offset",
-              "query": "SELECT mean(value) FROM \"ntpdate_offset\" WHERE \"host\" = '{{ hostvars[h].system_name }}' AND $timeFilter GROUP BY time($interval)",
-              "tags": [
-                {
-                  "key": "host",
-                  "value": "{{ hostvars[h].system_name }}"
-                }
-              ]
-            {{ '}' if loop.last else '},' }}
-            {% endfor %}
+              "text": "All",
+              "value": ".*",
+              "selected": true
+            }
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Time drift",
-          "tooltip": {
-            "shared": true,
-            "value_type": "cumulative"
+          "includeAll": true,
+          "allFormat": "regex wildcard",
+          "multi": true,
+          "multiFormat": "regex values",
+          "regex": "/{{ cluster_name }}_master_*/",
+          "query": "SHOW TAG VALUES WITH KEY = \"host\"",
+          "current": {
+            "text": "All",
+            "value": ".*",
+            "tags": []
           },
-          "type": "graph",
-          "x-axis": true,
-          "y-axis": true,
-          "y_formats": [
-            "short",
-            "short"
-          ]
+          "refresh": true,
+          "useTags": false,
+          "label": "Masters"
+        },
+        {
+          "type": "query",
+          "datasource": null,
+          "refresh_on_load": false,
+          "name": "service",
+          "options": [
+            {
+              "text": "All",
+              "value": ".*",
+              "selected": true
+            }
+          ],
+          "includeAll": true,
+          "allFormat": "regex wildcard",
+          "multi": true,
+          "multiFormat": "regex values",
+          "query": "SHOW TAG VALUES WITH KEY = \"host\"",
+          "regex": "/{{ cluster_name }}_service_*/",
+          "current": {
+            "text": "All",
+            "value": ".*",
+            "tags": []
+          },
+          "refresh": true,
+          "label": "Services"
+        },
+        {
+          "type": "query",
+          "datasource": null,
+          "refresh_on_load": false,
+          "name": "nodes",
+          "options": [
+            {
+              "text": "All",
+              "value": ".*",
+              "selected": true
+            }
+          ],
+          "includeAll": true,
+          "allFormat": "regex wildcard",
+          "multi": true,
+          "multiFormat": "regex values",
+          "query": "SHOW TAG VALUES WITH KEY = \"host\"",
+          "current": {
+            "text": "All",
+            "value": ".*",
+            "tags": []
+          },
+          "regex": "/{{ cluster_name }}_*/",
+          "refresh": true,
+          "label": "Nodes",
+          "hideLabel": false
         }
-      ],
-      "title": "Time"
-    }
-  ],
-  "nav": [
-    {
-      "collapse": false,
-      "enable": true,
-      "notice": false,
-      "now": true,
-      "refresh_intervals": [
-        "5s",
-        "10s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d"
-      ],
-      "status": "Stable",
-      "time_options": [
-        "5m",
-        "15m",
-        "1h",
-        "6h",
-        "12h",
-        "24h",
-        "2d",
-        "7d",
-        "30d"
-      ],
-      "type": "timepicker"
-    }
-  ],
-  "time": {
-    "from": "now-6h",
-    "to": "now"
+      ]
+    },
+    "annotations": {
+      "list": []
+    },
+    "refresh": "10s",
+    "schemaVersion": 6,
+    "version": 7,
+    "links": [
+      {
+        "type": "link",
+        "icon": "external link",
+        "tags": [],
+        "url": "{{ mesos_url }}",
+        "targetBlank": true,
+        "title": "Mesos",
+        "tooltip": "Open Mesos Console"
+      },
+      {
+        "type": "link",
+        "icon": "external link",
+        "tags": [],
+        "url": "{{ marathon_url }}",
+        "tooltip": "Open Marathon Console",
+        "targetBlank": true,
+        "title": "Marathon"
+      },
+      {
+        "type": "link",
+        "icon": "external link",
+        "tags": [],
+        "url": "{{ uchiwa_url }}",
+        "title": "Alert Status",
+        "tooltip": "Open Alerts Dashboard",
+        "targetBlank": true
+      }
+    ]
   },
-  "templating": {
-    "list": []
-  },
-  "annotations": {
-    "list": []
-  },
-  "schemaVersion": 6,
-  "version": 3,
-  "links": []
+  "overwrite": true
 }

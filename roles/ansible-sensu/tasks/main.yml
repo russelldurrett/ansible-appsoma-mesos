@@ -5,7 +5,7 @@
   apt_repository: repo="deb http://repos.sensuapp.org/apt sensu main" state=present
 
 - name: Install Sensu core
-  apt: pkg=sensu state=present update_cache=yes
+  apt: pkg=sensu state=present
 
 - name: Install Ruby
   apt: pkg="{{ item }}" state=present

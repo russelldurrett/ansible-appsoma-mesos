@@ -18,6 +18,15 @@
         "handlers": [ "influxdb" ],
         "interval": {{ metric_interval | int }}
     },
+    "memory_metrics_percent": {
+            "type": "metric",
+            "command": "/usr/local/bin/metrics-memory-percent.rb",
+            "subscribers": [
+                "{{ cluster_name }}"
+            ],
+            "handlers": [ "influxdb" ],
+            "interval": {{ metric_interval | int }}
+        },
     "network_metrics": {
         "type": "metric",
         "command": "/usr/local/bin/metrics-net.rb",
