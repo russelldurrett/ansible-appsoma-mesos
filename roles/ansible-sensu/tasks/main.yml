@@ -127,6 +127,10 @@
   service: name=redis-server state=restarted enabled=yes
   when: sensu_mode == "master"
 
+- name: Restart RabbitMQ to prepare
+  service: name=redis-server state=restarted enabled=yes
+  when: sensu_mode == "master"
+
 - name: Start Sensu server
   service: name=sensu-server state=started enabled=yes
   when: sensu_mode == "master"
