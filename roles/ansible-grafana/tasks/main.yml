@@ -23,9 +23,16 @@
 - name: Install Graphana package
   apt: deb="/opt/grafana/grafana_2.1.0-pre1_amd64.deb" state=present update_cache=yes
 
+- name: Make Grafana config file
+  template: src=grafana.ini.j2 dest=/etc/grafana/grafana.ini
+  register: grafana_config
+
+- name: Stop Grafana
+  service: name=grafana-server state=stopped enabled=yes
+  when: grafana_config.changed
+
 - name: Start Grafana
   service: name=grafana-server state=started enabled=yes
-
 
 - name: Make data source json
   template: src=influx_data_source.json.j2 dest=/opt/grafana/influx_data_source.json
