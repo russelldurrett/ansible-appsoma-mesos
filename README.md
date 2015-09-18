@@ -4,24 +4,32 @@
 ## Description
 
 
-Deploys software for a scalable Mesos cluster with Marathon, HAProxy and Appsoma's Welder job launcher and Rhino batch job Mesos framework.
+Deploy the [Appsoma Welder](https://github.com/appsoma/welder) app environment on a scalable Mesos cluster, with service 
+discovery, monitoring, docker, Mesos frameworks for job and app management, and other cluster tools.
 
 ### What you get
 
-Successfully running this playbook will create:
+Successfully running this playbook will create a cluster with:
 
-* An [Apache Mesos](http://mesos.apache.org/) cluster with 1 or more master nodes and 1 or more slave nodes
-* [Apache Zookeeper](https://zookeeper.apache.org/) to provide service registration and fault tolerance
-* The [Appsoma Rhino](https://github.com/appsoma/rhino) batch processing framework registered in Mesos
-* The [Appsoma Welder](https://github.com/appsoma/welder) compute Application Management service 
-* The [Mesosphere Marathon](https://github.com/mesosphere/marathon) service management framework registered with Mesos, and configured with [HAProxy](http://www.haproxy.org/) 
-* Master and slave nodes are configured with:
-    * Python2.7, OpenJDK Java 6, 7, and 8, and NodeJS to run jobs and services
-    * [Docker](https://www.docker.com/) for containerized applications
+* [Apache Mesos](http://mesos.apache.org/) with 1 or more master nodes and 1 or more slave nodes
+* [Appsoma Welder](https://github.com/appsoma/welder) compute Application Management service
+* [Appsoma Rhino](https://github.com/appsoma/rhino) batch processing framework to run jobs
+* [Apache Zookeeper](https://zookeeper.apache.org/) to provide service registration and fault tolerance 
+* [Mesosphere Marathon](https://github.com/mesosphere/marathon) service management framework registered with Mesos, and configured with [HAProxy](http://www.haproxy.org/) 
+* [Apache Kafka](https://github.com/mesos/kafka) framework to create and run brokers
+* [Apache Storm](https://github.com/mesosphere/storm-mesos) framework to run topologies
+* [HAProxy](http://www.haproxy.org/) managed by [Gandalf](https://github.com/appsoma/gandalf) for service discovery and routing with support for wildcard DNS
+* [Mesos-DNS](https://mesosphere.github.io/mesos-dns/docs/) for internal service discovery and DNS
+* [Sensu](https://sensuapp.org) alerts for all nodes
+* [Grafana](http://grafana.org/) metrics for all nodes
+* [Docker](https://www.docker.com/) for containerized applications
+* Python2.7, OpenJDK Java 6, 7, and 8, and NodeJS to run jobs and services locally
+* And much more...
     
-* All nodes have access to an NFS-mounted data directory, shared across all masters and slaves, to share job data.
-* All nodes have a series of initial users created (see `cluster_vars/users.yml.template`) to use when running Welder jobs.
-* When using a cloud provider (Amazon EC2), you get dynamic access to your cloud, with node creation and management 
+All nodes have access to an NFS-mounted data directory, shared across all masters and slaves, to share job data.  
+A series of initial users created (see `cluster_vars/users.yml.template`) to use when running Welder jobs.
+
+When using a cloud provider (for now, just Amazon EC2), you get dynamic access to your cloud, with node creation and management 
 
 ## Prerequisites
 
@@ -47,12 +55,12 @@ Don't forget about Boto, the Amazon AWS client module for python.  The standard 
 	git clone git@github.com:appsoma/ansible-appsoma-mesos.git
 	cd ansible-appsoma-mesos
 
-To configure your cluster, you'll have to create a directory with the name of your cluster: `cluster_vars/<cluster_name>`.  
-In this directory, you should create `cluster_vars/<cluster_name>/required_vars.yml` and `cluster_vars/<cluster_name>/users.yml`
+To configure your cluster, you'll have to create a directory with the name of your cluster: `cluster_vars/{{ cluster_name }}`.  
+In this directory, you should create `cluster_vars/{{ cluster_name }}/required_vars.yml` and `cluster_vars/{{ cluster_name }}/users.yml`
 from the templates in `cluster_vars/required_vars.yml.template` and `cluster_vars/users.yml.template`.  
 The only absolute customization you must do is the `cluster_name` variable.  This will be the root name of all your instances.
 
-To use HAProxy with SSL, set the flag in `required_vars.yml` and create a file called `cluster_vars/<cluster_name>/haproxy.pem`
+To use HAProxy with SSL, set the flag in `required_vars.yml` and create a file called `cluster_vars/{{ cluster_name }}/haproxy.pem`
 
 
 ## How To install on EC2 
@@ -67,10 +75,10 @@ You'll also need to select an AWS region and availability zone to install the cl
 
 If you use Route53 to manage a public domain name, you can assign DNS entries to your newly booted nodes. You'll need the name of the zone you want route53 to add new nodes to.
  
-* Copy `cluster_vars/aws_secret_vars.yml.template` to `cluster_vars/<cluster_name>/aws_secret_vars.yml` and edit the values to match your AWS account
+* Copy `cluster_vars/aws_secret_vars.yml.template` to `cluster_vars/{{ cluster_name }}/aws_secret_vars.yml` and edit the values to match your AWS account
     * Remember not to include the AWS keys in a git repo!
     * If you haven't already, copy `cluster_vars/required_vars.yml.template` and `cluster_vars/users.yml.template`
-    * Set `cloud_provider: "ec2"` in `cluster_vars/<cluster_name>/required_vars.yml`
+    * Set `cloud_provider: "ec2"` in `cluster_vars/{{ cluster_name }}/required_vars.yml`
     * Be sure to change the `ec2_key_name`, `ec2_region`, and `ec2_zone` keys to match your information
     * If you want to use Route53 DNS, make sure `use_route53: true` and `route53_zone` is set to your DNS zone.
     * Set the instance types, data volume size and type, and private lan subnets to your liking.  Remember these will cost you while running.
@@ -85,26 +93,31 @@ Any errors messages here will prevent you from accessing EC2 and using this play
     inventory/ec2Inventory.py --list
 
 ### Running
+
 If your private key is in ~/.ssh, you don't need the `--private-key` option.  You may want to edit your user ssh config in `~/.ssh/config` or your system ssh config `/etc/ssh/ssh_config` to set `StrictHostKeyChecking no`. 
 This will remove the warnings (which require you to type `yes`) when you connect to a brand new node on Amazon.
  
 Now to run the playbook from scratch: 
 
-    ansible-playbook --private-key ~/mykey.pem -i inventory/ec2Inventory.py create_cluster_playbook.yml -e "master_count=<# of masters> slave_count=<# of slaves>"
+    ansible-playbook --private-key ~/mykey.pem -i inventory/ec2Inventory.py create_cluster_playbook.yml -e "cluster_name={{ cluster_name }}"
 
 You can safely re-run this command multiple times, in the event of an Amazon communication outage, or an error in variables.
 
 If you edit `playbook_vars/users.yml`, you can update the entire cluster by running:
     
-    ansible-playbook --private-key ~/mykey.pem -i inventory/ec2Inventory.py sync_users.yml
+    ansible-playbook --private-key ~/mykey.pem -i inventory/ec2Inventory.py sync_users.yml -e "cluster_name={{ cluster_name }}"
     
 This will add new users, and update existing users (and their passwords).  This fixed password management is the best solution short of a user directory system. (See [To do items](#to-do))
 
+A convenience script to hide some of the Ansible argument complexity and AWS setup is available in `update_cluster.bash`, just run with the name of your cluster, and the name of the playbook yml file you want to use as arguments:
+    
+    update_cluster.bash {{ cluster_name }} create_cluster_playbook.yml
+    
 ### Troubleshooting
 * SSH errors
     * Make sure your SSH key has the correct permissions (`0600`).  Set `StrictHostKeyChecking no` in `/etc/ssh/ssh_config`
 * Missing variable values
-    * Check the `cluster_vars/<cluster_name>` files, and ensure that you have customized the values for `aws_secret_vars.yml`, `required_vars.yml`, and `users.yml`
+    * Check the `cluster_vars/{{ cluster_name }}` files, and ensure that you have customized the values for `aws_secret_vars.yml`, `required_vars.yml`, and `users.yml`
     * Rerun.  You can use the Ansible retry if it offers as well.
 * Timeouts or `receive failed` messages
     * Custom repositories may not be responding (Docker, Mesosphere, Github. possibly core repos or cloud-served repos).
@@ -120,7 +133,7 @@ This will add new users, and update existing users (and their passwords).  This 
 ### What you'll need
 
 You'll need to construct an Ansible inventory file with a few attributes for the nodes in your cluster.  
-A template with the required variables is in `cluster_vars/inventory.template` file.   This file can live anywhere, but we suggest `cluster_var/<cluster_name>/inventory`
+A template with the required variables is in `cluster_vars/inventory.template` file.   This file can live anywhere, but we suggest `cluster_var/{{ cluster_name }}/inventory`
 
 At least 3 nodes are required, one master, one service, and one slave.  You can also deploy with multiple master and slave nodes.
 
@@ -142,18 +155,18 @@ This will remove the warnings (which require you to type `yes`) when you connect
  
 Now to run the playbook from scratch: 
 
-    ansible-playbook --private-key ~/mykey.pem -i cluster_vars/<cluster_name>/inventory create_cluster_playbook.yml -e "cluster_name=<cluster_name>"
+    ansible-playbook --private-key ~/mykey.pem -i cluster_vars/{{ cluster_name }}/inventory create_cluster_playbook.yml -e "cluster_name={{ cluster_name }}"
 
 You can safely re-run this command multiple times, in the event of an Amazon communication outage, or an error in variables.
 
-If you edit `cluster_vars/<cluster_name>/users.yml`, you can update the entire cluster by running:
+If you edit `cluster_vars/{{ cluster_name }}/users.yml`, you can update the entire cluster by running:
     
-    ansible-playbook --private-key ~/mykey.pem -i cluster_vars/<cluster_name>/inventory sync_users.yml -e "cluster_name=<cluster_name>"
+    ansible-playbook --private-key ~/mykey.pem -i cluster_vars/{{ cluster_name }}/inventory sync_users.yml -e "cluster_name={{ cluster_name }}"
 
 ### Troubleshooting
 
 * Missing variable values
-    * Check the `cluster_vars/<cluster_name>` files, and ensure that you have customized the values for `inventory`, `required_vars.yml`, and `users.yml`
+    * Check the `cluster_vars/{{ cluster_name }}` files, and ensure that you have customized the values for `inventory`, `required_vars.yml`, and `users.yml`
     * Rerun.  You can use the Ansible retry if it offers as well.
 * Timeouts or `receive failed` messages
     * Custom repositories may not be responding (Docker, Mesosphere, Github. possibly core repos or cloud-served repos).
@@ -162,11 +175,20 @@ If you edit `cluster_vars/<cluster_name>/users.yml`, you can update the entire c
 -------------------------------
 
 ## Connecting to the cluster
+
+You can ssh to your new cluster with user `ubuntu` and the private key you used for deployment.  If you use route53, nodes will be available at
+
+* `master_*.{{ route53_zone }}`
+* `slave_*.{{ route53_zone }}`
+* `service_*.{{ route53_zone }}`
+
+Addtional SSH keys for user `ubuntu` can be set by setting `additional_ssh_keys` in cluster_vars/{{ cluster_name }}/required_vars.yml
+
 The welder server will be listening on the master at the port specified in roles/ansible-welder/defaults/main.yml ( Defaults to `8890`)
 
-The users you have defined in `cluster_vars/<cluster_name>/users.yml` are available to log in to Welder, using the password defined.  These users do not have SSH access to the cluster.
+The users you have defined in `cluster_vars/{{ cluster_name }}/users.yml` are available to log in to Welder, using the password defined.  These users do not have SSH access to the cluster.
 
-The `welder_group:` section of `cluster_vars/<cluster_name>/users.yml` defines a group that all Welder users will be a part of.
+The `welder_group:` section of `cluster_vars/{{ cluster_name }}/users.yml` defines a group that all Welder users will be a part of.
 
 ## Developing with Welder
 The Welder source is checked out into `/opt/welder` on the master. The service can be started by running `service welder start` and `service welder-widgets start`. 
@@ -177,10 +199,9 @@ The Welder users can be configured for ssh login by setting an authorized key in
 
 ## To Do
 
-* Cluster monitoring
 * Additional tools
+* Supporting other clouds (GCE, OpenStack, Azure) via [Terraform](https://www.terraform.io/)
 * Better utilization of docker
-* Cluster shutdown and cleanup 
-* Supporting other clouds (GCE, OpenStack, Azure)
-* Dynamic node management (add and remove capacity when needed)
-* Dynamic user management
+* Better cluster-wide user management (LDAP)
+* Better cluster-wide file support (HDFS)
+
