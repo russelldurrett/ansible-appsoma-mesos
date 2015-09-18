@@ -184,6 +184,17 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="Python 2.7.9 (C:\Python27\python.exe)" project-jdk-type="Python SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
+  <component name="PublishConfigData" serverName="welder_dev_master_0">
+    <serverData>
+      <paths name="ansible-manager">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/ansible-appsoma-mesos" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />

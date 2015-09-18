@@ -3,8 +3,6 @@ all_plugins:
   - sensu-plugins-memory-checks
   - sensu-plugins-disk-checks
   - sensu-plugins-dns
-  - sensu-plugins-docker
-  - sensu-plugins-network-checks
   - sensu-plugins-ntp
   - sensu-plugins-influxdb
 

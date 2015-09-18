@@ -17,6 +17,15 @@
         ],
         "handlers": [ "influxdb" ],
         "interval": {{ metric_interval | int }}
+    },
+    "haproxy_metrics": {
+        "type": "metric",
+        "command": "/usr/local/bin/metrics-haproxy.rb -c {{ hostvars[inventory_hostname].private_ip_address }} -P 9090 -q haproxy?stats -u admin -p admin",
+        "subscribers": [
+            "{{ cluster_name }}-master"
+        ],
+        "handlers": [ "influxdb" ],
+        "interval": 30
     }
   }
 }

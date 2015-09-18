@@ -1,5 +1,19 @@
+# Clones the demo_project from Github as user "demo"
+##############################################
+#          WARNING WARNING WARNING           #
+# This will FORCIBLY OVERWRITE LOCAL CHANGES #
+##############################################
+
+# Note that the project dir is owned by demo:welder with mode 2755 and git
+# checks out at as "demo"
+# This means that ONLY "demo" has write privileges to the code checked out by git
+# All users in group "welder" have read
+# If you are making changes to the demo project, this will FORCIBLY OVERWRITE ANY CHANGES.
+
+# To make changes as other users, be sure to "chmod -R g+w {{ project_folder }}/demo_project"
+
 - name: Create project folder
-  file: path="{{ project_folder }}" state=directory owner="demo" mode=2775
+  file: path="{{ project_folder }}/demo_project" state=directory owner="demo" group="{{ welder_group['name'] }}" mode=2775
 
 - name: Clone Demo Project source
   git:

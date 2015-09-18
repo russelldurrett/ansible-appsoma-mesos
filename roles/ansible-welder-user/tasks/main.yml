@@ -16,6 +16,9 @@
     state: present
   with_items: user_list
 
+- name: Add management user to Welder user group
+  user: name="{{ management_user }}" groups="{{ welder_group['name'] }}" append=yes
+
 - name: Add User's data dir
   file:
     name: "{{ dataDir }}/{{ item.username }}"
