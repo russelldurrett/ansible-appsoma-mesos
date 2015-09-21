@@ -1,0 +1,2 @@
+artifact_store_dir: "/opt/marathon/store"
+artifact_store_url: "file:///{{ artifact_store_dir }}"
