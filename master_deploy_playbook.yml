@@ -47,6 +47,11 @@
     - "cluster_vars/{{ cluster_name }}/users.yml"
   pre_tasks:
 
+    - name: Add AWS vars
+      include_vars: "cluster_vars/{{ cluster_name }}/aws_secret_vars.yml"
+      no_log: true
+      when: "(cloud_provider is defined and cloud_provider == 'ec2') or (use_docker_registry is defined and use_docker_registry)"
+
     - name: Find NFS Server IP
       set_fact: nfsServerIp={{ hostvars[groups[inventory_group_service][0]]['private_ip_address'] }}
       when: groups[inventory_group_service] is defined
@@ -101,6 +106,15 @@
       extra_ports: "{{ master_firewall_ports }}"
       when: use_ufw is defined and use_ufw
 
+    # Install Docker
+    - role: ansible-docker
+      when: use_docker_registry is not defined or not use_docker_registry
+
+    - role: ansible-docker
+      registry_host: "master.mesos"
+      marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
+      when: use_docker_registry is defined and use_docker_registry
+
     # Install Python
     - role: ansible-python
 
@@ -117,9 +131,6 @@
         - scribe-js
         - supervisor
       tags: ["nodejs"]
-
-    # Install Docker
-    - role: ansible-docker
 
     # Configure NFS
     - role: ansible-nfs-client

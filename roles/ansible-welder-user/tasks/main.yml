@@ -14,6 +14,7 @@
     groups: "{{ '' if item['test_group'] is defined else group['name'] }}"
     shell: "/bin/bash"
     state: present
+  no_log: true
   with_items: user_list
 
 - name: Add management user to Welder user group
@@ -25,6 +26,7 @@
     owner: "{{ item.username }}"
     group: "{{ group['name'] }}"
     state: directory
+  no_log: true
   with_items: user_list
 
 - name: Add ~/data link
@@ -32,4 +34,5 @@
     src: "{{ dataDir }}/{{ item.username }}"
     dest: "/home/{{ item.username }}/data"
     state: link
+  no_log: true
   with_items: user_list

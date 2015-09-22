@@ -1,0 +1,19 @@
+version: 0.1
+log:
+fields:
+  service: registry
+storage:
+  s3:
+    accesskey: {{ aws_access_key }}
+    secretkey: {{ aws_secret_key}}
+    region: {{ ec2_region }}
+    bucket: {{ s3_docker_registry_store }}
+    encrypt: true
+    secure: true
+    v4auth: true
+    chunksize: 5242880
+    rootdirectory: /images
+http:
+  addr: :5000
+  headers:
+    X-Content-Type-Options: [nosniff]

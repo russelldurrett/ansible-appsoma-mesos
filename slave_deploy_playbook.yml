@@ -72,6 +72,12 @@
 
     # Install docker
     - role: ansible-docker
+      when: use_docker_registry is not defined or not use_docker_registry
+
+    - role: ansible-docker
+      registry_host: "master.mesos"
+      marathon_host: "{{ hostvars[groups[inventory_group_master][0]].private_ip_address }}"
+      when: use_docker_registry is defined and use_docker_registry
 
     # Configure NFS
     - role: ansible-nfs-client

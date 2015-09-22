@@ -14,7 +14,7 @@
     - Restart Marathon
 
 - name: Create artifact_store directory
-  file: path="{{ artifact_store_dir }}"
+  file: path="{{ artifact_store_dir }}" state=directory
   when: artifact_store_dir != ""
   notify:
     - Restart Marathon
