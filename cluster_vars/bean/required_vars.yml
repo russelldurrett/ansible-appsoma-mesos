@@ -1,0 +1,66 @@
+cloud_provider: "ec2" # Other values could be "gce" or "none"
+
+management_user: "ubuntu"
+
+# Amazon EC2
+# All values are specific to the ec2_region used
+ec2_key_name: "bioworker.pem"  # use with "ansible-playbook --private-key "my-key.pem" if not in ~/.ssh
+ec2_region: "us-east-1" # Select your region
+ec2_zone: "us-east-1c"  # Select an availability zone for
+ec2_ami_id: "ami-7eb2a716" # Base HVM Ubuntu 14.04 image for us-east-1
+slave_local_disk_size_gb: 16
+master_local_disk_size_gb: 32
+
+# This section is only required if you want to use Route53 to manage DNS names for the cluster
+# AWS default ec2 public dns names are still created
+use_route53: true
+service_discovery_dns_suffix: "bean.rsldrt.com"
+
+haproxy_use_ssl: true
+haproxy_certificate_path: /opt/haproxy/haproxy.pem
+
+# This will configure HAProxy to serve out the welder service on port 80/443 of "welder.cluster_name.mydomain.com"
+# Any other service running on the master you'd like to map DNS to HAProxy can be added with a {name, dns_name, port} dict.
+haproxy_dns_services:
+  - { app_name: 'welder', service_port: '80', url: "welder.{{service_discovery_dns_suffix}}", port: '8890' }
+  - { app_name: 'mesos', service_port: '80', url: "mesos.{{service_discovery_dns_suffix}}", port: '5050' }
+  - { app_name: 'marathon', service_port: '80', url: "marathon.{{service_discovery_dns_suffix}}", port: '8080' }
+  - { app_name: 'monitor', service_port: '80', url: "monitor.{{service_discovery_dns_suffix}}", port: '3000' }
+
+
+# Set these to scale your nodes to suit
+master_instance_type: "t2.medium"  # Master requires at least 2 cpus and 4GB of RAM
+service_instance_type: "t2.micro" # Serving NFS is not resource intensive, so a "micro" or "small" is good for most deploys
+slave_instance_type: "t2.medium"  # Slave sizing depends on the workload.  This is usually best set dynamically according to needs
+
+# Network settings
+private_lan_net: "10.10.0.0/16"    # Your favorite private LAN
+private_lan_subnet: "10.10.0.0/24" # Note that EC2 requires the subnet to have a smaller netmask than the LAN above
+
+# NFS Data options
+nfs_data_mount: "/data"
+data_vol_size_gb: 250
+data_vol_type: "standard"
+data_mount_point: "/mnt/data"
+data_vol_type: "standard"  # EBS volumes include "standard" "gp2" and "io1"
+
+# Enable this script to burn a slave AMI.  Any AWS boot method may be used to add new slaves
+# with the AMI id created (named {{cluster_name}}_slave_image).  Just use the same subnet
+# and the security group {{ cluster_name }}-all-sg
+create_slave_image: true
+
+# Security
+use_ufw: false
+use_halo: false
+use_openvpn: true
+
+# This allows you to run an SSH on another port and allows Ansible to find it.
+# alternate_ssh_port: 10203
+
+# Mesos resource
+master_count: 1
+slave_count: 1
+run_slave_on_master: no
+
+additional_ssh_keys:
+  - <Insert SSH keys for the management user>
